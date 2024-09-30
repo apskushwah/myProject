@@ -1,0 +1,1837 @@
+[root@sgxhajj1 ~]# cat a.pl
+
+URL:https://www.geeksforgeeks.org/explore?page=6&difficulty=Medium,Hard&sprint=a663236c31453b969852f9ea22507634&sortBy=latest&sprint_name=SDE%20Sheet
+
+#---------------------------------------------------------------------------------------
+-to remove the duplicates from array:
+my @array = (1, 2, 2, 3, 4, 4, 5);
+print "array:@array \n";
+my %seen;
+my @unique = grep { !$seen{$_}++ } @array;
+
+-$arr[0] is a single scalar, @arr[0..5] is a list of one scalar
+Ex:
+my @arr = (3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5);
+print "sliced till 5th index @arr[0..4]";
+
+O/p: [root@sgxhajj1 ~]# perl d.pl
+sliced till 4th index 3 1 4 1 5
+
+-to find key of hash using its value:
+@target_keys = grep { $hash{$_} eq $target_value } keys %hash;
+
+-to remove the empty or undefined element from array:
+@arr2 = grep {defined  && /\$/} @arr2;
+Ex:
+before arr2:   5 7  9  6
+now arr2:5 7 9 6
+
+-Sorting of an Array of Numbers
+If an array containing number is sorted using sort function it takes every value in the array as a string so 12 will be placed before 2. Therefore, to consider the values as a number, spaceship operator( <=>) is used instead of cmp opeartor in the sort function. This operator considers its operands as a number and sorts the data as a number. sort() function by default uses the cmp() but without the use of block.
+
+[root@sgxhajj1 ~]# cat b.pl
+my @numbers = (5, 2, 8, 1, 7);
+
+@sorted = sort (@numbers);
+@reverseSorted1 = reverse sort (@numbers);
+@reverseSorted2 = sort {$b <=> $a} @numbers;
+print "@reverseSorted1 \n";
+print "@reverseSorted2 \n";
+
+- to iterate array by step2 in perl
+# Create an array of numbers
+my @numbers = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+# Iterate over the array with a step of 2
+for (my $i = 0; $i < scalar(@numbers); $i += 2) { #good
+    my $element = $numbers[$i];
+    print "$element ";
+}
+#---------------------------------------------------------------------------------------
+#read json
+use JSON;
+
+$readJson = do {
+    open (FH, '/tmp/json.txt') or die "couldnot get file ";
+    local $/; # enable "slurp" mode
+    <FH>; # whole file now here
+};
+
+$json_data = decode_json($readJson);
+print "$json_data->{'size'} \n";
+
+[root@sgxhajj2 ~]# cat /tmp/json.txt
+{
+    "fruit": "Apple",
+    "size": "Large",
+    "color": "Red"
+}
+#---------------------------------------------------------------------------------------
+# Class / Constructor / Passing values to constructor that will go in object. Fetching those values from object.
+# Define the Person class
+package Person;
+
+# Constructor method to create a new object of the class
+sub new {
+    my $class = shift;
+    my $self = {
+        _firstName => shift,   #good use of shift.
+        _lastName  => shift,
+        _ssn       => shift,
+    };
+    # Bless the reference as an object of the class
+    bless $self, $class;  #$self is hash refernece
+    return $self;
+}
+
+# Accessor method to get the first name of the person
+sub getFirstName {
+    my ($self) = @_;
+    return $self->{_firstName};
+}
+
+# Accessor method to set the first name of the person
+sub setFirstName {
+    my ($self, $firstName) = @_;
+    $self->{_firstName} = $firstName if defined($firstName);
+    return $self->{_firstName};
+}
+
+# End of package declaration, required in Perl
+1;  #good
+
+# Use the Person class
+use Person;  #this is .pm filename
+
+# Create a new object of the Person class
+my $person = Person->new("John", "Doe", "123-45-6789"); #This Person is the classname
+
+# Call the getFirstName method to get the first name of the person
+#mine: to get variables values of object of a class, we create set/get function in that class. To use class function, we create object i.e variable->Func->Ob
+OR:
+my $firstName = $person->getFirstName();
+print "First name: $firstName\n";
+
+#perl -I <Person.pm file location> <.pl filename>  #this to avoid 'Can't locate new.pm in @INC' : good
+#---------------------------------------------------------------------------------------
+
+#1)Longest subarray with sum divisible by K
+#Given an array arr containing N integers and a positive integer K, find the length of the longest sub array with sum of the elements divisible by the given value K.
+Input:
+N = 6, K = 3
+arr[] = {2, 7, 6, 1, 4, 5}
+Output:
+4
+Explanation:
+The subarray is {7, 6, 1, 4} with sum 18, which is divisible by 3.
+
+sub longestarray {
+    my ($k, $arr) = @_;
+    my @arr = @{ $arr };
+    $i=0;
+    my %hash;
+
+    foreach my $x ($i..$#arr) {
+        my @longestArray;
+        push (@longestArray, $arr[$x]);
+        $sum = $arr[$x];
+        $j = ($x + 1);
+        my @temp;
+        foreach my $y ($j..$#arr) {
+            $sum += $arr[$y];
+            push (@temp, $arr[$y]);
+            if ($sum%3 ==0) {
+                push (@longestArray, @temp);
+                @temp = ();
+            }
+        }
+        $hash{$i} = \@longestArray;
+        $i++;
+    }
+    return \%hash;
+}
+
+
+my $k = 3;
+my @arr = (2, 7, 6, 1, 4, 5);
+my $result = longestarray($k, \@arr);
+print "result is:\n";
+print Dumper($result);
+
+#2)Top k numbers in a stream
+#Given N numbers in an array. Your task is to keep at-most top K numbers with respect to their frequency.
+In other words, you have to iterate over the array, and after each index, you have to determine top K most frequent numbers. If total number of distinct numbers are less than K, then
+Input:
+N=5, K=4
+arr[] = {5, 2, 1, 3, 2}
+Output:
+5
+2 5
+1 2 5
+1 2 3 5
+2 1 3 5
+
+my @arr = (5, 2, 1, 3, 2);
+my $arrlength = scalar @arr;
+my ($i, $j);
+$i=$j=0;
+my %hash;
+
+foreach my $x ($i..$arrlength) {
+    my $count=0;
+    $j=($j+1);
+    foreach my $y ($j..$arrlength) {
+        if ($arr[$x] == $arr[$y]) {
+            $count = ($count+1);
+            print "x:$arr[$x]; y:$arr[$y] ; count:$count---\n";
+        }
+    }
+    $hash{$arr[$x]} = $count if (!exists($hash{$arr[$x]})); #good
+}
+print Dumper(\%hash);
+@count = sort values %hash;
+#mine:to find key of some value:-my $key = grep {$hash{$_} eq $value} keys %hash;
+
+#2a) paranthesis checker:
+my $exp1 = "((())){()}()";
+my @arr = split('',$exp1);
+my $count=0; my $flag = 'true';
+foreach my $i (@arr) {
+    if ($i eq '(') {
+        $count += 1;
+    } elsif($i eq ')') {
+        # It is a closing parenthesis
+        $count -= 1;
+    }
+}
+
+if ($count != 0) {
+    print "Unbalanced paranthesis \n";
+    exit();
+}
+
+#Same above logic for other type of brackets
+foreach my $i (@arr) {
+    if ($i eq '{') {
+        $count += 1;
+    } elsif($i eq '}') {
+        # It is a closing parenthesis
+        $count -= 1;
+    }
+}
+
+if ($count != 0) {
+    print "Unbalanced paranthesis=== \n";
+    exit();
+}
+
+#3)Grinding Geek -- NA
+
+#4)Fractional Knapsack -- https://www.youtube.com/watch?v=xZfmHVi7FMg
+Given an integer array, consisting of positive weights “W” and their values “V” respectively as a pair and some queries consisting of an integer ‘C’ specifying the capacity of the knapsack, find the maximum value of products that can be put in the knapsack if the breaking of items is allowed.
+use strict;
+use warnings;
+
+sub fractional_knapsack {
+    my ($weights_ref, $values_ref, $capacity) = @_;
+
+    my @weights = @$weights_ref;
+    my @values = @$values_ref;
+
+    my $n = scalar @weights;
+
+    # Calculate the value-to-weight ratio for each item
+    my @ratios;
+    for my $i (0..$n-1) {
+        $ratios[$i] = {
+            index  => $i,
+            ratio  => $values[$i] / $weights[$i],
+            weight => $weights[$i],
+            value  => $values[$i]
+        };
+    }
+
+    # Sort items based on value-to-weight ratio in descending order
+    @ratios = sort { $b->{ratio} <=> $a->{ratio} } @ratios;
+
+    my $max_value = 0;
+    my $current_weight = 0;
+
+    # Fill the knapsack with items in descending order of ratio
+    for my $i (0..$n-1) {
+        if ($current_weight + $ratios[$i]->{weight} <= $capacity) {
+            $max_value += $ratios[$i]->{value};
+            $current_weight += $ratios[$i]->{weight};
+        } else {
+            my $remaining_weight = $capacity - $current_weight;
+            $max_value += $ratios[$i]->{ratio} * $remaining_weight;
+            last;
+        }
+    }
+
+    return $max_value;
+}
+
+# Example usage:
+my @weights = (10, 20, 30);
+my @values = (60, 100, 120);
+my $capacity = 50;
+
+my $result = fractional_knapsack(\@weights, \@values, $capacity);
+print "Maximum value in the knapsack: $result\n";
+
+
+#5)Techfest and the Queue - maths--NA
+
+#6)New Year Resolution
+
+#7)Sort last M elements
+#hint:pop the last M elements into arr2 and sort them. Then push arr2 to arr.
+my @arr = (1, 3, 6, 19, 11, 16);
+n = 6
+m = 4
+
+my $i=0; #$i = ($n-$m)
+foreach my $x ($i..$#arr) {
+        if ($arr[$x] > $arr[$x+1]) {
+            $temp = $arr[$x];
+            $arr[$x] = $arr[$x+1];
+            $arr[$x+1] = $temp;
+        }
+}
+#or first pop the last M element in other array and sort them. The concatenate both the arrays
+print "arr:@arr \n";
+
+#8)Magical Number
+A number arr[i] is a magical number if arr[$i] == $i .
+You have to return the leftmost magical number present in the given array arr, if there is no magical number in the array arr then return -1
+magic number is INDEX=VALUE
+Example1:
+
+Input:
+N = 5
+arr = {-2, -1, 2, 4, 6}
+Output: 2
+-------------------
+my @arr = (-2, -1, 2, 4, 6);
+
+my $i = 0;
+my @magicArray;
+
+foreach my $i ($i..$#arr) {
+    if ($i == $arr[$i]) {
+        push (@magicArray, $arr[$i]);
+    }
+}
+print "leftmost magic number is: $magicArray[-1] \n";
+-------------------
+
+#9)Make best team for World Cup 2023
+ICC Cricket World Cup 2023 is going on and you need to make your own team. There are a total of N players given. You are also given the average of these N players in the form of an array A[ ]. These average values are non-negative integers.
+
+These N players are standing in a queue. Now you need to pick some players from the given N players to form your own team. The rules for selecting players are as follows :
+
+At every step you select at most one player from the remaining players and who is not selected in previous rounds. (Remember, selecting a player does not remove him from the queue).
+After every step, first and last player in the remaining queue are removed. So, after the ith step (where i starts from1), ith player and (n - i+1) th player are removed from the queue.
+We keep repeating this process until the queue becomes empty.
+Your task is to select the players for your team in such a way that sum of average of players of your team is maximum possible.
+
+Input:
+N = 5
+A[ ] =  [1, 5, 2, 4, 3]
+Output: 11
+Explanation:
+In first move, select player with index 4 (average = 4), then remove first and last player A[ ] = [5, 2, 4],
+In second move, select player with index 1 (average = 5), then remove first and last player A[ ] = [ 2 ],
+In third move, select player with index 1 (average = 2), then remove first and last player A[ ] = [  ],
+Total sum of average = 4 + 5 + 2 = 11
+-------------------
+my @arr = (1, 3, 2, 4, 5);
+
+foreach my $x (0..$#arr) {
+    @arr1 = sort(@arr);
+    push (@decAvg, $arr1[-1]);
+    pop @arr ; print "after pop: @arr \n";   #pop/push --from top; shift/unshift --from beginging - mine:
+    shift @arr; print "after shift: @arr \n";
+    print "arr:@arr===\n";
+}
+
+#10) Two Swaps-https://www.youtube.com/watch?v=-2_c4lG7k_M ; https://www.youtube.com/watch?v=m-8_yQao-lI --do
+
+#11) Level of Nodes -- graphbases-NA
+
+#12) Making A Large Island - matrix
+
+#13) Print adjacency list -- graphbases-NA
+
+#14) Nth catalan number-https://www.youtube.com/watch?v=eUw9A1wsFg8 - do
+ex: 4th catalan then, C4 = C0C3 + C1C2 + C2C1 + C3C0 . So need to find all lower catalans i.e C0 to C3
+say C0 = 1
+C1 = C0
+C2 = C0C1 + C1C0
+C3 = C0C2 + C1C1 + C2C0
+-------------------
+sub binomial_coefficient {
+    my ($n, $k) = @_;
+    my $result = 1;
+
+    for my $i (1 .. $k) {
+        $result *= ($n - $i + 1) / $i;
+    }
+
+    return $result;
+
+}
+
+sub catalan_number {
+    my $n = shift;
+    return binomial_coefficient(2 * $n, $n) / ($n + 1);
+}
+
+# Calculate the eighth Catalan number
+my $eighth_catalan = catalan_number(8);
+
+print "The eighth Catalan number is: $eighth_catalan\n";
+
+
+#15) Is it a tree? -graph-NA
+
+#16) Stock buy and sell II
+#The cost of stock on each day is given in an array price[] of size n. Each day you may decide to either buy or sell the stock i at price[i], you can even buy and sell the stock on the same day, Find the maximum profit which you can get.
+
+sub getMaxProfit {
+    my ($arr) = @_;
+    my @prices = @{$arr};
+    my $totalProfit;
+    $i=1;
+
+    foreach my $x ($i..$#prices) {
+        if ($prices[$x] > $prices[$x - 1]) {
+            $totalProfit += ($prices[$x] - $prices[$x - 1]); #profit
+        } else {
+            #sell the share in (i-1)th day on the purchasing price itself. And purchase new share at lesser price on ith day.
+        }
+    }
+    return $totalProfit;
+}
+
+my @prices = (7, 1, 5, 3, 6, 4);
+my $result = getMaxProfit(\@prices);
+print "result is:$result \n";
+
+#17) Reverse First K elements of Queue
+
+#18)Longest Common Prefix in an Array
+
+#19) Reverse First K elements of Queue
+#Given an integer K and a queue of integers, we need to reverse the order of the first K elements of the queue, leaving the other elements in the same relative order.
+sub reverseElement {
+    my ($arr, $k) = @_;
+    my @arr = @{$arr};
+    my @newArr;
+
+    foreach my $x ($i..$#arr) {  #reverse first K element
+        if ($x < $k) {
+            unshift (@newArr, $arr[$x]);
+        } else {
+            push (@newArr, $arr[$x]);
+        }
+    }
+    return \@newArr;
+}
+
+my $k = 5;
+my @arr = (10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
+my $result = reverseElement(\@arr, $k);
+@result = @{ $result };
+print "result is:@result \n";
+
+#20) Find all pairs with a given sum
+#Given two unsorted arrays A of size N and B of size M of distinct elements, the task is to find all pairs from both arrays whose sum is equal to X
+use Data::Dumper;
+sub getPairsOfSum {
+    my ($arr1, $arr2, $expectedSum) = @_;
+    my @arr1 = @{$arr1};
+    my @arr2 = @{$arr2};
+    $count = 1;
+    $i=$j=0;
+
+    foreach my $x ($i..$#arr1) {
+        foreach my $y ($j..$#arr2) {
+            $actualSum = ($arr1[$x] + $arr2[$y]);
+            print "$arr1[$x] ; $arr2[$y] \n";
+            print "here--\n";
+            if ($actualSum == $expectedSum) {
+                $hash{$count} = [$arr1[$x], $arr2[$y]];
+                $count++;
+            }
+        }
+    }
+    return \%hash;
+}
+
+my @arr1 = (1, 2, 4, 5, 7);
+my @arr2 = (5, 6, 3, 4, 8);
+my $expectedSum = 9;
+my $result = getPairsOfSum(\@arr1, \@arr2, $expectedSum);
+print "result is:\n";
+print Dumper($result);
+
+#21) Minimize the Heights II --do
+Given an array arr[] denoting heights of N towers and a positive integer K.
+
+For each tower, you must perform exactly one of the following operations exactly once.
+
+Increase the height of the tower by K
+Decrease the height of the tower by K
+Find out the maxmum possible difference between the height of the shortest and tallest towers after you have modified each tower.
+sub find_min_difference {
+    my ($arr_ref, $n, $k) = @_;
+
+    # Find the initial maximum and minimum heights.Set the baseline first.
+    my $max_height = $arr_ref->[0];
+    my $min_height = $arr_ref->[0];
+
+    for my $i (1..$n-1) {
+        $max_height = $arr_ref->[$i] if $arr_ref->[$i] > $max_height;
+        $min_height = $arr_ref->[$i] if $arr_ref->[$i] < $min_height;
+    }
+    print "max_height:$max_height ; min_height:$min_height \n";
+
+    # Update heights and find the new maximum and minimum heights
+    for my $i (0..$n-1) {
+        my $new_height = $arr_ref->[$i] + $k;
+        $arr_ref->[$i] = $new_height if $new_height < $max_height;
+
+        $new_height = $arr_ref->[$i] - $k;
+        $arr_ref->[$i] = $new_height if $new_height > $min_height;
+    }
+    print "here1: @{$arr_ref} \n";
+
+    # Calculate the updated MAX and MIN as per new heights. Set the baseline first.
+    my $final_max = $arr_ref->[0];
+    my $final_min = $arr_ref->[0];
+
+
+    for my $i (1..$n-1) {
+        $final_max = $arr_ref->[$i] if $arr_ref->[$i] > $final_max;
+        $final_min = $arr_ref->[$i] if $arr_ref->[$i] < $final_min;
+    }
+    print "final_max:$final_max ; final_min:$final_min \n";
+#mine: this will give max diff between elements of updated array. But we want min. --check
+    return $final_max - $final_min;
+}
+
+# Example usage:
+my @arr = (1, 15, 10);
+my $n = scalar @arr;
+my $k = 6;
+
+my $result = find_min_difference(\@arr, $n, $k);
+print "Minimum possible difference: $result\n";
+
+#22) Swapping pairs make sum equal -- do
+#Given two arrays of integers, find a pair of values (one value from each array) that you can swap to give the two arrays the same sum.
+sub find_swappable_pair {
+    my ($arr1_ref, $arr2_ref) = @_;
+
+    my $sum1 = 0;
+    my $sum2 = 0;
+
+    # Calculate the sums of both arrays
+    $sum1 += $_ for @$arr1_ref;
+    $sum2 += $_ for @$arr2_ref;
+
+    # Iterate through the first array
+    foreach my $num1 (@$arr1_ref) {
+        # Iterate through the second array
+        foreach my $num2 (@$arr2_ref) { #iterate overy each element
+            # Check if swapping these elements makes the sums equal
+            if (($sum1 - $num1 + $num2) == ($sum2 - $num2 + $num1)) {
+                return ($num1, $num2);
+            }
+        }
+    }
+
+    # If no such pair is found
+    return;
+}
+
+# Example usage:
+my @array1 = (4, 1, 2, 1, 1, 2);
+my @array2 = (3, 6, 3, 3);
+my ($element1, $element2) = find_swappable_pair(\@array1, \@array2);
+
+if (defined $element1 && defined $element2) {
+    print "Swapping $element1 from array1 and $element2 from array2 makes the sums equal.\n";
+} else {
+    print "No such pair found.\n";
+}
+
+#23) Largest Number formed from an Array -- #good:cram
+#hint:The key is to compare the concatenation of two numbers in both orders and choose the order that results in a larger combination.
+sub largest_number {
+    my @nums = @_;
+
+    # Custom comparison function
+    sub compare_numbers {
+        my ($a, $b) = @_;
+        return int("$b$a") <=> int("$a$b");
+    }
+
+    # Sort the numbers using the custom comparison function
+    @nums = sort { compare_numbers($a, $b) } @nums;
+
+    # Concatenate the sorted numbers to form the largest number
+    my $result = join('', @nums);
+
+    # Remove leading zeros
+    $result =~ s/^0+//;
+
+    # If the result is an empty string, the input was all zeros
+    return $result || '0';
+}
+
+# Example usage:
+my @numbers = (3, 30, 34, 5, 9);
+my $largest_number = largest_number(@numbers);
+print "Largest number: $largest_number\n";
+
+
+#24) Sum of Middle Elements of two sorted arrays - merge two arrays, sort it, if $numOfElements%2==0, then two mikddle elements [$numOfElements/2,$numOfElements%2 + 1]
+
+#25)Sort an array of 0s, 1s and 2s
+my @arr = (0, 2, 1, 2, 0);
+
+@sorted = sort {$a <=> $b} @arr;
+print "sorted:@sorted \n";
+
+#26)Kth smallest element
+my @arr = (0, 2, 3, 5, 1);
+my $k = 3;
+my $element;
+
+@sorted = sort (@arr);
+
+foreach my $x (0..$#arr) {
+    $element = $arr[$x] if ($x == $k);
+}
+
+print "kth smallest element:$element \n";
+
+#27) Zero Sum Subarrays
+Input:
+n = 6
+arr[] = {0,0,5,5,0,0}
+Output: 6
+Explanation: The 6 subarrays are
+[0], [0], [0], [0], [0,0], and [0,0].
+
+use Data::Dumper;
+sub getZeroSumSubarray {
+    my ($arr) = @_;
+    my @arr = @{$arr};
+    my %hash;
+
+
+    $count=1;
+    #Forst get the single elements that are 0
+    foreach my $x (0..$#arr) {
+        if ($arr[$x] == 0) {
+            $hash{$count} = [$arr[$x]];
+            $count++;
+        }
+    }
+    print "count:$count \n";
+
+    # Then get the pairs whose sum is 0
+    $i=0;
+    foreach my $x ($i..$#arr) {
+        $sum = $arr[$x];
+        @temp = $arr[$x];
+        $j = ($x+1);
+        foreach my $y ($j..$#arr) {
+            $sum += $arr[$y] ;
+            if ($sum == 0) {
+                push (@temp, $arr[$y]);
+                $temp = join('',@temp);
+                $hash{$count} = $temp;
+                $count++;
+            } else {
+               last();
+            }
+        }
+    }
+    return \%hash;
+}
+
+$result = getZeroSumSubarray([0,0,5,5,0,0]);
+print "result is: \n";
+print Dumper($result);
+
+#28) Minimum number of jumps -do
+sub min_jumps_to_reach_end {
+    my @arr = @_;
+    my $n = scalar @arr;
+
+    # If the array has only one element or the first element is 0, it's not possible to reach the end
+    return -1 if $n <= 1 || $arr[0] == 0;
+
+    my $max_reach = $arr[0];  # Maximum indexes that can be reached
+    my $steps = $arr[0];      # Number of steps available at the current index
+    my $jumps = 1;            # Initial jump
+
+    print "arr:@arr \n";
+    for my $i (1..$n-1) {
+        # If the current index is the last index, return the number of jumps
+        return $jumps if $i == ($n - 1);
+
+        # Update the maximum reach
+        $max_reach = $i + $arr[$i] if ($i + $arr[$i]) > $max_reach;
+#        print "max_reach:$max_reach ; index:$i, value:$arr[$i] \n ";
+
+        # Reduce the steps available
+#        print "element:$arr[$i] ; steps:$steps \n";
+        $steps--;
+        print "reduced steps:$steps \n";
+
+        # If no more steps are available, take a jump and update steps with the remaining steps
+        if ($steps == 0) {
+            $jumps++;
+
+            # If the current index is greater than or equal to the maximum reach, it's not possible to reach the end
+            return -1 if $i >= $max_reach;
+            print "max_reach:$max_reach; i:$i \n";
+            $steps = $max_reach - $i;
+        }
+    }
+
+    return -1;  # If we reach here, it means we haven't reached the end
+}
+
+# Example usage:
+my @arr = (1, 3, 5, 9, 8, 2, 6, 7, 6, 8, 9);
+my $result = min_jumps_to_reach_end(@arr);
+
+if ($result != -1) {
+    print "Minimum number of jumps: $result\n";
+} else {
+    print "It's not possible to reach the end.\n";
+}
+
+#ques: why we need max reach. Why not only get the steps and increase the jump when step==0. like below
+sub minJumps {
+    my ($arr) = @_;
+    my @arr = @{$arr};
+
+    $steps = $arr[0];
+    $jumps = 0;
+    foreach my $x (0..$#arr) {
+
+        $steps--;
+        if ($steps == 0) {
+            $jumps++;
+            $steps = $arr[$x]; #update the steps
+        }
+    }
+    return $jumps;
+}
+
+$result = minJumps([1, 3, 5, 9, 8, 2, 6, 7, 6, 8, 9]);
+print "result is: $result \n";
+
+#29)Minimum Platforms -- later
+
+#30)Maximum of all subarrays of size k
+use Data::Dumper;
+
+sub getMinMaxOfSubarray {
+    my ($size, $arr) = @_;
+    my @arr = @{$arr};
+
+    print "array:@arr \n";
+    my ($min, $max, $count, %hash);
+    foreach my $x ($i..$#arr) {
+        @temp = $arr[$x];
+        $j = ($x + 1);
+        foreach my $y ($j..$#arr) {
+            push (@temp, $arr[$y]);
+            print "y:$arr[$y] \n";
+            if (scalar(@temp) == $size) {
+                @temp = sort(@temp);
+                $max = $temp[-1];
+                $min = $temp[0];
+                $temp = join('',@temp);
+                $hash{$count} = [max.$max, min.$min, temp.$temp];  #good
+                $count++;
+                last();
+            }
+        }
+    }
+    return \%hash;
+}
+
+$size = 3;
+$result = getMinMaxOfSubarray($size, [1, 2, 3, 1, 4, 5, 2, 3, 6]);
+print Dumper($result);
+
+#31)Stock span problem -- later
+
+#32)Subarray with given sum
+use Data::Dumper;
+
+sub getSubarray {
+    my ($sum, $arr) = @_;
+    my @arr = @{$arr};
+
+    print "array:@arr \n";
+    my ($i,$j,%hash,$count);
+    foreach my $x ($i..$#arr) {
+        $j = ($x+1);
+        $actualSum = $arr[$x];
+        @temp = $arr[$x];
+        foreach my $y ($j..$#arr) {
+            push (@temp, $arr[$y]);
+            $actualSum += $arr[$y];
+            if ($actualSum == $sum) {
+                $temp=join('',@temp);
+                $hash{$count} = [leftIndex.$x , rightIndex.$y, subArray.$temp];
+                $count++;
+                last();
+            }
+        }
+    }
+    return \%hash;
+}
+
+my $sum = 12;
+$result = getSubarray($sum, [1,2,3,7,5]);
+print "result is:\n";
+print Dumper($result);
+
+#33)Count Inversions - do -- simply count ($i,$j) pairs when $i>$j [brute force]
+Inversion Count: For an array, inversion count indicates how far (or close) the array is from being sorted. If the array is already sorted then the inversion count is 0.
+If an array is sorted in the reverse order then the inversion count is the maximum.
+Formally, two elements a[i] and a[j] form an inversion if a[i] > a[j] and i < j.
+
+sub count_inversions {
+    my @arr = @_;
+    my $n = scalar @arr;
+
+    # If the array has zero or one element, there are no inversions
+    return 0 if $n <= 1;
+
+    my $count = 0;
+    my @temp = (0) x $n;
+
+    merge_sort_and_count(\@arr, \@temp, 0, $n - 1, \$count);
+
+    return $count;
+}
+----------------method2-----------------------------------------------------------
+sub merge_sort_and_count {
+    my ($arr_ref, $temp_ref, $left, $right, $count_ref) = @_;
+
+    if ($left < $right) {
+        my $mid = int(($left + $right) / 2);
+
+        merge_sort_and_count($arr_ref, $temp_ref, $left, $mid, $count_ref);
+        merge_sort_and_count($arr_ref, $temp_ref, $mid + 1, $right, $count_ref);
+
+        $count_ref += merge_and_count_split_inversions($arr_ref, $temp_ref, $left, $mid, $right);
+    }
+}
+
+sub merge_and_count_split_inversions {
+    my ($arr_ref, $temp_ref, $left, $mid, $right) = @_;
+
+    my $i = $left;
+    my $j = $mid + 1;
+    my $k = $left;
+    my $count = 0;
+
+    while ($i <= $mid && $j <= $right) {
+        if ($arr_ref->[$i] <= $arr_ref->[$j]) {
+            $temp_ref->[$k++] = $arr_ref->[$i++];
+        } else {
+            # Inversion found
+            $count += $mid - $i + 1;
+            $temp_ref->[$k++] = $arr_ref->[$j++];
+        }
+    }
+
+    while ($i <= $mid) {
+        $temp_ref->[$k++] = $arr_ref->[$i++];
+    }
+
+    while ($j <= $right) {
+        $temp_ref->[$k++] = $arr_ref->[$j++];
+    }
+
+    # Copy the merged elements back to the original array
+    for my $i ($left..$right) {
+        $arr_ref->[$i] = $temp_ref->[$i];
+    }
+
+    return $count;
+}
+
+# Example usage:
+my @arr = (2, 4, 1, 3, 5);
+my $result = count_inversions(@arr);
+print "Number of inversions: $result\n";
+
+#34)Kadane's Algorithm - Largest Sum of Contiguous Subarray
+sub kadane {
+    my ($arr) = @_;
+    my @arr = @{$arr};
+
+    my ($i,$j,@temp, %hash, $sum);
+    my $count=1;
+    $i=$j=0;
+    print "arr:@arr \n";
+    foreach my $x ($i..$#arr) {
+        $j = ($x + 1);
+        $sum = $arr[$x];
+        @temp = $arr[$x];
+        foreach my $y ($j..$#arr) {
+            $sum += $arr[$y];
+            push (@temp, $arr[$y]);
+            $temp = join('', @temp);
+            $hash{$temp} = $sum;
+            $count++;
+        }
+    }
+    my @values = values %hash;
+    my @sorted = sort(@values);
+    ($key) = grep {$hash{$_} == $sorted[-1]} keys %hash;
+    return $key;
+}
+
+$result = kadane([-2, -3, 4, -1, -2, 1, 5, -3]);
+print " subarray with largest sum is is: $result \n";
+
+#35)Stock buy and sell
+
+#36)Trapping Rain Water
+
+#37) Rearrange Array Alternately
+Given a sorted array of positive integers. Your task is to rearrange the array elements alternatively i.e first element should be max value, second should be min value, third should be second max, fourth should be second min and so on.
+Note: Modify the original array itself. Do it without using any extra space. You do not have to return anything.
+
+Mine: Do reverse sort and then wave sort.
+
+#38)Minimum Swaps to Sort - https://www.youtube.com/watch?v=dtgnUcA0VxU&t=162s --good
+#hint: create a hash from sorted array [position => value]. Then iterate the original array and get element's postion from hash.
+[root@sgxhajj1 ~]# cat b.pl
+sub sortCount {
+    my ($arr) = @_;
+    my (@arr) = @{$arr};
+
+    my @arrCopy = @arr; #create a copy array to get the replacement elemnts whose index is overwritten by other element of @arr.
+    my $i = $swapCount = 0;
+    my @sorted = sort(@arr);
+    print "arr:@arr \n";
+    foreach my $x ($i..$#sorted) {
+        $hash{$sorted[$x]} = $x;
+    }
+
+    #Now iterate the @arr
+    foreach my $y ($i..$#arr) {
+        #get the correct index of $arr[$x] using
+        my $expectedIndex = $hash{$arr[$y]};
+        print "Index of element:$arr[$y] should be $expectedIndex \n";
+        $flag=1;
+        while ($flag) {
+            if ($expectedIndex != $y) {
+                # Then move $arr[$y] to $expectedIndex and element at $expectedIndex to $y.
+                $arr[$expectedIndex] = $arr[$y];
+                $arr[$y] = $arrCopy[$expectedIndex];
+                # Get the expected index of element newly moved at $y
+                $expectedIndex = $hash{$arr[$y]};
+                print "Expected index of element:$arr[$y] newly moved at index:$y is $expectedIndex \n";
+                $swapCount++;
+            } else {
+                $flag = 0;
+            }
+        }
+    }
+    return $swapCount;
+}
+
+
+$result = sortCount([1, 5, 4, 3, 2]);
+print "result is: $result \n";
+
+#39)Largest subarray with 0 sum
+use Data::Dumper;
+sub zeroSumArray {
+    my ($arr) = @_;
+    my @arr = @{$arr};
+
+    my ($count, $i, $j) = (0, 0, 0);
+    my %hash;
+    foreach my $x ($i..$#arr) {
+        $sum = $arr[$x];
+        @temp = $arr[$x];
+        $j = ($x + 1);
+        foreach my $y ($j..$#arr) {
+            $sum += $arr[$y];
+            push(@temp, $arr[$y]);
+            if ($sum == 0) {
+                $temp = join('',@temp);
+                $hash{$count} = $temp;
+                $count++;
+            }
+        }
+    }
+    return \%hash;
+}
+
+$result = zeroSumArray([15, -2, 2, -8, 1, 7, 10, 23]);
+print "result is: \n";
+print Dumper($result);
+
+#40) Minimum Platforms
+
+#41)Subarray with given sum -done
+
+#42) Minimum Swaps to Sort -done
+
+#43)Maximum subset XOR
+#hint:In Perl, you can find the XOR (exclusive OR) of two numbers using the bitwise XOR operator (^)
+my $num1 = 5;
+my $num2 = 3;
+my $result = $num1 ^ $num2; --good - XOR sign
+
+Ex:
+arr[] = {2, 4, 5}
+Output : 7
+Explanation :
+The subset {2, 5} has maximum subset XOR value.
+
+#44)Search in a Rotated Array - Need to find index of given Key in array. - Easy
+Input:
+N = 9
+A[] = {5, 6, 7, 8, 9, 10, 1, 2, 3}
+key = 10
+Output:
+5
+Explanation: 10 is found at index 5.
+
+#45)Allocate minimum number of pages - do
+sub minimizeSum {
+    my ($student, $arr) = @_;
+    my @arr = @{$arr};
+
+    my ($i, $x, $sum1, $sum2, %hash);
+    $i = 0;
+    print "array:@arr \n";
+    # First find the sum of all pages.
+    foreach my $x ($i..$#arr) {
+        $sum1 += $arr[$x];
+    }
+
+    my $sum2; my @temp ;
+    #Now get the combination where $diff is min [$diff = ($sum1 - $arr[$x])]. This way neither of the student is overloaded i.e both are almost same loaded
+    foreach my $x ($i..$#arr) {
+        $sum2 += $arr[$x]; #since books should be distributed in continuous order.
+        $diff = ($sum1 - $sum2);
+        print "s1.$sum1, diff.$diff, sum2:$sum2, temp:$temp[-1] \n";
+        push (@temp, $diff) ;
+        if ($diff < $temp[0]) {  #some issue, not going in IF , (check now)
+            shift @temp; #remove the earlier $diff
+            $hash{$i} = [s1.$arr[$x], s2.$diff];
+        } else {
+           pop @temp; #remove the latest $diff
+        }
+    }
+    return \%hash;
+}
+my $student = 2;
+$result = minimizeSum($student, [12,34,67,90]);
+print Dumper($result);
+
+
+#46)Sort an array according to the other
+Given two arrays A1[] and A2[], sort A1 in such a way that the relative order among the elements will be same as those are in A2. For the elements not present in A2, append them at last in sorted order.
+
+Example:
+
+Input: A1[] = {2, 1, 2, 5, 7, 1, 9, 3, 6, 8, 8}
+           A2[] = {2, 1, 8, 3}
+Output: A1[] = {2, 2, 1, 1, 8, 8, 3, 5, 6, 7, 9}
+
+sub sortArrayLikeOther {
+    my ($arr1, $arr2) = @_;
+    my @arr1 = @{$arr1}; my @arr2 = @{$arr2};
+
+    print "arr1:@arr1 ; arr2:@arr2 \n";
+    foreach my $x (0..$#arr1) {
+        foreach my $y (0..$#arr2) {
+            if ($arr1[$x] == $arr2[$y]) {
+                push (@ordered, $arr2[$y]);
+                $arr2[$y] = undef; #make the element empty:good
+            }
+        }
+    }
+    @arr2 = grep {defined  && /\S/} @arr2;  # Remove the empty/undefined elements :good
+    return [@ordered, @arr2];
+}
+
+$result = sortArrayLikeOther([2, 1, 8, 3],[2, 1, 2, 5, 7, 1, 9, 3, 6, 8, 8]);
+print "result: @{$result} \n"
+
+#47)Find All Four Sum Numbers
+Given an array A of integers and another number K. Find all the unique quadruple from the given array that sums up to K.
+
+Also note that all the quadruples which you return should be internally sorted, ie for any quadruple [q1, q2, q3, q4] the following should follow: q1 <= q2 <= q3 <= q4.
+use Data::Dumper;
+
+sub quad {
+    my ($sum, $arr) = @_;
+    my @arr = @{$arr};
+
+    my $i = 1;
+    foreach my $x (0..$#arr) {
+        @quad = $arr[$x];
+        $count=1;
+        $sum = $arr[$x];
+        foreach my $y ($0..$#arr) {
+            if ($count <= 4) {
+                push (@quad, $arr[$y]);
+                $sum += $arr[$y];
+                $count++;
+                @quad = sort(@quad);
+                $quad = join('', @quad);
+                $hash{$i} = $quad if ($sum == 3);
+            } else {
+                last();
+            }
+        }
+    }
+    return \%hash;
+}
+
+my $sum=3;
+$result = quad($sum, [0,0,2,1,1]);
+print "result is:";
+print Dumper($result);
+
+#48) Number of pairs
+Given two arrays X[] and Y[] of positive integers, find a number of pairs such that x^y > y^x where x is an element from X[] and y is an element from Y[].
+use Data::Dumper;
+
+sub xPowery {
+    my ($arr1, $arr2) = @_;
+    my @arr1 = @{$arr1};  my @arr2 = @{$arr2};
+
+    my $count;
+    foreach my $x (0..$#arr1) {
+        foreach my $y (0..$#arr2) {
+            $power = $arr1[$x]**$arr2[$y]; #good, x to the power of y
+            print "power: $power ; $arr1[$x], $arr2[$y]\n";
+            if ($arr1[$x]^$arr2[$y] > $arr2[$y]^$arr1[$x]) {
+                $hash{$count} = $arr1[$x].$arr2[$y];
+                $count++;
+            }
+        }
+    }
+    return \%hash;
+}
+
+$result = xPowery([2, 1, 6], [1,5]);
+print Dumper($result);
+
+#48) Sort an array in wave form
+sub waveSort {
+    my ($arr) = @_;
+    my @arr = @{$arr};
+
+    @arr = sort(@arr);
+    my $i = 0;
+    foreach my $x ($i, $i<=$#arr, $i += 2 ) {  #good
+        $j = ($x+1);
+        ($arr[$x],$arr[$j]) = ($arr[$j],$arr[$x]);
+    }
+
+OR:
+
+    foreach my $x (0..$#arr ) {  #good
+        ($arr[$x],$arr[$x+1]) = ($arr[$x+1],$arr[$x]);
+    }
+    return \@arr;
+}
+
+$result = waveSort([10, 5, 6, 3, 2, 20, 100, 80]);
+print "result is: @{$result} \n";
+
+#49)Heap Sort - hard
+
+#50)Largest BST - hard
+
+#51)Quick Sort --good
+sub quickSort {
+    my (@arr) = @_;
+
+    return @arr if @arr < 2;
+
+    my $pivot = shift @arr;
+
+    my @less = grep {$_ <= $pivot} @arr;
+    my @more = grep {$_ > $pivot} @arr;
+
+    print "array now:@arr ;pivot:$pivot; less:@less ; more:@more\n";
+    return (quickSort(@less), $pivot, quickSort(@more));
+}
+my @unsorted = (3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5);
+my @sorted = quickSort(@unsorted);
+print "sorted:@sorted \n";
+
+#52)Merge Sort - do
+sub merge_sort {
+    my @array = @_;
+
+    return @array if @array < 2;
+
+    my $middle = int(@array / 2);
+
+    my @left  = merge_sort(@array[0 .. $middle - 1]); #this thing, how flow will go to below line??
+    my @right = merge_sort(@array[$middle .. $#array]);
+
+    return merge(\@left, \@right);
+}
+
+sub merge {
+    my ($left_ref, $right_ref) = @_;
+    my @merged;
+
+    while (@$left_ref && @$right_ref) {
+        push @merged, $left_ref->[0] <= $right_ref->[0] ? shift @$left_ref : shift @$right_ref;
+    }
+
+    push @merged, @$left_ref, @$right_ref;
+
+    return @merged;
+}
+
+# Example usage:
+my @unsorted = (3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5);
+my @sorted = merge_sort(@unsorted);
+
+print "Unsorted: @unsorted\n";
+print "Sorted:   @sorted\n";
+
+#53)Merge Without Extra Space --good-do -- https://www.youtube.com/watch?v=NWMcj5QFW74
+
+#54)Alien Dictionary -- good-do
+
+$55)First non-repeating character in a stream
+my $str = 'geeksforgeeks';
+@arr = split('', $str);
+foreach my $x (0..$#arr) {
+    $j = ($x+1);
+    $found=0;
+    foreach my $y ($j..$#arr) {
+        if ($arr[$x] eq $arr[$y]) {
+            $found=1;
+            last();
+        }
+    }
+    if (!$found) {
+        print "first non-repeating:$arr[$x] \n" ;
+        last();
+    }
+}
+
+#56)Array Pair Sum Divisibility Problem
+Given an array of integers nums and a number k, write a function that returns true if given array can be divided into pairs such that sum of every pair is divisible by k.
+
+Example 1 :
+
+Input :
+nums = [9, 5, 7, 3]
+k = 6
+Output:
+True
+
+use Data::Dumper;
+my @arr = (9, 5, 7, 3);
+my $k = 6;
+
+$count=1;
+foreach my $x (0..$#arr) {
+    $j=($x+1);
+    foreach my $y ($j..$#arr) {
+        $sum = ($arr[$x] + $arr[$y]);
+        if ($sum%$k == 0) {
+            $hash{$count} = $arr[$x].$arr[$y];
+            $count++;
+            $sum;
+        }
+    }
+}
+print Dumper(\%hash);
+
+#57)Longest consecutive subsequence
+Given an array of integers, find the length of the longest sub-sequence such that elements in the subsequence are consecutive integers, the consecutive numbers can be in any order.
+
+Examples:
+
+Input: arr[] = {1, 9, 3, 10, 4, 20, 2}
+Output: 4
+Explanation: The subsequence 1, 3, 4, 2 is the longest subsequence of consecutive elements
+
+Input: arr[] = {36, 41, 56, 35, 44, 33, 34, 92, 43, 32, 42}
+Output: 5
+Explanation: The subsequence 36, 35, 33, 34, 32 is the longest subsequence of consecutive elements.
+
+Hint: Sort the array and get the longest sequence
+use Data::Dumper;
+my @arr = (36, 41, 56, 35, 44, 33, 34, 92, 43, 32, 42);
+@arr = sort(@arr);
+print "arr:@arr \n";
+
+foreach my $x (0..$#arr) {
+    $j = ($x+1);
+    @sequence = $arr[$x];
+    $expected = ($arr[$x] + 1); #next digit should be increamented by 1
+    foreach $y ($j..$#arr) {
+        if ($arr[$y] == $expected ) {
+           push (@sequence, $arr[$y]);
+           $expected += 1; #next digit should be increamented by 1
+           next();
+        } else {
+            $sequence = join('', @sequence);
+            $hash{$count} = $sequence;
+            $count++;
+            last();
+        }
+    }
+}
+
+print Dumper(\%hash);
+
+#58)Smallest window in a string containing all the characters of another string --hard
+
+#59)LRU Cache - do via array undef, unshift
+
+#60)Shortest Source to Destination Path --NA --matrix
+
+#61)Rotten Oranges --NA-matrix
+
+#62)Find whether path exist --NA-matrix
+
+#63) Longest Palindrome in a String
+#hint--to check odd size palindrom, make the orbit
+#https://www.youtube.com/watch?v=vTlVtLvPQo4
+
+use Data::Dumper;
+#$str = 'forgeekskeegfor';
+$str = 'forgeeksskeegfor';
+
+@arr = split('', $str);
+print "arr:@arr \n";
+$i =0 ; $count=1;
+foreach my $x ( 1..($#arr-1) ) {
+    @sequence = $arr[$x]; #initialize @sequence with axis.
+    foreach my $y ( 1..($#arr-1) ) {
+        if ($arr[$x-$y] eq $arr[$x+$y]) { #in odd size palin, axis is at element x and orbit is expaning by ([$x-$y], [$x+$y])
+             $count++;
+             unshift (@sequence, $arr[$x-$y]); push (@sequence, $arr[$x+$y]);
+        } else {
+            $sequence = join('', @sequence);
+            $hash{$i} = $sequence; $i++;
+            last();
+        }
+    }
+}
+print Dumper(\%hash);;
+
+For EVEN size palindrom: #in even size palin, axis is between two elements and orbit is expaning by ([$x-$y+1], [$x+$y])
+use Data::Dumper;
+#$str = 'forgeekskeegfor'; #odd
+$str = 'forgeeksskeegfor';   #even
+
+@arr = split('', $str);
+print "arr:@arr \n";
+$i =0 ; $count=1;
+foreach my $x ( 2..($#arr-1) ) {
+#    @sequence = $arr[$x];
+    foreach my $y ( 1..($#arr-1) ) {
+        if ($arr[$x-$y+1] eq $arr[$x+$y]) {
+             $count++;
+             print "x:$x, y:$y ; $arr[$x-$y+1] , $arr[$x+$y] \n";
+             unshift (@sequence, $arr[$x-$y+1]); push (@sequence, $arr[$x+$y]);
+        } else {
+            $sequence = join('', @sequence);
+            $hash{$i} = $sequence; $i++; @sequence = (); #Empty the @sequence
+            last();
+        }
+    }
+}
+print Dumper(\%hash);;
+
+
+#64)Median in a row-wise sorted Matrix -NA
+
+#65)Solve the Sudoku -- NA
+
+#66)Rearrange characters so that two adjacent charaters are not duplicates
+if $char_freq > scalar(@arr)/2 -- then not possible-good
+create a hash of "character vs frequency"
+always start arranging char of highest freq at 0th index, then alternate i.e 2, 4, 6. Then remaining charaters are either at 8, 10 or 1, 3, 5,
+
+#67)Search Pattern (Rabin-Karp Algorithm
+Input:  T[] =  “AABAACAADAABAABA”, P[] =  “AABA”
+Output: Pattern found at index 0
+              Pattern found at index 9
+              Pattern found at index 12
+
+#68)Recursively remove all adjacent duplicates
+#hint: we can update the array size (by $arr[$x] = undef ; @arr = grep {defined($_)} @arr;) even when 'foreach' loop has started.
+my $str = 'caaabbbaacdddd';
+my @arr = split ('',$str);
+
+my $count=1;
+print "str:$str \n";
+foreach my $x (0..$#arr) {
+    $count = scalar(@arr);
+    print "At charater:$arr[$x]; size is:$count \n";
+    while($arr[$x] eq $arr[$x+1]) {
+        print "in while: $arr[$x] , $arr[$x+1] \n"; my $a = <STDIN>;
+        $arr[$x+1] = undef;
+        @arr = grep {defined($_)} @arr;
+        $count = scalar(@arr);
+        print " arr:@arr; size is now:$count \n";
+    }
+}
+$str = join('',@arr);
+print "str:$str \n";
+
+#69)Permutations of a given string --getting only 8 combination of (ABCD) --find 4 more
+my $str = 'abcd';
+my @arr = split ('',$str);
+my @arrCopy = @arr;
+
+my $str = 'abcd';
+my @arr = split ('',$str);
+my @arrCopy = @arr;
+
+my $count=1; my @combination; my @arrCopy = @arr;
+
+print "str:$str \n";
+#First get the simple combination by movinf the character at the last in sequence.
+foreach my $x (0..$#arr) {
+   $temp = $arr[$x];
+   $arr[$x] = undef;
+   push(@arr, $temp);
+   @arr = grep {defined($_)} @arr;
+   $arr = join('', @arr);
+   push (@combination, $arr);
+
+   # Now get the combination by swapping the places with every other charater.
+   @arrCopy1 = @arr;
+   foreach my $x (0..$#arr) {
+        foreach my $y (0..$#arr) {
+            next () if ($x==$y);
+            ($arr[$x], $arr[$y]) = ($arr[$y], $arr[$x]);
+            $arr = join('', @arr);
+            push (@combination, $arr);
+            @arr = @arrCopy1;
+        }
+    }
+
+    @arr = @arrCopy;
+}
+print "combination:@combination  \n";
+
+%seen;
+@combination = grep {!$seen{$_}++} @combination;
+print "combination:@combination  \n";
+
+#70) Longest Prefix Suffix --same as longesg palindrom
+Given a string of characters, find the length of the longest proper prefix which is also a proper suffix.
+
+NOTE: Prefix and suffix can be overlapping but they should not be equal to the entire string.
+
+Example 1:
+
+Input: s = "abab"
+Output: 2
+Explanation: "ab" is the longest proper
+prefix and suffix.
+
+
+#71) Kth element in Matrix
+
+#72) Implement Atoi
+Your task  is to implement the function atoi. The function takes a string as an argument and converts it to an integer and returns it. If the string is not numerical, then return -1. Numerical strings are the strings where either every character is in between 0-9 or where the first character is '-' and the rest all characters are in between 0-9.
+
+Note: You are not allowed to use inbuilt function.
+
+Example 1:
+
+Input:
+str = 123
+Output: 123
+Example 2:
+
+Input:
+str = 21a
+Output: -1
+Explanation: Output is -1 as 'a'
+can not be converted to integer.
+
+Hint: split and iterate. It it is between 0-9 or -1, then push. It either is not numeric, then pop .
+
+#73)Generate IP Addresses
+
+#74)Edit Distance
+Given two strings str1 and str2 of length M and N respectively and below operations that can be performed on str1. Find the minimum number of edits (operations) to convert ‘str1‘ into ‘str2‘.
+
+Operation 1 (INSERT): Insert any character before or after any index of str1
+Operation 2 (REMOVE): Remove a character of str1
+Operation 3 (Replace): Replace a character at any index of str1 with some other character.
+Note: All of the above operations are of equal cost.
+
+Examples:
+
+Input:   str1 = “geek”, str2 = “gesek”
+Output:  1
+Explanation: We can convert str1 into str2 by inserting a ‘s’ between two consecutive ‘e’ in str2.
+
+
+#75)Circle of strings
+Given an array of lowercase strings A[] of size N, determine if the strings can be chained together to form a circle.
+A string X can be chained together with another string Y if the last character of X is same as first character of Y. If every string of the array can be chained with exactly two strings of the array(one with the first character and second with the last character of the string), it will form a circle.
+
+For example, for the array arr[] = {"for", "geek", "rig", "kaf"} the answer will be Yes as the given strings can be chained as "for", "rig", "geek" and "kaf"
+Hint: take 1st and last character of all words and check if all collected letter are 2 in number.
+
+#76) Form a palindrome --check--good
+
+#77)Special Keyboard
+
+#78) Program to generate all possible valid IP addresses from given string
+
+Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+A valid IP address must be in the form of A.B.C.D, where A, B, C, and D are numbers from 0-255. The numbers cannot be 0 prefixed unless they are 0.
+
+Examples :
+
+Input: 25525511135
+Output: [“255.255.11.135”, “255.255.111.35”]
+Explanation:
+These are the only valid possible
+IP addresses.
+
+Input: "25505011535"
+Output: []
+Explanation:
+We cannot generate a valid IP
+address with this string.
+First, we will place 3 dots in the given string and then try out all the possible combinations for the 3 dots.
+Corner case for validity:
+
+For string "25011255255"
+25.011.255.255 is not valid as 011 is not valid.
+25.11.255.255 is not valid either as you are not
+allowed to change the string.
+250.11.255.255 is valid.
+
+#79)Check if a given string is Even-Odd Palindrome or not
+Given a string str, the task is to check if the given string is Even-Odd Palindrome or not.
+
+Hint:An Even-Odd Palindrome string is defined to be a string whose characters at even indices form a Palindrome while the characters at odd indices also form a Palindrome separately.
+
+#80) Rat in a Maze Problem - I - matrix
+
+#81) To solve this problem, you can count the frequency of each character in the given string. For a permutation of a palindrome, the characters can occur in pairs, except for at most one character. Based on this, you can determine the number of ways to add zero or one letter to the string to make it a palindrome.
+use strict;
+use warnings;
+
+sub palindrome_ways {
+    my $input_str = shift;
+    my %char_count;
+
+    # Count the frequency of each character in the input string
+    for my $char (split //, $input_str) {
+        $char_count{$char}++;
+    }
+
+    my $odd_count = 0;
+
+    # Count the number of characters with odd frequency
+    for my $count (values %char_count) {
+        $odd_count++ if $count % 2 != 0;
+    }
+
+    # Calculate the number of ways to add zero or one letter
+    my $ways = $odd_count <= 1 ? 1 : 0;
+
+    # Add one letter for each character with odd frequency
+    $ways += $char_count{$_} % 2 == 1 for keys %char_count;
+
+    return $ways;
+}
+
+# Example usage:
+my $input_str = "abcab";
+my $result = palindrome_ways($input_str);
+print "Number of ways: $result\n";
+
+========================================================================================
+[root@sgxhajj1 ~]# cat a2.pl
+#URL:https://www.geeksforgeeks.org/explore?page=1&category=Arrays,Strings&difficulty=Basic,Easy,Medium&sprint=a663236c31453b969852f9ea22507634&sortBy=latest&sprint_name=SDE%20Sheet
+
+#1)Equilibrium point
+
+my @arr = (1,2,3,5,2,2,2);
+my $sum = 0;
+$i = 0;
+foreach my $x ($i..$#arr) {
+    $sum = $sum + $arr[$x];
+}
+
+my $rem = $sum%2;
+my $quotient = int($sum/2);
+
+# Now read the element till their sum exceeds $quotient. Once reached, that element itself is EP.
+$sum = 0;
+my $ep;
+foreach my $x ($i..$#arr) {
+    $sum = $sum + $arr[$x];
+    print "sum:$sum ===\n";
+    if ($sum > $quotient) {
+        $ep = ($x);
+        last();
+    }
+}
+print "epIndex:$ep ; epValue:$arr[$ep] \n";
+#----------------------------------------------------------------
+
+#2) Minimize the sum of product
+#hint:If you have two arrays A and B of equal size N, and you want to minimize the sum of products, a common approach is to sort one array in ascending order and the other array in descending order. Then, multiply the corresponding elements of the sorted arrays and sum them up.
+
+my @array_a = (3, 1, 1);
+my @array_b = (6, 5, 4);
+my $sum = 0;
+
+sub minimize_sum_of_product {
+    my ($array_a, $array_b) = @_;  #good
+    my @sorted_a = sort {$a <=> $b} @{$array_a};
+    my @sorted_b = sort {$b <=> $a} @{$array_b}; #good, reverse sort
+
+    foreach my $x (0..$#sorted_a) {
+        $sum += ($sorted_a[$x] * $sorted_b[$x]);
+    }
+
+    return $sum;
+}
+
+$sum = minimize_sum_of_product (\@array_a, \@array_b);
+print "Minimized sum of product: $sum\n";
+
+----------------------------------------------------------------
+
+#3) Remove K digits from the number so that the new number is the smallest possible - https://www.youtube.com/watch?v=3QJzHqNAEXs
+#hint: without juggling the digits, remove those k digits such that resulting number digit comes in ascending order.
+# basically we are not putting k biggest digits of $num into @stack.
+sub remove_k_digits {
+    my ($num, $k) = @_;
+    my @stack;  #this is the final array in ascending order of digits
+
+    for my $digit (split //, $num) {
+        while ($k > 0 && @stack && $stack[-1] gt $digit) {
+            pop @stack;
+            print "stack:@stack---digit:$digit---\n";
+            $k--;
+        }
+        print "before push:stack:@stack===digit:$digit==\n"; my $a = <STDIN>;
+        push @stack, $digit;
+        print "stack:@stack===digit:$digit==\n"; my $a = <STDIN>;
+    }
+
+    # If there are still remaining digits to be removed, remove from the end
+    while ($k > 0) {
+        pop @stack;
+        $k--;
+    }
+
+    # Remove leading zeros
+    my $result = join('', @stack) =~ s/^0+//r;
+
+    # If the result is an empty string, return '0'
+    return $result || '0';
+}
+
+# Example usage:
+my $num = "1432219";
+my $k = 3;
+my $result = remove_k_digits($num, $k);
+print "$result\n";
+
+#-----------------------------------------------------------------
+
+#4) Array Subset of another array
+#Given two arrays: a1[0..n-1] of size n and a2[0..m-1] of size m. Task is to check whether a2[] is a subset of a1[] or not. Both the arrays can be sorted or unsorted. There can be duplicate elements.
+
+my @a1 = (11, 7, 1, 13, 21, 3, 7, 3);
+my @a2 = (11, 3, 7, 5, 1, 7);
+my $result = 'yes';
+
+sub compare {
+    my ($a1, $a2) = @_;
+    @a1 = @{$a1};
+    @a2 = @{$a2};
+    foreach my $x (@a2) {
+        print "x:$x \n";
+        next() if (grep{$_ == $x} @a1);
+        print "$x of a2 is not in a1 \n";
+        $result = 'No';
+        last();
+    }
+    return $result;
+}
+
+$result = compare(\@a1, \@a2);
+print "result:$result \n";
+
+#-----------------------------------------------------------------
+
+#5) Longest Common Prefix in an Array
+Given an array of N strings, find the longest common prefix among all strings present in the array.
+
+
+Example 1:
+
+Input:
+N = 4
+arr[] = {geeksforgeeks, geeks, geek,
+         geezer}
+Output: gee
+
+my @arr = ("flower", "flaw", "floght");
+
+my @sorted = sort(@arr);   #good: this will ensure if we compare only 1st and last elemet, middle element will already contain that charaters.
+my @first = split ('', $sorted[0]);
+my @last = split ('', $sorted[-1]);
+my @common;
+
+foreach my $x (0..$#first) {
+     last() if ($first[$x] ne $last[$x]);
+     push (@common, $first[$x]);
+}
+
+print "common:@common \n";
+
+#-----------------------------------------------------------------
+
+#6) Find all pairs with a given sum
+Given two unsorted arrays A of size N and B of size M of distinct elements, the task is to find all pairs from both arrays whose sum is equal to X.
+
+use Data::Dumper;
+my @a1 = (1, 2, 4, 5, 7);
+my @a2 = (5, 6, 3, 4, 8);
+my $i = $j = 0;
+$sum = 8;
+foreach my $x ($i..$#a1) {
+    foreach my $y ($j..$#a2) {
+        if ( ($a1[$x] + $a2[$y]) == $sum ) {
+           $hash{$m} = [$a1[$x], $a2[$y]] ;  #good, use hash to store multiple arrays
+           $m++;
+        }
+    }
+}
+
+print Dumper(\%hash);
+
+#-----------------------------------------------------------------
+
+#7) Convert array into Zig-Zag fashion
+Given an array arr of distinct elements of size N, the task is to rearrange the elements of the array in a zig-zag fashion
+
+sub zigzag {
+    my ($arr) = @_;
+    my @arr = @{$arr};
+
+    my $flag = 0; #current value shud be less than next value
+    @arr = sort{$a<=>$b}@arr;
+    foreach my $x ($i..$#arr) {
+        ($arr[$x+1], $arr[$x]) = ($arr[$x], $arr[$x+1]);
+    }
+    return \@arr
+}
+
+my @arr = (4, 3, 7, 8, 6, 2, 1);
+$res = zigzag(\@arr);
+print "zigzag:@{$res} \n";
+
+#-----------------------------------------------------------------
+
+#8) Missing number in array
+#Given an array of size N-1 such that it only contains distinct integers in the range of 1 to N. Find the missing element.
+
+sub findMissing {
+    my ($arr) = @_;
+    my @arr = @{$arr};
+    my $missing=0;
+    my $nextExpected;
+
+    foreach my $x ($i..$#arr) {
+        $nextExpected = ($arr[$x]+1);
+        print "$arr[$x+1] ; $nextExpected \n";;
+        next() if ($arr[$x+1] == $nextExpected);
+        $missing=1;
+        last();
+    }
+    return $nextExpected if ($missing);
+}
+
+my @arr = (1,2,3,5);
+$result = findMissing(\@arr);
+print "missing element is:$result \n"
+
+#-----------------------------------------------------------------
+
+#9) Leaders in an array
+#An element of array is a leader if it is greater than or equal to all the elements to its right side. The rightmost element is always a leader.
+
+sub findLeader {
+    my ($arr) = @_;
+    my @arr = @{$arr};
+    my @leader;
+
+    foreach my $x ($i..$#arr) {
+        if ($leader[-1] < $arr[$x]) {
+            pop @leader;
+            push (@leader, $arr[$x]);
+        }
+    }
+    return \@leader;
+}
+
+my @arr = (16,17,4,3,5,2);
+$result = findLeader(\@arr);
+@leader = @{$result};
+print "Leader of array is:$leader[-1] \n";
+
+#-----------------------------------------------------------------
+
+#10)Overlapping Intervals --NA
+Given a collection of Intervals, the task is to merge all of the overlapping Intervals.
+
+Example 1:
+
+Input:
+Intervals = {{1,3},{2,4},{6,8},{9,10}}
+Output: {{1, 4}, {6, 8}, {9, 10}}
+
+#-----------------------------------------------------------------
+
+#11) Coin Change
+#Given an integer array coins[ ] of size N representing different denominations of currency and an integer sum, find the number of ways you can make sum by using different combinations from coins[ ].
+
+
+[root@sgxhajj1 ~]#

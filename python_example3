@@ -1,0 +1,3082 @@
+#Hints:-
+#case1: Find the Kth largest element in an array -- sorted_set = sorted(arr_set) #to make the sorted set to make it ordered. ; print (sorted_set[k])
+#case2: Maximum sum of Subarray (Kadane’s Algorithm) -- if my_list[i] > current_sum + my_list[i]:  -- good , start recursion then 'break' from inside IF itself
+#case3: Find the duplicate number in an array
+#case4: Merge Intervals --good -- recursion
+#case5: Rotate Image (90 degrees) -- matrix:mine:later
+#case6: Subarray Sum Equals K -- if (cumulative_sum - k) in my_dict: ; combination.append(arr[my_dict[cumulative_sum-k] +1: end+1])      #good   
+#case7: Largest Rectangle in Histogram -- for i in range(n): ; for j in range(i, n): ; min_height = min(min_height, heights[j]) ; area = min_height * (j - i + 1)
+#case8: Product of Array Except Self -- final_list.append(prod//my_list[i])
+#case9: Trapping Rain Water -- gfg - good
+#case10: Longest Consecutive Sequence
+#case11: Search in Rotated Sorted Array. Shud return -1 if key is not available. -- while low <= high: #good: to point out the exact index, use <= ; mid = (low + high) // 2 #good: keep finding mid with new low/high inside WHILE 
+#case12: Triplet Sum in Array --good , 2 pointer approach
+#mine: # For two elements,dont use FOR loop, sort the array and then, while left < right:
+#case13: Minimum Size Subarray Sum --GFG understand it --2 pointer-sliding window --good--do
+#case14: Next Permutation -- #Lexicographical Order: Lexicographical order means dictionary-like order. -- later 
+#case15: Spiral Matrix -- later
+#case16: Find All Duplicates in an Array 
+#case17: Maximum Product Subarray -- for i in range(0, len(my_list)): ; for j in range(i+1, len(my_list)): 
+#case18: Longest Subarray with Sum 0-- if (cumulative_sum - k) in my_dict: ; length = end - my_dict[cumulative_sum - k] ; max_length = max(max_length, length)
+#case19: Sort Colors (Dutch National Flag Problem)  -- low = mid = 0 ; high = len(my_list) - 1 ; if (my_list[mid] == 0): ; my_list[mid], my_list[low] = my_list[low], my_list[mid] ; low += 1 ;mid += 1
+#case20: Subarrays with K Different Integers -- understand: sliding window --good, do
+#case21: Container With Most Water --good
+
+Remaining 20, Do BELOW:-start from these 20 the above 20
+...
+
+2. Strings 
+#case41: Longest Palindromic Substring --remember:longestPalin is by 'expand around center' ; #odd length: ; #even length:
+#case42: Longest Common Subsequence(LCS) -- # Generate all possible subsequences of every length of str1 then match all those with str2; iter_str2 = iter(str2)
+#case43: Edit Distance (Levenshtein Distance) --IF/ELSE:insertion_cost/deletion_cost/substitution_cost
+#case44: Minimum Window Substring –2 pointer — WHILE-char = s[right]/WHILE-char = s[left] ;  t_dict/s_dict
+#case46: Longest Substring Without Repeating Characters (LSWRC) char_index_map = {} ; left = char_index_map[char] + 1 
+#case47: Longest Repeating Subsequence(LRS) – non-overlaping; first_occurrence_end/ second_occurrence_end - Unlike (LCS) in LRS, we look for repeating subsequences within the same string.
+#case49: Word Break -- BF (This approach assumes that a word can be used only once. --good
+#case50: Palindrome Partitioning -- good -- see walkthrough --later, didnt understand
+#case: coin change -- from itertools import product; max_coin = amount//min(coins) ; product(coins, repeat=comb_size)
+#case53: Count and Say:- my_list = [num]  #fill the first element manually before WHILE; reset freq=1 before last digit (num[-1] )
+#case54: Zigzag Conversion --leetcode --later good
+#case55: Valid Parentheses -- matching_paranthesis
+#case56: Longest Common Prefix
+#case57: Implement strStr() (Needle in Haystack)
+#case58: Multiply Strings -- later: rev here
+#case59: Roman to Integer --later
+#case60: Integer to Roman -- later
+#case61: Valid Anagram -- if t_dict.get(x,0) != s_dict[x]:
+Or if any(key not in t_dict for key in s_dict):  #this will not consider the count of characters. So I think this wont work
+#case62: Valid Palindrome II – run pointers in both WHILE and ‘def is_palindrome’. Move one char right and left and then resultant string as 'is_palindrom'
+#case63: Remove Invalid Parentheses -- queue = deque([s]) ; if next_str not in visited:
+#case64: Longest Palindrome that can be built
+#case65: Permutation in String --good
+#case67: Minimum Number of Steps to Make Two Strings Anagram
+#case68: Reorder Data in Log Files
+#case69: good - Find the First Unique Character in a String
+#case70: Add Bold Tag in String -- Python's Counter and dict (since Python 3.7) already maintain the order of elements, so you can just use Counter directly.(OrderedDict not required)
+#case74: Smallest Substring with At Least K Repeating Characters.--good - queue = deque([(beginWord, 1)]) ; for char in 'abcdefghijklmnopqrstuvwxyz':
+#case76: Scramble String --moved to 4 - later
+#case77: Reverse Words in a String  -- my_str = 'the sky is blue' ; first convert into list by splitting then do reverse then join. else  revserse on string will reverse character level
+#mine:#Case14: Find the element with the maximum frequency in a set derived from a list.
+my_list = [1, 2, 3, 1, 2, 1, 3, 3, 3, 4, 5, 6, 3, 2, 1]
+from collections import Counter
+
+my_dict = Counter(my_list)
+max_freq_ele = max(my_dict, key=my_dict.get)  #good
+print (max_freq_ele)
+
+#good:what when we dont pass key=element_counts.get with max()
+#When you don't pass key=element_counts.get to the max() functon, it will simply return the maximum 
+of the dictionary keys based on their natural order (which is usually numerical or lexicographical for strings). 
+#It won't consider the values (frequencies) in the dictionary but only the keys themselves.
+
+#mine:Set Comprehension: {x for x in iterable if condition}
+List Comprehension: [x for x in iterable if condition]
+Dictionary Comprehension: {key_expression: value_expression for item in iterable if condition}
+
+#mine:#Case21: Sort a list of tuples based on the second element of each tuple.
+data = [(1, 4), (3, 1), (2, 3), (5, 2)]
+
+my_list = sorted(data, key=lambda x:x[1]) #good
+print (my_list)
+
+#Case22: Find the tuple with the maximum sum of its elements.
+data = [(1, 4, 3), (3, 1, 2), (2, 3, 5), (5, 2, 1)]
+max_tuple = max(data, key=lambda x:sum(x))
+print (max_tuple)
+
+#mine:#Case25: Convert a list of tuples into a dictionary. --good
+#mine:If your intention is to create a dictionary from tuples, each tuple should contain exactly two elements: a key and a value
+tuples_list = [('a', 1), ('b', 2), ('c', 3)]
+
+#my_dict = dict(tuples_list)
+#or
+
+my_dict = {key: value for key, value in tuples_list}
+print (my_dict)
+#mine:#Case28: Sort a list of tuples by the first element, and then by the second element.
+tuples_list = [(1, 2), (2, 1), (3, 3), (4, -1), (1, 2), (0, 6)]
+my_list_second = sorted(tuples_list, key=lambda x: x[1])
+my_list_first = sorted(tuples_list, key=lambda x: x[0])
+print (my_list_first)
+print (my_list_second)
+
+#Case29: Find the tuple with the smallest difference between its elements.
+tuples_list = [(1, 2), (2, 1), (3, 3), (4, -1), (1, 2), (0, 6)]
+min_diff = min(tuples_list, key=lambda x: abs(x[0]-x[1])) #good:abs
+print (min_diff)
+
+#Case30: Implement a function to return a list of tuples where the sum of elements equals a given number.
+tuples_list = [(1, 2), (3, -1), (4, -2), (5, 3), (2, 3)]
+target_sum = 5
+
+my_list = [x for x in tuples_list if sum(x) == target_sum]
+print (my_list)
+good:lambda we use for the key with inbuilt methods (say sorted(), min(), max())
+
+#Case31: Flatten a list of tuples into a single list.
+tuples_list = [(1, 2), (3, -1), (4, -2), (5, 3), (2, 3)]
+my_list = []
+
+for x in tuples_list:
+    my_list.extend(x)
+print (my_list)
+#mine:you should use the deque class from the collections module, which provides a method called appendleft(); popleft() ; append() ; pop() for this purpose.
+#mine:#way2: saving space by inplace reversal 
+def rotate_array(arr, k):
+    n = len(arr)
+    k = k % n  # Handle cases where k is larger than the array length -- good
+    # If the array has 7 elements and you rotate it 7 times, the array will remain unchanged.
+    # Rotating it 8 times is the same as rotating it 1 time because the 8th rotation brings it back to the starting position.
+    return arr[-k:] + arr[:-k]   #good
+
+arr = [1, 2, 3, 4, 5, 6, 7]
+k = 3
+rotated_arr = rotate_array(arr, k)
+print(rotated_arr)
+
+#mine:#case19: Count of Subarrays whose Product is Less Than K. --good
+# Sliding window approach
+    for right in range(len(arr)):
+        product *= arr[right]
+        
+        # Shrink the window if the product is >= k
+        while product >= k and left <= right:
+            product /= arr[left] #good, removing result of arr[left] from product before new element from right appended in window 
+            left += 1 #good, moving the window
+        
+        # The number of subarrays ending at 'right' is (right - left + 1)
+        count += (right - left + 1) #good
+    
+    return count
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++from python_example4+++++++++++++++++++++++++++++++++++
+#case1: Find pair with target sum in a sorted array.
+#case2: Remove Duplicates from a Sorted Array.
+#case4: Container With Most Water. --if heights[start] < heights[end]:
+#case5: Merge Sorted Arrays.--while i < len(arr1) and j < len(arr2) ; while i < len(arr1):
+#case6: Find Triplets with Zero Sum.--arr.sort() for i in range(0, len(arr)):  first = i second = i+1 third = len(arr)-1 while (second < third):
+#case7: Subarray with Given Sum. -- if (cumulative_sum == k): ; if (cumulative_sum - k) in my_dict: combination.append(arr[my_dict[cumulative_sum-k] +1: end+1]) ; if cumulative_sum not in my_dict:
+#case8: Max Consecutive Ones.
+#case9: Sort Colors (Dutch National Flag Problem). -- while (mid <= last): ; elif (arr[mid] == 0): arr[mid], arr[start] = arr[start], arr[mid]
+#case10: Intersection of Two Arrays. -- while i < len(arr1) and j < len(arr2):
+#case11: Find the Duplicate Number.
+#case12: Minimum Size Subarray Sum. #remem this type, subarray of sum K. Use this approach -- if (cumulative_sum - k) in my_dict:
+#case13: Rotate an array of n elements to the right by k steps -- k = k % n  ; return arr[-k:] + arr[:-k]
+#case14: Find All Pairs with a Given Sum. 
+#case15: Longest Palindromic Substring.--remember:longestPalin is by 'expand_around_center'
+#case16: Minimum Window Substring. -- while (right < len(s)): ; while (left <= right and formed == required):
+#case17: Find an element which is greater than or equal to its neighbors.
+#case18: Find the Smallest Range. --later
+#case19: Count of Subarrays whose Product is Less Than K. - good - while product >= k and left <= right: ; product /= arr[left] ; left += 1 ; count += (right - left + 1) #good
+#case20: Trapping Rain Water. -- left_max = [0] * n ; right_max = [0] * n  ; # Fill left_max
+    left_max[0] = heights[0]   #pick first element
+    for i in range(1, n):
+        left_max[i] = max(left_max[i - 1], heights[i]) #compare first element and second height 
+    
+    # Fill right_max
+    right_max[n - 1] = heights[n - 1]   #pick last element
+    for i in range(n - 2, -1, -1):  #good
+        right_max[i] = max(right_max[i + 1], heights[i]) #compare last element and second last height 
+    
+    # Calculate trapped water
+    trapped_water = 0
+    for i in range(n):
+        trapped_water += min(left_max[i], right_max[i]) - heights[i]
+
+##Three-Pointer (or Three-Way Partitioning) -- do now 
+## do problems under 'Dynamic Programming' via brute force:
+#case2: Knapsack Problem. --good
+Description: Given n items, each with a weight w[i] and a value v[i], and a knapsack with a capacity W, 
+find the maximum value that can be obtained by selecting a subset of items such that their total weight does not exceed W.
+#case3: Coin Change. - bruteforce 
+#case4: Longest Increasing Subsequence. (BF)
+#case5: Palindrome Partitioning.
+Description: Given a string, partition it such that every substring is a palindrome. Return all possible palindrome partitioning of the string.
+#mine: I think, 
+1) generate all the combinatuons of each length . Filter the palindromes from them.
+2) Sort the palindrom in decreasing length
+3) the traverse from longest palindrom and keep replacing that part (if exists) with '' in string:s.
+4) This will give the min partiontion. Sort in increasing order and repeat step3 will give the max partitions
+#case6: Edit Distance.
+Description: Find the minimum number of operations required to convert one string into another.
+
+
+#mine:#case5: Merge Sorted Arrays. --good: traverse two arrays parallely
+Description: Merge two sorted arrays into a single sorted array.
+def merge_sorted_arrays(arr1, arr2):
+    merged_array = []
+    i, j = 0, 0
+    
+    # Traverse both arrays and merge them into the merged_array
+    while i < len(arr1) and j < len(arr2):
+        if arr1[i] <= arr2[j]:
+            merged_array.append(arr1[i])
+            i += 1
+        else:
+            merged_array.append(arr2[j])
+            j += 1
+    
+    # If there are remaining elements in arr1, add them to merged_array
+    while i < len(arr1):
+        merged_array.append(arr1[i])
+        i += 1
+    
+    # If there are remaining elements in arr2, add them to merged_array
+    while j < len(arr2):
+        merged_array.append(arr2[j])
+        j += 1
+    
+    return merged_array
+
+# Example usage
+arr1 = [1, 3, 5, 7]
+arr2 = [2, 4, 6, 8]
+merged_array = merge_sorted_arrays(arr1, arr2)
+print(merged_array)  # Output: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#============================================================================================================================================
+# SampleDecorator:
+import time
+
+def timing_decorator(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()  # Record the start time
+        result = func(*args, **kwargs)  # Call the decorated function
+        end_time = time.time()  # Record the end time
+        print(f"Execution time for {func.__name__}: {end_time - start_time:.4f} seconds")
+        return result  # Return the result of the function
+    return wrapper
+#mine: In 'func.__name__', func is a reference to a function object. func.__name__ is an attribute of the function object that contains the name of the function as a string.
+
+@timing_decorator
+def example_function(n):
+    total = 0
+    for i in range(n):
+        total += i
+    return total
+
+# Example usage
+result = example_function(1000000)
+print(f"Result: {result}")
+
+#Steps:
+1. Call: example_function(1000000)  <-- Calls wrapper function
+2. Enter: wrapper function
+   2.1. Record start time
+   2.2. Call: example_function(1000000)  <-- Calls original function
+3. Enter: example_function
+   3.1. Compute sum
+   3.2. Return result
+4. Back to: wrapper function
+   4.1. Record end time
+   4.2. Print execution time
+   4.3. Return result
+5. Print result
+
+# Sampleconstrutor:
+class Person:
+    def __init__(self, name, age):
+        # Constructor to initialize name and age attributes
+        self.name = name
+        self.age = age
+
+    def display_info(self):
+        # Method to display person's information
+        print(f"Name: {self.name}, Age: {self.age}")
+
+# Create an object of the class
+person1 = Person("Alice", 30)
+
+# Call the method to display information
+person1.display_info()
+
+#1. Lists
+#case1: Find the Kth largest element in an array
+arr = [12, 5, 787, 1, 23] 
+n = 5
+k = 2
+arr_set = set(arr) #to make the elements unique if there are duplicates in list
+sorted_set = sorted(arr_set) #to make the sorted set to make it ordered. #good
+print (sorted_set[k])
+
+#case2: Maximum sum of Subarray (Kadane’s Algorithm) --good
+my_list = [1, 2, 3, -2, 5]
+
+# Initialize variables --good
+max_sum = my_list[0]
+current_sum = my_list[0]
+start = end = s = 0
+
+# Iterate through the list starting from the second element
+for i in range(1, len(my_list)):
+    print(f'Element: {my_list[i]}, Current Sum: {current_sum}, Comparing: {my_list[i]} with {current_sum + my_list[i]}')
+    input()  # For debugging purposes
+
+    # If starting a new subarray provides a higher sum, reset current_sum and start index
+    if my_list[i] > current_sum + my_list[i]: ## This case, when the first element itself (i.e my_list[0]) is negative  #good
+        current_sum = my_list[i]  
+        s = i  # Start of a new subarray
+    else:
+        current_sum += my_list[i]
+
+    # Update max_sum and the corresponding start/end indices if current_sum is larger
+    if current_sum > max_sum:
+        # Here for setting max_sum, s, i. If 4th element is negative but 5th is positive 
+        # that can compensate (means current_sum > max_sum) loss due to 4th element, only then sub-array will include till 5th element (set end = i)
+        # Also, if the 5th element is negative, then 'end' will remain set till the previous element
+        max_sum = current_sum
+        start = s  # Update start of the max subarray
+        end = i  # Update end of the max subarray
+
+# Create the subarray and store it in a dictionary
+max_subarray = my_list[start:end + 1]
+my_dict = {'comb': max_subarray}
+
+# Output results
+print(f'Maximum Subarray Sum: {max_sum}')
+print(f'Subarray: {my_dict["comb"]}')
+
+
+#case3: Find the duplicate number in an array
+#way1
+my_list = [2,3,1,2,3]
+from collections import Counter
+cnt = Counter(my_list)
+flag = 0
+for x in my_list:
+    if cnt[x] > 1:
+        print (f'{x} is repeated')
+        flag = 1
+        break
+
+
+print ('No Duplicates..') if flag == 0 else None
+
+#way2:
+arr = [2, 3, 1, 2, 3]
+visited = set()
+duplicates = set()  # Use a set to avoid duplicate entries in the duplicates list
+
+for char in arr:
+    if char in visited:
+        duplicates.add(char)  # Add to duplicates set
+    else:
+        visited.add(char)  # Mark as visited
+
+# Convert the set back to a list if needed
+duplicates_list = list(duplicates)
+print(duplicates_list)
+
+
+#case4: Merge Intervals --good
+def check_overlap(my_list):
+    for r in range(0, len(my_list)-1):
+        if (my_list[r][-1] > my_list[r+1][0]):
+            my_list[r] = [my_list[r][0], my_list[r+1][-1]]  #good, take 2nd digit(r+1) from next element's 2nd digit (-1)
+            # Also, to make  changes into the array directly,use my_list[r] rather than char = my_list[r]; nextchar = my_list[r+1]
+            
+            print (my_list)
+            input()
+            my_list.remove(my_list[r+1])
+            check_overlap(my_list)  #good, trigger from inside IF
+            break   #good, to avoid index OOR due to FOR loop where len(my_list)-1) has come as per initial length
+    return my_list
+
+my_list = [[1, 3], [2, 4], [6, 8], [9, 10]]
+# Call the function and store the result
+non_overlap_list = check_overlap(my_list)
+# Final output
+print(non_overlap_list)
+
+#case5: Rotate Image (90 degrees) -- matrix:mine:later
+
+#case6: Subarray Sum Equals K
+def find_comb_of_sum(arr, k):
+    cumulative_sum = 0
+    combination = []
+    my_dict = {}
+    for end in range(len(arr)):
+        print (arr[end])
+        cumulative_sum += arr[end]
+        if (cumulative_sum == k):
+            combination.append(arr[:end+1]) 
+        if (cumulative_sum - k) in my_dict:
+            combination.append(arr[my_dict[cumulative_sum-k] +1: end+1])      #good   
+            #When cumulative_sum - k exists in my_dict, it means that the sum of elements from the index 
+            #immediately after my_dict[cumulative_sum - k] up to the current index end is k.
+            # Make sure this must be IF and not ELIF :good
+        if cumulative_sum not in my_dict:
+            my_dict[cumulative_sum] = end
+    return combination
+
+
+arr = [1, 2, 3, 7, 5]
+k = 12
+combination = find_comb_of_sum(arr, k)
+print (combination)
+#good: For subarray of size 2:
+
+#case7: Largest Rectangle in Histogram --BF
+#The task is to find the largest rectangle that can be formed in a histogram 
+#given an array where each element represents the height of a bar.
+
+def largest_rectangle_area_brute_force(heights):
+    max_area = 0
+    n = len(heights)
+
+    # Iterate over each bar
+    for i in range(n):
+        min_height = heights[i]
+        
+        # Try to form a rectangle with heights[i] as the smallest height
+        for j in range(i, n): #good, start with i itself since area of tower of height i will be i*1
+            # Update the minimum height in the current range
+            min_height = min(min_height, heights[j]) #good, keepadjusting min_height since area will consider minimum height of tower (whether it is at ith or not). 
+                                                     #Rectangle formed shud be SOLID
+            
+            # Calculate the area
+            area = min_height * (j - i + 1)
+            
+            # Update the maximum area found so far
+            max_area = max(max_area, area)
+    
+    return max_area
+
+# Example usage:
+heights = [2, 1, 5, 6, 2, 3]
+print(largest_rectangle_area_brute_force(heights))  # Output: 10
+
+
+#case8: Product of Array Except Self
+#Output: [180, 600, 360, 300, 900]
+def self_product(my_list): 
+    global prod
+    final_list = []
+    for i in range(1, len(my_list)):
+        prod *= my_list[i]
+    for i in range(len(my_list)):
+        final_list.append(prod//my_list[i])      
+    return final_list
+
+
+my_list = [10, 3, 5, 6, 2]
+prod = my_list[0]  #good, assign it globally since used in both the FORs above.
+final_list = self_product(my_list)
+print (final_list)
+
+#case9: Trapping Rain Water -- gfg - good
+def trap_rain_water(heights):
+    if not heights:
+        return 0
+
+    n = len(heights)
+    left_max = [0] * n  #good
+    right_max = [0] * n  #good
+
+    # Fill left_max
+    left_max[0] = heights[0]   #pick first element
+    for i in range(1, n):
+        left_max[i] = max(left_max[i - 1], heights[i])
+    
+    # Fill right_max
+    right_max[n - 1] = heights[n - 1]   #pick last element
+    for i in range(n - 2, -1, -1):  #good
+        right_max[i] = max(right_max[i + 1], heights[i])
+    
+    # Calculate trapped water
+    trapped_water = 0
+    for i in range(n):
+        trapped_water += min(left_max[i], right_max[i]) - heights[i]
+    
+    return trapped_water
+
+heights = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]
+print("Amount of trapped water:", trap_rain_water(heights))  # Output: 6
+
+#case10: Longest Consecutive Sequence 
+def longest_consecutive(arr):
+    seq = []
+    final_seq =[]
+    for i in range(len(arr)-1):
+        start = arr[i]
+        next = arr[i+1]
+       
+        if not seq:
+            seq = [start]
+     
+        if (start+1 != next):
+            final_seq.append(seq)
+            seq = []
+            continue
+        else:
+            seq.append(next)
+            continue
+            
+    if seq:
+        final_seq.append(seq)
+
+    return final_seq
+
+arr = [1, 2, 3, 8, 5, 6, 7]
+final_seq = longest_consecutive(arr)
+print (final_seq)
+        
+#case11: Search in Rotated Sorted Array. Shud return -1 if key is not available.
+my_list = [4, 5, 6, 7, 0, 1, 2]
+key = 2
+
+my_str = ','.join(map(str,my_list))
+key = str(key)
+key = f',{key},' #good
+index = my_str.find(str(key))
+print (index)
+
+#way2: GFG prac -- good
+def search_rotated_sorted_array(arr, key):
+    low, high = 0, len(arr) - 1
+    
+    while low <= high: #good: to point out the exact index, use <=
+        mid = (low + high) // 2 #good: keep finding mid with new low/high inside WHILE 
+        
+        # Check if key is present at mid
+        if arr[mid] == key:
+            return mid
+        
+        # If the left half is sorted
+        if arr[low] <= arr[mid]: #Ex:[4, 5, 6, 7, 0, 1, 2]
+            if arr[low] <= key < arr[mid]:  # Key lies in the left half  
+                high = mid - 1
+            else:  # Key lies in the right half #good:dont use elif,to avaoid infinite run
+            #mine: 'else' is when k is in other half i.e in below 'else'
+                low = mid + 1
+        # If the right half is sorted
+        else:  #Ex: [5, 6, 7, 0, 1, 2, 4]
+            if arr[mid] < key <= arr[high]:  # Key lies in the right half
+                low = mid + 1
+            else:  # Key lies in the left half  #good:dont use elif,to avaoid infinite run
+            #mine: 'else' is when k is in other half i.e in above 'IF'
+                high = mid - 1
+    
+    return -1  # Key is not present
+
+# Example usage
+my_list = [4, 5, 6, 7, 0, 1, 2]
+key = 0
+index = search_rotated_sorted_array(my_list, key)
+print(index)  # Output: 4 (correct index)
+
+#case12: Triplet Sum in Array --good , 2 pointer approach
+# Sorting and Two-Pointer Technique
+array = {12, 3, 4, 1, 6, 9}, sum = 24; 
+def find_triplet(arr, target_sum):
+    arr.sort()  # Step 1: Sort the array
+    
+    n = len(arr)
+    for i in range(n - 2):  # Step 2: Iterate through the array, fixing one element at a time
+        left = i + 1
+        right = n - 1       
+        while left < right:  # Step 3: Use two pointers to find the other two elements. Use '<' to avoid duplicate element
+            current_sum = arr[i] + arr[left] + arr[right] #move left/right but keep left fixed for one triplet
+            
+            if current_sum == target_sum:  # Step 4: Check if the sum matches the target sum
+                return arr[i], arr[left], arr[right] #use return to avoid infinite loop
+                # I think, if need to find all the triplets, then do BOTH left += 1; right -=1 and keep appending. --YES
+
+            elif current_sum < target_sum:  # If the current sum is less, move the left pointer to the right
+                left += 1
+                
+            else:  # If the current sum is more, move the right pointer to the left
+                right -= 1
+    
+    return None  # If no triplet is found  #good
+
+
+# Example usage:
+array = [12, 3, 4, 1, 6, 9]
+target_sum = 24
+result = find_triplet(array, target_sum)
+
+if result:
+    print(f"Triplet found: {result}")
+else:
+    print("No triplet found.")
+
+# For two elements,dont use FOR loop:- For  triplet,need FOR/WHILE. For pair,need only FOR or only WHILE(if only one pair). Only FOR (if all pairs) . = good
+#mine:-
+
+def find_pair(arr, target_sum):
+    arr.sort()  # Step 1: Sort the array
+    
+    left = 0
+    right = len(arr) - 1
+    
+    # Step 2: Use two pointers to find the pair
+    while left < right:
+        current_sum = arr[left] + arr[right]
+        
+        if current_sum == target_sum:  # Step 3: Check if the sum matches the target sum
+            return arr[left], arr[right]
+        
+        elif current_sum < target_sum:  # Step 4: If the current sum is less, move the left pointer to the right
+            left += 1
+            
+        else:  # If the current sum is greater, move the right pointer to the left
+            right -= 1
+    
+    return None  # If no pair is found
+
+# Example usage
+arr = [12, 3, 4, 1, 6, 9]
+target_sum = 24
+result = find_pair(arr, target_sum)
+print(result)  # Output: (12, 12) or None if no valid pair is found
+
+#case13: Minimum Size Subarray Sum --GFG understand it --2 pointer-sliding window --good
+#mine: This  will work for the array where all ele are >= 0 and the sum of few subarrays is == target_sum (here K). 
+#      This wont work for arr = [2, 4, 6, -1, 2, 1] , k=9
+#To find the smallest subarray with a sum equal to a given value K from an array, you can use the sliding window (or two-pointer) technique. 
+# This approach is efficient and works well for this type of problem.
+def smallest_subarray_with_sum(arr, K):
+    n = len(arr)
+    start = 0
+    current_sum = 0
+    min_length = float('inf')
+    min_subarray = []
+
+    for end in range(n):
+        current_sum += arr[end]
+        
+        # Contract the window while the current sum is greater than or equal to K
+        while current_sum >= K:
+            # First take the length of valid combination before it may get invalid due to contracting
+            if current_sum == K and (end - start + 1) < min_length: #good, IF under WHILE to get the min_length
+                min_length = end - start + 1 #good
+                min_subarray = arr[start:end + 1]   #for 2nd subarray, counting from 'start' since it already increased(L347) during 1st subarray
+                
+            current_sum -= arr[start]
+            start += 1
+    
+    if min_length == float('inf'):
+        return None  # No subarray found
+    else:
+        return min_subarray
+
+# Example usage
+arr = [2, 4, 6, 10, 2, 1]
+K = 12
+result = smallest_subarray_with_sum(arr, K)
+print(result)
+
+#way2: find all subarrays and take the shortest one:
+def find_comb_of_sum(arr, k):
+    cumulative_sum = 0
+    combination = []
+    my_dict = {}
+    for end in range(len(arr)):
+        print (arr[end])
+        cumulative_sum += arr[end]
+        if (cumulative_sum == k):
+            combination.append(arr[:end+1]) 
+        if (cumulative_sum - k) in my_dict: 
+            combination.append(arr[my_dict[cumulative_sum-k] +1: end+1])      #good   
+        if cumulative_sum not in my_dict: #good, use IF (not ELIF or ELSE) bcoz combination1 (that make sum ==k) may helpin finding combination2 also [sum-k == (sum of combination1)] 
+            my_dict[cumulative_sum] = end #      So, recording every sum is important. Ex (combination1:2+4+6=12) and(combination2:2+4+6+10+2 - k = 12)
+    return combination
+
+arr = [2, 4, 6, 10, 2, 1]
+K = 12
+combination = find_comb_of_sum(arr, k)
+print (combination)
+
+#case14: Next Permutation - later
+#Lexicographical Order: Lexicographical order means dictionary-like order. 
+# -->After making the smallest possible increase (by swapping the pivot with the next larger element), 
+# you want to minimize the rest of the array to ensure that this new permutation is the very next one in dictionary order.
+
+#Correctness: If you didn't reverse the suffix, the elements to the right of the pivot would still be in descending order, 
+# which is the largest possible permutation for that portion. That would skip many possible permutations, 
+# and you'd get a permutation that isn't the immediate next one in order.
+def next_permutation(arr):
+    n = len(arr)
+    
+    # Step 1: Find the pivot
+    i = n - 2
+    while i >= 0 and arr[i] >= arr[i + 1]:
+        i -= 1
+    
+    # If no such pivot is found, the array is in descending order
+    if i == -1:
+        arr.reverse()
+        return arr
+    
+    # Step 2: Find the successor
+    j = n - 1
+    while arr[j] <= arr[i]:
+        j -= 1
+    
+    # Step 3: Swap the pivot and successor
+    arr[i], arr[j] = arr[j], arr[i]
+    
+    # Step 4: Reverse the suffix
+    arr[i + 1:] = reversed(arr[i + 1:])
+    
+    return arr
+
+# Example usage
+arr = [1, 2, 3, 6, 5, 4]
+result = next_permutation(arr)
+print(result)  # Output: [1, 2, 4, 3, 5, 6]
+
+
+#case15: Spiral Matrix -- later
+
+#case16: Find All Duplicates in an Array 
+my_list = [2, 10, 10, 100, 2, 10, 11, 2, 11, 2]
+seen_set = set() #--good:define empty set
+duplicate_set = set() #good use set, to avoid duplicate entries in duplicate_set
+for i in range (0, len(my_list)):
+    if my_list[i] not in seen_set:
+        seen_set.add(my_list[i])
+    else:
+        duplicate_set.add(my_list[i])
+    
+
+print (f'duplicates:{duplicate_set}')
+
+#case17: Maximum Product Subarray
+my_list = [6, -3, -10, 0, 2]
+max_product = -float('inf')
+final_array = []
+for i in range(0, len(my_list)):    
+    product = my_list[i]
+    print (i)
+    for j in range(i+1, len(my_list)):
+      
+        product *= my_list[j]
+        if (product > max_product):
+            max_product = product
+            final_array = my_list[i:j+1]  #good, use range, this will help in getting elements which we didnt append yet
+       
+    # good: If found that single element itself is bigger than the product of all consecutive elements, then take that.
+    if (my_list[i] > max_product):
+        max_product = my_list[i]
+        final_array = [my_list[i]]
+
+print (final_array)
+
+#case18: Longest Subarray with Sum 0 #mine: use all 3 IFs only. - good
+def longest_subarray_with_sum_k(my_list, k):
+    cumulative_sum = 0
+    my_dict = {}  # To store cumulative sum and its first occurrence index
+    max_length = 0
+
+    for end in range(len(my_list)):
+        cumulative_sum += my_list[end]
+
+        # If cumulative_sum equals k, the subarray from 0 to end has sum k
+        if cumulative_sum == k:
+            max_length = end + 1  #good, length willbe counted from start to end in this case. 
+                                  #For subarray cases, below is the case: (cumulative_sum - k)
+
+        # If cumulative_sum - k is found in the dictionary, update max_length
+        if (cumulative_sum - k) in my_dict:
+            #The idea is that if the cumulative sum at two different indices is the same, 
+            # the subarray between these two indices has a sum of zero. #good : good
+            length = end - my_dict[cumulative_sum - k]
+            max_length = max(max_length, length)
+        
+        # Store cumulative_sum in the dictionary if it's not already there
+        if cumulative_sum not in my_dict:
+            my_dict[cumulative_sum] = end
+
+    return max_length
+
+# Test the function
+my_list = [15, -2, 2, -8, 1, 7, 10, 23]
+k = 0  # Looking for the longest subarray with sum = 0
+final_length = longest_subarray_with_sum_k(my_list, k)
+print(f'Length of the longest subarray with sum {k}: {final_length}')
+
+#case19: Sort Colors (Dutch National Flag Problem) -- good
+my_list = [0, 1, 2, 0, 1, 2]
+low = mid = 0
+high = len(my_list) - 1
+
+while mid<=high:
+    #mine:good: mid <= high ensures you keep examining elements until you have processed all necessary parts of the array.
+    #           low: Where the next 0 should go.
+    #           mid: Current element being examined.
+    #           high: Where the next 2 should go.
+    print (f'mid:{mid}')
+    if (my_list[mid] == 0):
+        my_list[mid], my_list[low] = my_list[low], my_list[mid]
+        low += 1
+        mid += 1
+    elif (my_list[mid] == 1):
+        mid += 1
+    else:    #good: always use ELSE as last condition not ELIF to avoid infinite loop    
+        my_list[high], my_list[mid] =  my_list[mid], my_list[high]
+        high -= 1
+    
+print (my_list)
+
+#4:32
+#case20: Subarrays with K Different Integers --here 
+my_list = [1, 2, 1, 2, 3]
+k = 3
+final_array = []
+
+for i in range(0, len(my_list)):
+    my_array = [my_list[i]]
+    print (f'my_array:{my_array}')
+    for j in range(i+1, len(my_list)):
+        if len(my_array) < k:
+            print (my_list[j])
+            input()           
+            if my_list[j] not in my_array:
+                my_array.append(my_list[j])
+                print (my_array)
+                input()
+                if len(my_array) == k:
+                    final_array.append(my_array)
+                    break
+            else:
+                break
+
+#Way2:GFG: understand: sliding window --good, do
+def find_subarray_with_k_different_integers(arr, k):
+    left = 0
+    right = 0
+    n = len(arr)
+    my_dict = {}  # Dictionary to count occurrences of each integer
+    result = []
+    
+    while right < n:
+        # Add the current element to the dictionary
+        if arr[right] in my_dict:
+            my_dict[arr[right]] += 1
+        else:
+            my_dict[arr[right]] = 1
+        
+        # If we have exactly k different integers, record the subarray
+        while len(my_dict) == k:
+            result.append(arr[left:right + 1])
+            
+            # Move left pointer to find other subarrays
+            my_dict[arr[left]] -= 1
+            if my_dict[arr[left]] == 0:
+                del my_dict[arr[left]]
+            left += 1
+        
+        # Move right pointer
+        right += 1  #in SLIDING window, if you use WHILE in outer loop then dont forget to increment 'right'. If you use FOR, then no need to increment
+
+    return result
+
+# Example usage
+arr = [1, 2, 1, 2, 3]
+k = 3
+subarrays = find_subarray_with_k_different_integers(arr, k)
+print(subarrays)  # Output should be all subarrays with exactly 3 different integers
+#good, to pick the shortest length of list from list of lists, min(subarrays, key=len)
+
+#5:15
+#case21: Container With Most Water --good
+# In the "Container With Most Water" problem, the solution aims to find two heights that, when paired, 
+# form a container that can hold the maximum amount of water. 
+#5:18
+def max_area(heights):
+    start = 0
+    end = len(heights) - 1
+    max_quant = -float('inf')
+
+    while (start < end):
+        height = min(heights[start], heights[end])
+        width = end - start
+        quant = height * width    
+        max_quant = max(quant, max_quant)
+
+        if heights[start] < heights[end]:
+            start += 1
+        else:
+            end -= 1
+    return max_quant
+    
+heights = [1, 8, 6, 2, 5, 4, 8, 3, 7]
+print(max_area(heights)) #output:49
+
+#5:28
+#way2: GFG: 2 pointer : O(n)
+my_list = [1, 5, 4, 3]
+left, right = 0, len(my_list) - 1  #good assignment
+max_quant = 0
+
+while left < right:
+    height = min(my_list[left], my_list[right])
+    width = right - left  #GOOD:since we are calculating water, so no +1 since we dont include edges here. ONLY WATER .
+    max_quant = max(max_quant, height * width)
+    
+    # Move the pointer pointing to the shorter line
+    # good: Since the shorter line limits the area, to maximize the area, the algorithm moves the pointer pointing 
+    # to the shorter line, HOPING to find a taller line that can trap more water:
+    if my_list[left] < my_list[right]:
+        left += 1
+    else:
+        right -= 1 #good, always use 'else' for uncoonditionally increasing the counter to avoid infinite loop. 
+
+print(max_quant)  #output:6
+#5:40
+
+#case22: Subarray Product Less Than K
+
+#case23: Jump Game --greedy algo -- good --here
+# Given an array arr[] where each element represents the max number of steps that can be made forward from that index. 
+# The task is to find the minimum number of jumps to reach the end of the array starting from index 0.
+def minJumps(arr):
+    n = len(arr)
+    
+    # If the array has only one element, we're already at the end
+    if n <= 1:
+        return 0
+    
+    # If the first element is 0, we can't move anywhere
+    if arr[0] == 0:  #good
+        return -1
+    
+    # Variables to store the maximum reachable index, steps remaining, and jumps
+    maxReach = arr[0]  # Maximum index we can reach
+    steps = arr[0]     # Steps we can still take
+    jumps = 1          # Number of jumps taken
+    
+    for i in range(1, n):  #good, start from 1
+        # Check if we've reached the end of the array
+        if i == n - 1:
+            return jumps
+        
+        # Update the maxReach for this index
+        maxReach = max(maxReach, i + arr[i])
+        
+        # Use a step to move forward
+        steps -= 1  #good, shud come after we take next step and get the new max_reach
+        
+        # If we run out of steps
+        if steps == 0:
+            jumps += 1  # We need another jump
+            
+            # good:-If the current index is beyond or equal to the maxReach (that is possible with steps:;maxReach - i'), we cannot move forward. 'steps' will be negative
+            if i >= maxReach:
+                return -1
+            
+            # Reinitialize steps with the amount of steps to reach maxReach
+            steps = maxReach - i
+    
+    return -1
+
+# Example usage:
+arr = [2, 3, 1, 1, 2, 4, 2, 0, 1, 1]
+print(minJumps(arr))  # Output: 4
+
+#case24: Maximum Gap -- check BF, way2
+# Given an unsorted array, the task is to find the maximum difference between the successive elements in the sorted version of the array.
+# You cannot explicitly sort the array, as the problem aims for a more efficient solution than the O(n log n) time complexity of sorting.
+#way1:  later : -This problem can be efficiently solved using the bucket sort technique, which helps to avoid sorting and still achieve linear time complexity.
+import math
+
+def maximumGap(nums):
+    if len(nums) < 2:
+        return 0
+
+    # Step 1: Find the minimum and maximum element in the array
+    min_num, max_num = min(nums), max(nums)
+    
+    if min_num == max_num:
+        return 0  # If all elements are the same, max gap is 0
+
+    # Step 2: Calculate bucket size
+    n = len(nums)
+    bucket_size = math.ceil((max_num - min_num) / (n - 1))  # Bucket size
+
+    # Step 3: Create buckets to hold min and max of each bucket
+    bucket_min = [float('inf')] * n
+    bucket_max = [-float('inf')] * n
+
+    # Step 4: Place each element in its respective bucket
+    for num in nums:
+        if num == min_num or num == max_num:
+            continue  # Skip the min and max elements
+        idx = (num - min_num) // bucket_size  # Determine the bucket index
+        bucket_min[idx] = min(bucket_min[idx], num)
+        bucket_max[idx] = max(bucket_max[idx], num)
+
+    # Step 5: Scan the buckets to find the maximum gap
+    max_gap = 0
+    prev_max = min_num  # Initialize previous max as the minimum element
+
+    for i in range(n):
+        if bucket_min[i] == float('inf') and bucket_max[i] == -float('inf'):
+            continue  # Empty bucket, skip it
+        # The gap is between the min of this bucket and the max of the previous bucket
+        max_gap = max(max_gap, bucket_min[i] - prev_max)
+        prev_max = bucket_max[i]  # Update prev_max to the max of this bucket
+
+    # Step 6: Final gap between the max element and the last bucket's max
+    max_gap = max(max_gap, max_num - prev_max)
+
+    return max_gap
+
+# Example usage:
+arr = [3, 6, 9, 1]
+print(maximumGap(arr))  # Output: 3
+
+#way2: BF: The brute-force approach to solving the Maximum Gap problem involves directly sorting the array and then 
+#calculating the difference between each pair of consecutive elements. This approach is straightforward and easy to implement 
+#but has a time complexity of 𝑂(𝑛log⁡𝑛) due to sorting.
+def maximumGapBruteForce(nums):
+    if len(nums) < 2:
+        return 0
+
+    # Step 1: Sort the array
+    nums.sort()
+
+    # Step 2: Calculate the maximum gap between successive elements
+    max_gap = 0
+    for i in range(1, len(nums)):
+        max_gap = max(max_gap, nums[i] - nums[i - 1])
+
+    return max_gap
+#mine: timecomplexity, sorting = O(nlogn) ; FOR = O(n) . Since the sorting step dominates the overall time complexity, 
+#       the time complexity of the entire function is: O(nlogn)
+# Example usage:
+arr = [3, 6, 9, 1]
+print(maximumGapBruteForce(arr))  # Output: 3
+
+#case25: Longest Mountain in Array
+def longestMountain(arr):
+    n = len(arr)
+    if n < 3:
+        return 0
+
+    longest = 0
+
+    # Step through the array, identifying peaks
+    for i in range(1, n - 1):
+        # Check if arr[i] is a peak
+        if arr[i - 1] < arr[i] > arr[i + 1]: #good, make extremes as left/right in next steps. Then decrease/increase them
+            # Expand to the left (strictly increasing part)
+            left = i - 1  #good to initialize left/right before WHILE itself. Easy to traverse then.
+            while left > 0 and arr[left - 1] < arr[left]: #good,individually traversion left and right to get the max length
+                left -= 1
+
+            # Expand to the right (strictly decreasing part)
+            right = i + 1
+            while right < n - 1 and arr[right] > arr[right + 1]:
+                right += 1
+
+            # Calculate the length of the mountain
+            current_mountain_length = right - left + 1 #good, +1 since edges are included
+            longest = max(longest, current_mountain_length)
+
+    return longest
+
+# Example usage:
+arr = [2, 1, 4, 7, 3, 2, 5]
+print(longestMountain(arr))  # Output: 5
+
+#case26: Rotate Array -- You are given an array and an integer k. Rotate the array to the right by k steps.
+#way1:
+def reverse(arr, start, end):
+    while start < end:
+        arr[start], arr[end] = arr[end], arr[start]
+        start += 1
+        end -= 1
+    #mine: good, no needto return arr since list in in-place reversal (mutable datastructure)
+
+def rotate(arr, k):
+    n = len(arr)
+    k = k % n  # In case k is larger than the array size #good
+    # If the array has 7 elements and you rotate it 7 times, the array will remain unchanged.
+    # Rotating it 8 times is the same as rotating it 1 time because the 8th rotation brings it back to the starting position.
+    
+    # Step 1: Reverse the entire array
+    reverse(arr, 0, n - 1)
+    
+    # Step 2: Reverse the first k elements
+    reverse(arr, 0, k - 1)
+    
+    # Step 3: Reverse the remaining elements
+    reverse(arr, k, n - 1)
+    
+    return arr
+
+# Example usage:
+arr = [1, 2, 3, 4, 5, 6, 7]
+k = 3
+print(rotate(arr, k))  # Output: [5, 6, 7, 1, 2, 3, 4]
+
+#way2:
+def reverse(arr, start, end):
+    # Reverse the elements from start to end (exclusive)
+    return arr[start:end][::-1]  # Slicing from start to end and then reversing it
+    #good, take slice first and then reverse it. Finally return the SLICE itself
+
+def rotate(arr, k):
+    n = len(arr)
+    k = k % n  # Handle cases where k is greater than n
+
+    # Step 1: Reverse the whole array
+    arr = reverse(arr, 0, n)  # Reverse the entire array
+    
+    # Step 2: Reverse the first k elements
+    # Receive as a slice -- good
+    arr[:k] = reverse(arr, 0, k)  # Reverse the first k elements
+
+    # Step 3: Reverse the remaining elements
+    arr[k:] = reverse(arr, k, n)  # Reverse the remaining elements
+    
+    return arr
+
+arr = [1, 2, 3, 4, 5, 6, 7]
+k = 3
+result = rotate(arr, k)  # Expected Output: [5, 6, 7, 1, 2, 3, 4]
+print(result)            # Display final result
+
+#case27: Find the Missing Number -- You are given an array containing n distinct numbers taken from the range 0 to n. 
+# One number is missing from the array. Your task is to find the missing number.
+The sum of the first n natural numbers is given by the formula: 
+Sum of number from 0 to n = n(n+1)/2 -- good
+ 
+If the array has one missing number, the difference between the sum of numbers in the complete range (0 to n) and 
+the sum of numbers in the array will give the missing number.
+
+def findMissingNumber(arr):
+    n = len(arr)
+    # Calculate the expected sum of numbers from 0 to n. 
+    #mine: Since starting from 0 and only one ele is missing, so we  can use n as len(arr). In actual, n is number of continuous integers (say 0,1,2,3..).
+    total_sum = n * (n + 1) // 2  #good, use * for multiply and // for avoiding float, else it will give 2.0 rather than 2
+    
+    # Calculate the sum of elements in the array
+    actual_sum = sum(arr)
+    
+    # The missing number is the difference between the expected sum and actual sum
+    return total_sum - actual_sum
+
+# Example usage:
+arr = [3, 0, 1]
+print(findMissingNumber(arr))  # Output: 2
+
+#case28: Reverse Pairs -- Given an array of integers, your task is to count the number of reverse pairs.
+#mine: condition of reverse is: arr[i] > 2 * arr[j] for i < j  ---good
+#Element Relationship: The condition states that the value at index i must be greater than twice the value at index j. This establishes a significant disparity between the two elements.
+# Significance: The reason for using 2 as a multiplier is to emphasize the contrast between the two values:
+Input: arr = [1, 3, 2, 3, 1]
+Output: 2
+Explanation: The reverse pairs are:- [[3, 1], [3, 1]]
+
+def reversePairsBruteForce(arr):
+    count = 0
+    n = len(arr)
+    
+    for i in range(n):
+        for j in range(i + 1, n):
+            if arr[i] > 2 * arr[j]:
+                count += 1
+                
+    return count
+
+# Example usage:
+arr = [1, 3, 2, 3, 1]
+print(reversePairsBruteForce(arr))  # Output: 2
+
+#case29: Count Inversions in an Array
+Ex:Input: arr = [1, 3, 2, 3, 1]
+Output: 3
+Explanation: An inversion in an array is a pair of indices (i,j) such that: arr[i] > arr[j] -- good
+#way1: BF: O(n^2)
+def countInversions(arr):
+    count = 0
+    for i in range(len(arr)):
+        for j in range(i+1, len(arr)):
+            if (arr[i]>arr[j]):
+                count +=1
+    return count
+
+
+# Example usage:
+arr = [1, 3, 2, 3, 1]
+print(countInversions(arr))  # Output: 3
+
+#way2 -- merge sort (O(nlogn)) -- later
+def mergeAndCount(arr, temp_arr, left, mid, right):
+    i = left    # Starting index for left subarray
+    j = mid + 1 # Starting index for right subarray
+    k = left    # Starting index to be sorted
+    inv_count = 0
+    
+    while i <= mid and j <= right:
+        if arr[i] <= arr[j]:
+            temp_arr[k] = arr[i]
+            i += 1
+        else:
+            # There are mid - i inversions, because all remaining elements
+            # in the left subarray (arr[i]...arr[mid]) are greater than arr[j]
+            temp_arr[k] = arr[j]
+            inv_count += (mid - i + 1)
+            j += 1
+        k += 1
+
+    while i <= mid:
+        temp_arr[k] = arr[i]
+        i += 1
+        k += 1
+
+    while j <= right:
+        temp_arr[k] = arr[j]
+        j += 1
+        k += 1
+
+    for i in range(left, right + 1):
+        arr[i] = temp_arr[i]
+        
+    return inv_count
+
+def mergeSortAndCount(arr, temp_arr, left, right):
+    inv_count = 0
+    if left < right:
+        mid = (left + right) // 2
+
+        inv_count += mergeSortAndCount(arr, temp_arr, left, mid)
+        inv_count += mergeSortAndCount(arr, temp_arr, mid + 1, right)
+        inv_count += mergeAndCount(arr, temp_arr, left, mid, right)
+
+    return inv_count
+
+def countInversions(arr):
+    temp_arr = [0] * len(arr)
+    return mergeSortAndCount(arr, temp_arr, 0, len(arr) - 1)
+
+# Example usage:
+arr = [1, 3, 2, 3, 1]
+print(countInversions(arr))  # Output: 3
+
+
+#case30: Meeting Rooms II-You are given an array of meeting time intervals, where each interval is represented as a pair of integers [start, end]. 
+# Your task is to determine the minimum number of meeting rooms required to hold all meetings without any overlap.
+#way1: good
+import heapq
+
+def minMeetingRooms(intervals):
+    if not intervals:
+        return 0
+
+    # Step 1: Sort the meetings in increasing order of their start time
+    intervals.sort(key=lambda x: x[0]) #good, sort as per start time of meetings
+
+    # Step 2: Create a min-heap to track the end times of meetings
+    heap = []
+
+    # Step 3: Add the first meeting's end time to the heap
+    heapq.heappush(heap, intervals[0][1]) #good, add first meeting end time initially
+    #mine:When you use the heapq.heappush() function, it adds an element to the heap while maintaining the heap property (i.e., the smallest element stays at the top). 
+    #However, it does not necessarily push the element to the "top" or "start" of the heap, but rather places it in the correct position according to the heap property.
+
+    # Step 4: Iterate over the remaining meetings
+    for i in range(1, len(intervals)):  #good, then start from 2nd meeting
+        # If meeting2 (here intervals[i][0]) start time is greater than meeting1, then same roomcan be utilized for both the meetings. 
+        if intervals[i][0] >= heap[0]: #good, use 0 and not -1 becasue with -1, even if the current meeting starts after the last meeting in the heap ends, 
+        # it doesn't guarantee that the earlier meetings (those that end before the last one) have finished and freed up their rooms.
+            heapq.heappop(heap) #good
+        
+        # Add the current meeting's end time to the heap
+        heapq.heappush(heap, intervals[i][1])
+
+    # The size of the heap tells us the minimum rooms required
+    return len(heap)
+
+# Example usage:
+intervals = [[0, 30], [5, 10], [15, 20]]
+print(minMeetingRooms(intervals))  # Output: 2
+
+#way2:BF :
+def minMeetingRoomsBruteForce(intervals):
+    if not intervals:
+        return 0
+
+    count = 0
+    for i in range(len(intervals)):
+        overlap_count = 0
+        for j in range(len(intervals)):
+            if i != j and (intervals[i][0] < intervals[j][1] and intervals[j][0] < intervals[i][1]):
+                overlap_count += 1
+        count = max(count, overlap_count + 1)  # +1 for the current meeting
+
+    return count
+
+# Example usage:
+intervals = [[0, 30], [5, 10], [15, 20]]
+print(minMeetingRoomsBruteForce(intervals))  # Output: 2
+
+Do BELOW:-
+#case31: Merge Sorted Array without Extra Space
+Description: Merge two sorted arrays into a single sorted array.
+def merge_sorted_arrays(arr1, arr2):
+    merged_array = []
+    i, j = 0, 0
+    
+    # Traverse both arrays and merge them into the merged_array
+    while i < len(arr1) and j < len(arr2):
+        if arr1[i] <= arr2[j]:
+            merged_array.append(arr1[i])
+            i += 1
+        else:
+            merged_array.append(arr2[j])
+            j += 1
+    
+    # If there are remaining elements in arr1, add them to merged_array
+    while i < len(arr1):
+        merged_array.append(arr1[i])
+        i += 1
+    
+    # If there are remaining elements in arr2, add them to merged_array
+    while j < len(arr2):
+        merged_array.append(arr2[j])
+        j += 1
+    
+    return merged_array
+
+# Example usage
+arr1 = [1, 3, 5, 7]
+arr2 = [2, 4, 6, 8]
+merged_array = merge_sorted_arrays(arr1, arr2)
+print(merged_array)  # Output: [1, 2, 3, 4, 5, 6, 7, 8]
+
+#case32: Sliding Window Maximum -- Given an array nums and an integer k, return an array containing the maximum value of each sliding window of size k.
+#way1- BF - O(n*k)
+nums = [1, 3, -1, -3, 5, 3, 6, 7]
+k = 3
+arr = [1, 3, -1, -3, 5, 3, 6, 7]
+k = 3
+
+final_array = []
+for i in range(len(arr)-k+1):
+    max_element = max(arr[i:i+k])
+    final_array.append(max_element)
+print (final_array)
+
+#way2: understand later --O(n)
+from collections import deque
+
+def maxSlidingWindow(nums, k):
+    if not nums:
+        return []
+    
+    max_values = []
+    dq = deque()  # to store indices of elements in nums
+
+    for i in range(len(nums)):
+        # Remove indices that are out of the current window
+        if dq and dq[0] < i - k + 1:
+            dq.popleft()
+
+        # Remove elements that are less than the current element
+        while dq and nums[dq[-1]] < nums[i]:
+            dq.pop()
+
+        # Add the current element's index to the deque
+        dq.append(i)
+
+        # If we've processed at least k elements, append the maximum to the results
+        if i >= k - 1:
+            max_values.append(nums[dq[0]])
+
+    return max_values
+
+# Example usage:
+nums = [1, 3, -1, -3, 5, 3, 6, 7]
+k = 3
+print(maxSlidingWindow(nums, k))  # Output: [3, 3, 5, 5, 6, 7]
+
+#case33: Shortest Unsorted Continuous Subarray --good
+#Given an integer array nums, find the shortest continuous subarray that if sorted, would make the whole array sorted in non-decreasing order.
+def find_unsorted_subarray(nums):
+    n = len(nums)
+    start, end = -1, -1  #good,initialize
+
+    # Step 1: Find the first element which is out of order from left to right
+    for i in range(1, n):
+        if nums[i] < nums[i - 1]:
+            start = i - 1
+            break  #good, comeout as soon as got the first out of order element
+    
+    # If the array is already sorted
+    if start == -1:
+        return 0
+
+    # Step 2: Find the first element which is out of order from right to left
+    for i in range(n - 2, -1, -1):
+        if nums[i] > nums[i + 1]:
+            end = i + 1
+            break  #good, comeout as soon as got the first out of order element
+    #mine,take the boundary till when things are expected like (i-1), (i+1)
+
+    # Step 3: Find the min and max of the unsorted subarray
+    min_val = min(nums[start:end+1])
+    max_val = max(nums[start:end+1])
+
+    # Step 4: Expand the left boundary if there are elements greater than min_val
+    while start > 0 and nums[start - 1] > min_val:
+        start -= 1
+
+    # Step 5: Expand the right boundary if there are elements smaller than max_val
+    while end < n - 1 and nums[end + 1] < max_val:
+        end += 1
+
+    # Return the length of the unsorted subarray
+    return end - start + 1
+
+# Example usage:
+nums = [1, 3, 5, 2, 6, 4, 7, 8]
+result = find_unsorted_subarray(nums)
+print(result)  # Expected output: 5 (subarray [3, 5, 2, 6, 4] needs to be sorted)
+
+
+#case34: Minimum Operations to Reduce X to Zero
+def minOperations(nums, x):
+    total_sum = sum(nums)
+    target = total_sum - x  #good, first find the target sum that we need 
+    if target < 0:
+        return -1  # Not possible to reach zero
+
+    max_length = 0
+    current_sum = 0
+    left = 0
+
+    for right in range(len(nums)):
+        current_sum += nums[right]
+
+        while current_sum > target and left <= right:
+            current_sum -= nums[left]
+            left += 1
+
+        if current_sum == target:
+            max_length = max(max_length, right - left + 1)
+
+    if max_length == 0:
+        return -1  # No valid subarray found
+
+    return len(nums) - max_length ## good:these many operation (convert each of the remaining digit to 0) we need to make x to 0
+
+# Example usage
+nums = [1, 1, 4, 2, 3]
+x = 5
+result = minOperations(nums, x)
+print(result)  # Output: 2
+
+#case35: First Missing Positive 
+#mine: sort and then use FOR th get the first missing element
+
+#case36: Best Time to Buy and Sell Stock with Cooldown -- good
+def maxProfitBruteForce(prices, start=0):  #good, keep placeholder
+    n = len(prices)
+    
+    if start >= n:
+        return 0  # No more days left to trade
+
+    max_profit = 0  # Keep track of the maximum profit
+    
+    # Try to buy on day 'i' and sell on a future day 'j'
+    for i in range(start, n):
+        for j in range(i + 1, n):
+            profit = prices[j] - prices[i]  # Calculate profit for this transaction
+            
+            # After selling, the next buy can only happen after the cooldown (day j + 1)
+            next_start = j + 2  # Next buy can happen on day j+2 due to cooldown
+            
+            # Recurse for the remaining days after selling on day j
+            max_profit = max(max_profit, profit + maxProfitBruteForce(prices, next_start)) #good
+
+    return max_profit
+
+# Example usage
+arr = [1, 2, 3, 0, 2]
+result = maxProfitBruteForce(arr)
+print(result)  # Expected output: 3
+
+
+#case37: Maximum Swap - Given a non-negative integer, you can swap two digits at most once to get the maximum possible value of that integer. --good-do
+#way1:mine:
+def maximumSwap(num):
+    arr = list(str(num))
+    my_array = []
+    swapped = 0
+    for i, value in enumerate(arr):
+        for j in range(i+1, len(arr)):
+            if (arr[j] > value and j > i):
+                my_array.append(arr[j])
+
+        if (my_array):          
+            largest_ele = max(my_array) 
+            idx = ''.join(arr).rfind(largest_ele)
+            arr[i], arr[idx] = arr[idx], arr[i]
+            swapped = 1
+            break
+        if (swapped):
+            break
+        else: 
+            my_array = []
+        
+    return ''.join(arr)       
+        
+# Example usage
+num = 9793
+result = maximumSwap(num)
+print(result)  # Output: 9973       
+        
+# Example usage
+num = 9793
+result = maximumSwap(num)
+print(result)  # Output: 7236
+
+#way2:
+def maximumSwap(num):
+    # Convert the number to a list of its digits
+    digits = list(str(num))  #good
+    #mine:good:In Python, you can't convert an integer directly to a list because integers are not iterable. 
+    #     When you use list(num) on an integer, Python expects an iterable (like a string or a list) to create the list elements from.
+    last = {int(x): i for i, x in enumerate(digits)}  # Store last occurrence of each digit
+
+    for i, digit in enumerate(digits):
+        # Check for a larger digit to swap with
+        for d in range(9, int(digit), -1):  # Check digits from 9 down to digit+1
+            if d in last and last[d] > i:  # A larger digit found later
+                # Perform the swap
+                digits[i], digits[last[d]] = digits[last[d]], digits[i]
+                return int(''.join(digits))  # Return the new number after swap
+
+    return num  # Return original number if no swap was made
+
+# Example usage
+num = 2736
+result = maximumSwap(num)
+print(result)  # Output: 7236
+
+#case38: Maximum Length of Repeated Subarray
+#You are given two integer arrays nums1 and nums2. Your task is to find the maximum length of a subarray that appears in both arrays.
+def findLengthBruteForce(arr1, arr2):
+    n, m = len(arr1), len(arr2)
+    max_len = 0
+
+    # Iterate through every starting index in arr1
+    for i in range(n):
+        # Iterate through every starting index in arr2
+        for j in range(m):
+            # Check how far the subarray matches
+            length = 0
+            while (i + length < n) and (j + length < m) and arr1[i + length] == arr2[j + length]:  #vgood
+                length += 1
+            # Update the maximum length found so far
+            max_len = max(max_len, length)
+
+    return max_len
+
+# Example usage
+nums1 = [1, 2, 3, 2, 1]
+nums2 = [3, 2, 1, 4, 7]
+result = findLengthBruteForce(nums1, nums2)
+print(result)  # Output: 3
+
+#case39: Find Peak Element
+def findPeakElement(nums):
+    n = len(nums)
+
+    # Edge case: If the array has only one element, it is the peak.
+    if n == 1:
+        return 0
+
+    # Check for the peak at the start and end of the array.
+    if nums[0] > nums[1]:
+        return 0
+    if nums[n - 1] > nums[n - 2]:
+        return n - 1
+
+    #mine: If extremes are not peak, then peak must be in the middle. so start from 1 till n-1 #good 
+    # Check for peaks in the middle of the array.
+    for i in range(1, n - 1):
+        if nums[i] > nums[i - 1] and nums[i] > nums[i + 1]:
+            return i
+
+    return -1  # In case no peak is found (though it is guaranteed to have one).
+
+# Example usage:
+nums = [1, 2, 3, 1]
+result = findPeakElement(nums)
+print(result)  # Output: 2
+
+#case40: Find Minimum in Rotated Sorted Array - good
+#Suppose an array of length n is sorted in ascending order and then rotated between 1 and n times.
+#way1 - Binary Search Code - O(nlogn) because we're halving the search space in each iteration.
+def findMin(nums):
+    left, right = 0, len(nums) - 1
+    
+    while left < right: #good:use < and not <= to avaoid infinite loop when left == right
+        mid = (left + right) // 2
+        
+        # If the middle element is greater than the rightmost element,
+        # it means the smallest element must be on the right side(since the array is sorted and rotated) - good
+        if nums[mid] > nums[right]:
+            left = mid + 1
+        else:
+            # Otherwise, the smallest element is on the left side (including mid)
+            right = mid
+    
+    return nums[left]
+    #So, returning either nums[left] or nums[right] would yield the same result at that moment.
+    #In many algorithms, it is common to return the value from the left pointer after a convergence like this.
+    #It emphasizes that the search started from the left and worked towards finding the minimum.
+
+# Example usage:
+nums = [3, 4, 5, 1, 2]
+result = findMin(nums)
+print(result)  # Output: 1
+
+#way2: BF: O(n)  
+#mine:When searching in a sorted (or rotated sorted) array, O(log n) is more efficient than O(n) 
+#because binary search leverages the array's structure to narrow down the search space. 
+# In a rotated sorted array, you can use binary search by checking which half of the array is sorted,
+def findMin(nums):
+    # Initialize the minimum element as the first element
+    min_element = nums[0]
+    
+    # Traverse through the array and find the minimum element
+    for num in nums:
+        if num < min_element:
+            min_element = num
+    
+    return min_element
+
+# Example usage:
+nums = [3, 4, 5, 1, 2]
+result = findMin(nums)
+print(result)  # Output: 1
+
+2. Strings -- here:
+#case41: Longest Palindromic Substring --remember:longestPalin is by 'expand around center'
+#Way1: The "Expand Around Center" method
+def longest_palindromic_substring(s):
+    final_list = []
+    
+    def expand_around_center(left, right):
+        while (left >=0 and right < len(s) and s[left] == s[right]):
+            left -= 1
+            right += 1
+        return (s[left+1:right])
+
+    for i in range(len(s)):
+        #odd length:
+        palin = expand_around_center(i, i)
+        final_list.append(palin)
+
+        #even length:
+        palin = expand_around_center(i, i+1)
+        final_list.append(palin)
+
+    final_list.sort(key=len)''
+    return final_list[-1]
+
+# Example usage
+s = "ABCDFSABBAKAYAK"
+print("Longest Palindromic Substring:", longest_palindromic_substring(s))
+
+
+#case42: Longest Common Subsequence --good
+#mine:LCS refers to the longest sequence that can appear in both strings, but it does not require that the characters appear consecutively. 
+# For example, for the strings str1 = "AGGTAB" and str2 = "GXTXAYB", the LCS is "GTAB", which is not contiguous.
+#way1:BF
+from itertools import combinations
+
+# Function to check if sub_seq is a subsequence of str2
+def is_subsequence(sub_seq, str2):
+    iter_str2 = iter(str2)  # iter will help in maintaining the order :vgood
+    # iter_str2 is an iterator object created from the string str2. 
+    # It doesn’t return the characters of the string immediately but provides a way to access each character sequentially.
+    return all(char in iter_str2 for char in sub_seq) #good, use all() . 'all/any' expects the list of booleans, so no IF/ELSE here
+
+# Brute force function to find the length of the Longest Common Subsequence
+def lcs_brute_force(str1, str2):
+    longest_common_subsequence = ""
+
+    # Generate all possible subsequences of every length of str1
+    for r in range(1, len(str1) + 1):  # r is the length of the subsequence
+        for subseq in combinations(str1, r):
+            subseq_str = ''.join(subseq)
+            
+            # Check if the generated subsequence of str1 is a subsequence of str2
+            if is_subsequence(subseq_str, str2):
+                # Update the longest subsequence if the current one is longer
+                if len(subseq_str) > len(longest_common_subsequence):
+                    longest_common_subsequence = subseq_str
+    
+    # Return the length of the longest common subsequence
+    return len(longest_common_subsequence)
+
+# Example usage
+#mine LCs:- ['abhishek' if ele == 'firstname' else 'singh' for ele in my_list]
+#        :- ['abhishek' for ele in my_list if ele == 'firstname']
+str1 = "AGGTAB"
+str2 = "GXTXAYB"
+print("Length of LCS (brute force):", lcs_brute_force(str1, str2))  # Output should be 4, LCS: "GTAB"
+
+#way2:recursion
+def longest_common_seq(S1, S2):
+    # Base case: if either string is empty, return an empty list (no common subsequence)
+    if len(S1) == 0 or len(S2) == 0:
+        return []
+
+    # If the last characters of both strings match
+    if S1[-1] == S2[-1]:
+        result =  longest_common_seq(S1[:-1], S2[:-1]) + [S1[-1]]  # Append the matching character
+        return result
+
+    # If the last characters do not match, we have two possibilities:
+    # 1. Ignore the last character of S1
+    # 2. Ignore the last character of S2
+    # Take the result with the longer subsequence
+    else:
+        lcs1 = longest_common_seq(S1[:-1], S2)
+        lcs2 = longest_common_seq(S1, S2[:-1])
+        return lcs1 if len(lcs1) > len(lcs2) else lcs2
+
+# Example usage:
+S1 = 'ABCBDAB'
+S2 = 'BDCAB'
+final_string = longest_common_seq(S1, S2)
+print("Longest Common Subsequence:", ''.join(final_string))
+
+
+#case43: Edit Distance (Levenshtein Distance) --good - BF - recursion
+Description: Find the minimum number of operations required to convert one string into another
+#way1: BF
+def edit_distance_brute_force(str1, str2):
+    # Initialize variables to track the cost of insertion, deletion, and substitution
+    cost = 0
+
+    # Iterate over both strings
+    i, j = 0, 0
+    while i < len(str1) and j < len(str2):
+        if str1[i] == str2[j]:
+            # If characters match, move to the next character
+            i += 1
+            j += 1
+        else:
+            # Characters don't match, so we need to decide between inserting, deleting, or substituting
+            #  why 'len(str2) - j':-Assume, If we have processed a portion of str1 and have reached the end of it, but str2 still has characters remaining, 
+            #  then one possible option is to simply insert all the remaining characters from str2 into str1 to make them match. Ex: str1 = 'ab' ; str2 = 'abhishek'
+            insert_cost = len(str2) - j  # Cost if we insert
+            delete_cost = len(str1) - i  # Cost if we delete
+            substitute_cost = 1  # Cost for substitution. 
+            # The substitution operation means replacing one character in str1 with a corresponding character in str2
+            
+            # We choose the minimum cost operation
+            min_cost = min(insert_cost, delete_cost, substitute_cost)
+            
+            # Update the cost
+            cost += min_cost
+            
+            # Move the index based on the operation performed
+            if min_cost == insert_cost:
+                j += 1  # Simulate insertion
+            elif min_cost == delete_cost:
+                i += 1  # Simulate deletion
+            else:
+                i += 1  # Simulate substitution
+                j += 1
+    
+    # Account for any remaining characters #GOOD, dont forget this
+    if i < len(str1):
+        cost += len(str1) - i  # Delete remaining characters from str1
+    if j < len(str2):
+        cost += len(str2) - j  # Insert remaining characters into str1
+
+    return cost
+
+# Example usage:
+str1 = "kitten"
+str2 = "sitting"
+print(edit_distance_brute_force(str1, str2))  # Output will be 3
+
+
+#case44: Minimum Window Substring --good 
+#Way1: GFG : remember:  2 pointer -- 2 WHILEs ,one for expand other for contract
+from collections import Counter, defaultdict
+
+def min_window_substring(s, t):
+    right = left = formed = 0
+    t_dict = Counter(t)
+    s_dict = defaultdict(int)
+    required = len(t_dict)
+    min_length = float('inf')
+    min_window = ''
+
+    while (right < len(s)):
+        char = s[right]
+        s_dict[char] += 1 #add all elements to s_dict
+
+        if s_dict[char] == t_dict[char]:
+            formed += 1
+
+        while (left <= right and formed == required):
+            #Take the valid length before contracting (and after valid contraction).
+            # STOP as soon as formed != required. Next window will get counted from incremented LEFT 
+            length = right + 1 - left
+            if (length < min_length):
+                min_length = length
+                min_window = s[left:right+1]
+
+            #Now contract from left
+            char = s[left]
+            s_dict[char] -= 1
+            if char in t_dict and s_dict[char] < t_dict[char]:
+                formed -= 1
+            left += 1   #Incremented
+        right += 1
+
+    return min_window
+
+s = "ADOBECODEBANC"
+t = "ABC"
+print(min_window_substring(s, t))  # Output: "BANC"
+
+#case45: Regular Expression Matching --later
+
+#case46: Longest Substring Without Repeating Characters(LSWRC) -- 2Pointer- sliding window - again, good ==here17Sep
+#Definition: LSWRC is focused on finding the length of the longest substring that does not contain any repeating characters. 
+#A substring is a contiguous sequence of characters within a string.
+
+def length_of_longest_substring(s: str) -> int:
+    char_index_map = {}  # Map to store the last index of each character
+    left = 0  # Left boundary of the sliding window
+    max_length = 0  # Maximum length of substring without repeating characters
+    
+    for right in range(len(s)):
+        # This loop iterates through each character in the string, 
+        # with right representing the current end of the sliding window.
+        char = s[right]
+        
+        # If the character is already in the map and its index is within the current window
+        if char in char_index_map and char_index_map[char] >= left:
+            # Move the left boundary of the window to the right of the last occurrence of the character
+            left = char_index_map[char] + 1  #good
+        
+
+        # Update the last occurrence of the current character to the current right index
+        char_index_map[char] = right  #good:simple. No ELSE, keep adding char with index. No Harm with ELSE also
+               
+        # Calculate the length of the current window and update max_length
+        max_length = max(max_length, right - left + 1)
+    
+    return max_length
+
+# Example usage
+s = "GEEKSFORGEEKS"
+print(length_of_longest_substring(s))  # Output will be 7 for substring "EKSFORG" or "KSFORGE"
+
+
+#case47: Longest Repeating Subsequence(LRS) --good-again
+# The key difference from the Longest Common Subsequence (LCS) is that in LRS, we look for repeating subsequences within the same string.
+# In the Longest Repeating Subsequence (LRS) problem, we want to find a subsequence that repeats non-overlapping.
+from itertools import combinations
+
+def generate_combinations(s):
+    sequences_list = []
+    for i in range(1, len(s)+1): #start from 1. length of combination cant be 0
+        sequences = combinations(s, i)
+        sequences_list.extend(list(map(''.join, sequences))) #good:combinations will return object (of tuples) that needs to be converted to 'list' (of strings) for using it.
+    return sequences_list #use extend to add all combination of different lengths to sequences_list
+
+def is_repeating_subsequence(subseq, s):
+    def find_subsequence(s, subseq, start): # good:this we defined because this wholeblock needs to be called twice.
+        j = 0
+        for i in range(start, len(s)):
+            if s[i] == subseq[j]:
+                j += 1
+            if j == len(subseq):  #good,to get the index of s where subseq ends 
+                return i
+        return -1
+    
+    first_occurrence_end = find_subsequence(s, subseq, 0)
+    if first_occurrence_end == -1:
+        return False
+    second_occurrence_end = find_subsequence(s, subseq, first_occurrence_end + 1)  #-------------(3)
+    return second_occurrence_end != -1   #good way to return True or False by comparing
+
+def longest_repeating_subsequence(s):
+    subsequences = generate_subsequences(s)  #-----(1)
+    max_len = 0
+    for subseq in subsequences:
+        if is_repeating_subsequence(subseq, s): #-----------(2)
+            max_len = max(max_len, len(subseq))
+    return max_len
+
+# Example usage
+#s = "AABEBCDD"  #good:This is overlaping seq : ABD's are overlaping. So it is invalid for LRS
+s = "AABEBCDACBND"
+print(longest_repeating_subsequence(s))  # Output will be 3 (The longest repeating subsequence is "ABD", which appears twice in the string.)
+# The output for this string would be 3, as the length of the longest repeating subsequence is 3.
+
+
+#case48: String to Integer (atoi) -- later
+#case49: Word Break -- BF (This approach assumes that a word can be used only once. --good
+#Given a string s and a list of strings my_list, return true if s can be segmented 
+#into a space-separated sequence of one or more dictionary words.
+If words can be reused, you'll need a more complex solution,) -- dint understand, it works for 'samsungilikesamsung' also.
+s = 'ilikesamsung' 
+my_list = [ 'i', 'like', 'sam', 'sung', 'samsung', 'mobile']
+my_list.sort(key=len, reverse=True)
+
+for x in my_list:
+    if x in s:
+        s = s.replace(x, '', 1) #good, it returns since string is immutable
+
+if len(s):
+    print (s)
+    print ('NO')
+else:
+    print ('YES')
+
+#case50: Palindrome Partitioning -- good -- see walkthrough --later, didnt understand
+Given a string s, partition s such that every substring of the partition is a palindrome.
+Return all possible palindrome partitioning of s.
+
+#mine: BF:- get all the palindrom combinations then arrange in ascending order and traverse. Keep replacing part of s as and when matched.
+
+from itertools import combinations
+
+# Function to check if a string is a palindrome
+def is_palindrome(s):
+    return s == s[::-1]
+
+# Function to find the minimum palindrome cuts using combinations
+def min_palindrome_cuts_combinations(s):
+    n = len(s)
+    if is_palindrome(s): #good, inbuilt func to check palin
+        return 0  # No cuts needed if the entire string is a palindrome
+
+    # To store the minimum cuts found
+    min_cuts = float('inf')
+
+    # Generate all combinations of partition points
+    for r in range(1, n):  # r is the number of cuts (1 to n-1 cuts)
+        for cuts in combinations(range(1, n), r):  # Generate all sets of r cuts
+            print ('r, n, cuts', r, n, cuts)
+            #input()
+            parts = []
+            prev = 0
+            for cut in cuts:
+                print ('s[prev:cut]', s[prev:cut])
+                input()
+                parts.append(s[prev:cut])
+                prev = cut
+            parts.append(s[prev:])  # Add the last part
+
+            # If all parts are palindromes, update the min_cuts
+            if all(is_palindrome(part) for part in parts):
+                min_cuts = min(min_cuts, len(cuts))
+
+    return min_cuts
+
+# Example Usage
+s = 'ababbbabbababa'
+print("Minimum cuts required:", min_palindrome_cuts_combinations(s))
+
+#case51: Coin Change. 
+Description: Given a set of coins, find the fewest number of coins to make a given amount.
+from itertools import product
+
+def min_coins_bruteforce(coins, amount):
+    # Generate all possible combinations of coins
+    max_coins = amount // min(coins) + 1  # Maximum possible number of coins needed
+    print('coins, max_coins', coins, max_coins)
+    
+    best_solution = float('inf')
+    
+    # Generate combinations for different numbers of coins
+    for num_coins in range(1, max_coins + 1):
+        for combination in product(coins, repeat=num_coins):
+            #mine: Read as Ex:-Using repeat=2 with product(coins, repeat=2) will generate all possible combinations 
+            #                  where each combination consists of 2 coins, and each coin can be repeated:
+            #mine:Yes, you can use the combinations object directly in a loop without converting it to a list, as it is an iterator 
+            #     Convert object:combination to a list if you need random access to the combinations or if the total number of combinations.
+            #mine: Once you convert combinations object to list (say my_list), the original combinations object is exhausted and you can't iterate over it again.    
+            if sum(combination) == amount:
+                best_solution = min(best_solution, len(combination))
+                # Break after finding the first valid combination with `num_coins` coins
+                break
+        if best_solution != float('inf'):
+            break
+    
+    return best_solution if best_solution != float('inf') else 'Not possible'
+
+# Example usage
+coins = [1, 2, 5]
+amount = 11
+result = min_coins_bruteforce(coins, amount)
+print('Minimum number of coins needed:', result)
+
+
+#case52: Group Anagrams -- good
+from collections import defaultdict
+
+my_list = ['act', 'god', 'cat', 'dog', 'tac']
+my_dict = defaultdict(list)  #values of this dict will have of type list. so methods of list (say append) will work with its values. 
+#Also,if ele is not the key, it will create the key:ele with value as empty list.
+
+for word in my_list:
+    ele = ''.join(sorted(word)) #vgood
+    # The sorted() function can be used on strings.However, sorted() returns a list of characters, not a string. 
+    # Like combinations() return object with tuples of charatcters.We need to use ''.join()
+    my_dict[ele].append(word)
+
+print (my_dict)
+
+#case53: Count and Say -- good: taking last element of num at the end, num[-1] --here
+# ['1', '11', '21', '1211', '111221', '312211']
+num = '1'
+my_list = [num]  #fill the first element manually
+
+count = 1
+final_num = ''
+while count < n:
+    print (count, n)
+    num = my_list[-1]
+    final_num = ''  #reset the placeholder for next number
+    freq = 1
+    if (len(num) == 1):
+        final_num = str(freq)+num
+        my_list.append(final_num)
+        count += 1
+        continue
+       
+    num = my_list[-1]  # for 2 digit numbers
+    for i in range(1, len(num)):  #good, iterate the number and start from 2nd digit
+        if num[i] == num[i-1]:
+            freq += 1
+                        
+        elif num[i] != num[i-1]:  # 1, 11, 21, 1211, 111221
+            final_num += str(freq)+num[i-1] #for the previous repititive digits whose freq is increasing in above IF
+            freq = 1 #good, reset the freq
+    final_num += str(freq)+num[-1]  #for  the last element  
+    my_list.append(final_num)
+    count += 1
+    
+print (my_list)        
+
+#case54: Zigzag Conversion --leetcode --later good
+'''
+s = "PAYPALISHIRING"
+Row 0: P     A     H     N
+Row 1: A  P  L  S  I  I  G
+Row 2: Y     I     R
+
+'''
+def convert(s: str, numRows: int) -> str:
+    if numRows == 1 or numRows >= len(s):
+        return s
+    
+    # Create an array for each row
+    rows = [''] * numRows
+    current_row = 0
+    going_down = False
+    
+    # Traverse the string and add characters to the respective rows
+    for char in s:
+        rows[current_row] += char
+        if current_row == 0 or current_row == numRows - 1:
+            going_down = not going_down  # Reverse the direction
+        current_row += 1 if going_down else -1
+    
+    # Concatenate all rows
+    return ''.join(rows)
+
+# Example usage:
+s = "PAYPALISHIRING"
+numRows = 3
+result = convert(s, numRows)
+print(result)  # Output: "PAHNAPLSIIGYIR"
+
+#case55: Valid Parentheses --good
+def check_valid_paranthesis(s):
+    matching_paranthesis = {']':'[' , '}':'{' , ')':'('} #good, will be used to compare its values of its keys(char) with final_str[-1]
+    final_list = []
+    for char in s:
+        if char in '([{':
+            final_list.append(char)
+        else:
+            innermost_paranthesis = final_list.pop()
+            if innermost_paranthesis != matching_paranthesis[char]:
+                print ('NotBalanced')
+                break 
+    if final_list:   #good, if 'openings' are more
+        print ('NotBalanced')
+
+s = '()[]{}'
+check_valid_paranthesis(s)
+
+
+#case56: Longest Common Prefix
+#mine:The split() method splits a string into a list of words. Since your strings do not have any spaces, split() will return the entire string as a single element list. 
+#     This is not necessary for your problem and will lead to incorrect results. #mine: string.split()  is same as string.split(' '). There is nothing like string.split('')
+my_list = ['geeksforgeeks', 'geeks', 'geek', 'geezer']
+my_list.sort()
+    
+count = 0
+common = []
+status = True  #good useof boolean value
+while status and count < len(my_list[0]):
+    first_ele = my_list[0]
+    last_ele = my_list[-1]   #convert to list to get indexes is NR, can index string also like List
+    if first_ele[count] == last_ele[count]:
+        status = True
+        common.append(first_ele[count])
+    else:
+        status = False
+    count += 1
+print (''.join(common))
+
+#case57: Implement strStr() (Needle in Haystack)
+haystack = 'hello'
+needle = 'll'
+status = False  #set the boolean variable as either True/False rather than ''
+index = ''
+status = False
+for i in range (len(haystack)-len(needle)+1):
+    #mine:good: Without the +1, the loop would stop before reaching the last valid starting index where the needle can fit.
+    #     This happen because we are taking whole value(here 1..2 i.e 2) of len(needle), but taking len(haystack) from 0,len(haystack)-1 i.e 4. So add +1
+    if needle == haystack[i:i+len(needle)]:
+        status = True
+        index = i
+        status = True
+        break
+print (status, index)
+
+#case58: Multiply Strings -- later: rev here
+def multiply_strings(s1, s2):
+    # Helper function to remove leading zeros
+    def remove_leading_zeros(s):
+        return s.lstrip('0') or '0'
+    
+    # Remove leading zeros
+    s1 = remove_leading_zeros(s1)
+    s2 = remove_leading_zeros(s2)
+    
+    # Edge case when either string is '0'
+    if s1 == '0' or s2 == '0':
+        return '0'
+    
+    # Reverse the strings for easier processing
+    s1 = s1[::-1]
+    s2 = s2[::-1]
+    
+    # Initialize the result list with zeros
+    result = [0] * (len(s1) + len(s2))
+    
+    # Perform multiplication
+    for i in range(len(s1)):
+        for j in range(len(s2)):
+            result[i + j] += int(s1[i]) * int(s2[j])
+            # Handle carry
+            result[i + j + 1] += result[i + j] // 10
+            result[i + j] %= 10
+    
+    # Remove leading zeros from result
+    while len(result) > 1 and result[-1] == 0:
+        result.pop()
+    
+    # Reverse the result and convert to string
+    result = ''.join(map(str, result[::-1]))
+    
+    return result
+
+# Test the function
+s1 = "0033"
+s2 = "2"
+print(multiply_strings(s1, s2))  # Output: 66
+
+#case59: Roman to Integer --here
+#case60: Integer to Roman
+#case61: Valid Anagram
+from collections import Counter
+s = "anagramr"
+t = "nagaramm"
+s_dict = Counter(s)
+t_dict = Counter(t)
+
+status = True
+for x in s_dict:
+    if t_dict.get(x,0) != s_dict[x]:  #or can do as:- (t_dict == s_dict)
+        status = False
+        break
+print (status)
+
+#mine:good:if any(key not in t_dict for key in s_dict):
+#             print 'Not Valid'
+
+#case62: Valid Palindrome II--The "Valid Palindrome II" problem asks you to 
+# Determine if a string can become a palindrome after deleting at most one character. --good
+def valid_palindrome(s):
+    # Helper function to check if the string is a palindrome between two indices
+    def is_palindrome(s, left, right):
+        while left < right: #good, when there are two center elements, so only we are getting left/right as arguments since we are increasing/decreasing  here
+            if s[left] != s[right]:
+                return False
+            left += 1
+            right -= 1
+            # mine: query: cant I do simply as "return s == s[::-1]"??
+            # Ans:- Yes but I think need to create separate string like substring = s[left:right+1]. Also it will take extra menoru for extra substring
+        return True
+
+    # Two-pointer approach
+    left, right = 0, len(s) - 1
+    
+    while left < right:
+        if s[left] != s[right]:  #good, first check the extremen elements towards inwards. As soon as it finds unmatch, 
+                                 #then skip one char from either left or right and try from ther in 'is_palindrome'
+            # When there's a mismatch, try to skip the left or right character
+            return is_palindrome(s, left + 1, right) or is_palindrome(s, left, right - 1)
+        left += 1
+        right -= 1
+
+    return True
+
+# Example usage:
+s = "abca"
+print(valid_palindrome(s))  # Output: True
+
+
+#case63: Remove Invalid Parentheses --good - breadth first search
+# The output of this problem generally involves generating all valid combinations of the string by 
+# removing the minimum number of invalid parentheses, not just one possible valid string.
+from collections import deque
+
+def is_valid(s: str) -> bool:
+    # Helper function to check if the string is valid
+    count = 0
+    for char in s:
+        if char == '(':
+            count += 1
+        elif char == ')':
+            count -= 1
+        if count < 0:
+            return False
+            #good: If the count becomes negative at any point (which happens when there are more closing parentheses ) 
+            #      than opening parentheses (), the function returns False immediately. Useful for catching, string = '()())('
+            #  Also, 'deque' does not support slicing like lists or strings. You can't use s[:i] on a deque object.
+    return count == 0  # this will catch if opening braces and closing braces are not same in number.
+    
+def remove_invalid_parentheses(s: str):
+    if not s:
+        return [""]
+    
+    # Set for visited strings
+    visited = set()
+    # Queue for BFS
+    queue = deque([s])
+# mine:In a regular list, appending or removing elements from the beginning (using pop(0) or insert(0, ...)) can take O(n) time, 
+# where n is the number of elements in the list. This is because all elements have to be shifted.
+# With deque, appending (append()) or popping (popleft()) from both ends takes O(1) time, which is much faster.
+    visited.add(s)
+    
+    # Flag to indicate when we find valid expressions
+    found = False
+    result = []
+    
+    while queue:
+        current_str = queue.popleft() #good, to take elements from start of list
+        found = False
+        # If the current string is valid, add it to the result
+        if is_valid(current_str):
+            result.append(current_str)
+            # good: Here are are picking string that is valid from the characters of given string. 
+            # This is as good as removing characters from places that is making the string invalid
+            found = True
+        
+        # If we found a valid string at the current level, do not process further levels
+        if found:
+            continue
+        
+        # Generate all possible states by removing one parenthesis at each position
+        #mine: here we are creating level with nodes where 1 para is removed. (all combinations)
+        # Then in next itertaion, pich first element of level one and again remove one more paranthese (all combinations). Do the same for all other nodes of level1
+        # As and when you get valid combination, append is  final_list. This will be the answer.
+
+        for i in range(len(current_str)):
+            if current_str[i] not in ('(', ')'):
+                continue
+            next_str = current_str[:i] + current_str[i+1:]
+            if next_str not in visited: #good,to avoid duplicate entry (like (a)()))())=>remove consecutive ')' generate same string ->(a)())()) ,(a)())()) in queue. Add same ele in both cases.
+                visited.add(next_str) 
+                queue.append(next_str)
+    
+    return result
+
+# Test examples
+s = "(a)())()"
+print(remove_invalid_parentheses(s))  # Output: ["(a())()", "(a)()()"]
+
+s = ")("
+print(remove_invalid_parentheses(s))  # Output: [""]
+
+#case64: Longest Palindrome that can be built
+#case65: Permutation in String --good
+from collections import Counter
+s1 = "ab"
+s2 = "eidbaooo"
+my_dict = Counter(s1)
+
+for i in range(len(s2)-len(s1)+1):
+    window = s2[i:i+len(s1)]
+    window_count = Counter(window)
+    if (my_dict == window_count):
+        print ('yes')
+        
+
+#case66: good- Find All Anagrams in a String-(find all the anagrams of a string s1 in another string s2) - GFG sliding windows- understand
+from collections import Counter
+
+def find_anagrams(s1:str , s2:str):
+    window = s2[:len(s1)]
+    window_count = Counter(window)
+    s1_count = Counter(s1)
+    for i in range(0, len(s2) - len(s1) + 1):  #good,to avoid index OOR
+        print (s1_count.keys(), window_count.keys())
+        input()
+        if (s1_count == window_count):  #good, direct dictionary  matching
+            result.append(window_count.keys())
+            print ('result', result)
+            input()
+        else:
+            window_count[s2[i+len(s1)]] += 1  #good,sliding way. This way by sliding the window, no need to run 'Counter' for every windows (as previous prog)
+            del window_count[s2[i]]  #removing first element from window
+            print ('new window', s2[i+len(s1)], window_count.keys())
+            input()
+        
+result = []
+s1 = "ab"
+s2 = "eidbaooo"
+print(find_anagrams(s1, s2))
+
+#case67: Minimum Number of Steps to Make Two Strings Anagram
+from collections import Counter
+
+s = "aaagram"
+t = "mangaar"
+
+s_dict = Counter(s)
+t_dict = Counter(t)
+
+actions = []
+for x in s_dict.keys():
+    if s_dict[x]> t_dict.get(x,0):  # Handle missing characters in t_dict with .get(x, 0) - Good
+    # Cases where t_dict[char] > s_dict.get(char,0) are not considered because those chases will be taken care by above line (in reverse way) since length of both s,t are same.
+        actions.append(s_dict[x] - t_dict[x])
+print (sum(actions)) #sum of elements of array
+
+#good: Both s,t must have Same Length and contain Same Set of Characters (may be in different freqencies)
+
+#case68: Reorder Data in Log Files
+#case69: good - Find the First Unique Character in a String
+
+#Good: You can optimize this code for finding the first unique character in a string by avoiding the use of OrderedDict and Counter together. 
+#Python's Counter and dict (since Python 3.7) already maintain the order of elements, so you can just use Counter directly.
+
+from collections import OrderedDict, Counter
+my_dict = OrderedDict()
+s='loveleetcode'
+my_dict = Counter(s)
+for key,value in my_dict.items():
+    if value == 1:
+        print ('First unique char', key)
+        break
+
+Way2: optimized:
+from collections import Counter
+
+def first_unique_char(s):
+    count = Counter(s)  # Get the frequency of each character in the string
+
+    # Loop through the string to preserve the order and find the first unique character
+    for idx, char in enumerate(s):  #good: I, V
+        if count[char] == 1:
+            return f"First unique char: {char}, at index: {idx}"
+
+    return "No unique character found."
+
+# Example usage
+s = 'loveleetcode'
+print(first_unique_char(s))  # Output: 'First unique char: v'
+
+
+#case70: Add Bold Tag in String
+def add_bold_html(text, word):
+    #return text.replace(word, f'<b>{word}</b>')  #OR  
+    return text.replace(word, "<b>{}</b>".format(word))
+
+s = 'loveleetcode'
+word_to_bold = 'love'
+result = add_bold_html(s, word_to_bold)
+
+print(result)
+#case71: Encode and Decode Strings
+#case72: Find the Index of the First Occurrence in a String
+#case73: Restore IP Addresses
+#case74: Smallest Substring with At Least K Repeating Characters.--good
+from collections import defaultdict
+
+def shortest_substring_with_k_repeating_chars(s, k):
+    l = 0
+    min_length = float('inf')
+    freq = defaultdict(int)
+    
+    for r in range(len(s)):
+        freq[s[r]] += 1
+        
+        # Check if the current window has at least one character repeating k times
+        while any(count >= k for count in freq.values()):
+            # Take the length
+            length = r - l + 1
+            if length < min_length:
+                min_length = length
+            
+            # Move the left pointer to potentially find a smaller window
+            freq[s[l]] -= 1
+            if freq[s[l]] == 0:
+                del freq[s[l]]
+            l += 1
+    
+    return min_length if min_length != float('inf') else -1
+
+# Example usage
+s = "babcac"
+k = 2
+result = shortest_substring_with_k_repeating_chars(s, k)
+print(result)  # Output: 4, for substring "babc"
+
+good: Does sliding window will have a FOR loop that will increase the size of window in right, 
+while we need to reduce the window from left (using WHILE loop) inside that FOR loop
+
+--Yes, that's correct. The sliding window approach involves two main operations witWITHIN a FOR loop:
+
+Expanding the Window (Increasing Size on the Right):
+
+The end pointer is used to expand the window by moving it to the right, adding characters to the current window and updating the frequency counts or other relevant data structures.
+Contracting the Window (Reducing Size from the Left):
+
+Once a valid window is found (i.e., a window that satisfies the condition, such as having at least K repeating characters), then first take the length of valid string.
+Then start pointer is used to contract the window from the left to find the smallest possible window that still satisfies the condition.
+
+#case75: Word Ladder --do understand :later --good-again
+'''
+The Word Ladder problem is a classic problem in algorithms and is typically asked in interviews to assess breadth-first search (BFS) understanding.
+Given two words, beginWord and endWord, and a dictionary containing a list of words, find the shortest transformation sequence from beginWord to endWord, such that:
+
+Only one letter can be changed at a time.
+Each transformed word must exist in the word list.
+Return the length of the shortest transformation sequence. If no such sequence exists, return 0.
+'''
+
+from collections import deque
+
+def wordLadderLength(beginWord, endWord, wordList):
+    wordSet = set(wordList)
+    if endWord not in wordSet:
+        return 0
+    
+    queue = deque([(beginWord, 1)])  # (current_word, current_length) - add as a list of tuples - to popout as a single element : good
+    visited = set([beginWord]) #good
+    #set([beginWord]): This creates a set with the entire word "hit" (or beginWord) as a single element.For example, set(["hit"]) creates {"hit"}
+    #                  The brackets [] indicate that you're passing a list to the set() constructor. By wrapping beginWord in a list, you ensure that the entire word is treated as one single entity.
+    # For example, set("hit") would create {'h', 'i', 't'} (each letter is treated as an individual element).
+    
+    while queue:
+        current_word, length = queue.popleft()
+        
+        if current_word == endWord:
+            return length
+        
+        for i in range(len(current_word)):
+            for char in 'abcdefghijklmnopqrstuvwxyz':
+                next_word = current_word[:i] + char + current_word[i+1:] #good: [i+1] becoz we are replacing char of current_word
+                if next_word in wordSet and next_word not in visited:
+                    visited.add(next_word)
+                    queue.append((next_word, length + 1)) #good, append as tuple
+    
+    return 0
+
+# Example usage
+beginWord = "hit"
+endWord = "cog"
+wordList = ["hot", "dot", "dog", "lot", "log", "cog"]
+result = wordLadderLength(beginWord, endWord, wordList)
+print(result)  # Output: 5
+
+#case76: Scramble String 
+#way - BF:
+from itertools import permutations
+
+def is_scramble(s1, s2):
+    # If lengths are different, they can't be scrambles
+    if len(s1) != len(s2):
+        return False
+
+    # Generate all permutations of s1
+    for perm in permutations(s1): #good
+        # Join the tuple to form the scrambled string
+        scrambled = ''.join(perm)
+        if scrambled == s2:
+            return True
+
+    return False
+
+# Example usage
+s1 = "great"
+s2 = "rgeat"
+result = is_scramble(s1, s2)
+print(result)  # Output: True
+
+#case77: Reverse Words in a String 
+my_str = 'the sky is blue'
+words = my_str.split() # good:first convert into list by splitting then do reverse then join. else  revserse on string will reverse character level
+words.reverse()  #remember, only STRING and TUPLE  are immutable, so there function returns the new value. Other does inplace, so return None.
+my_str1 = ' '.join(words)
+print (my_str1)
+
+#case78: Basic Calculator
+#case79: Text Justification
+#case80: Simplify Path
+#----------------------------------------------------------------
+Set Programs --here
+#Case1: Find the intersection of two sets.
+s1 = {89, 24, 75, 11, 23}
+s2 = {89, 2, 4}
+s3 = s1.intersection(s2)
+print (s3)
+
+#Case2: Determine if one set is a subset of another.
+
+#Case3: Find the union of multiple sets.
+
+#Case4: Find the difference between two sets.
+s1 = {89, 24, 75, 11, 23}
+s2 = {89, 2, 4}
+s3 = s1.difference(s2)
+print (s3) 
+
+#Case5: Find the symmetric difference between two sets.
+s1 = {87, 88, 89, 24, 75, }
+s2 = {89, 24, 75, 76, 77}
+s3 = s1.symmetric_difference(s2) #good
+print (s3)  
+o/p:-{76, 77, 87, 88}
+
+#Case6: Find the largest common element in multiple sets.
+set1 = {1, 2, 3, 4, 5}
+set2 = {3, 4, 5, 6, 7}
+set3 = {4, 5, 8, 9}
+
+set4 = set1.intersection(set2, set3)       
+print (max(set4))
+
+#Case7: Count the number of elements in a set that are not in another set.
+set1 = {1, 2, 3, 4, 5}
+set2 = {4, 5, 6, 7}
+
+set3 = set1.symmetric_difference(set2)
+print (set3)
+
+#Case8: Remove duplicates from a list using a set. -- good via 2 pointer
+j = 0
+my_list = [1, 1, 2, 3, 4, 4, 5]
+for i in range(1, len(my_list)):
+    if (my_list[j] != my_list[i]):
+        j += 1
+        my_list[j] = my_list[i]
+
+print (my_list)
+
+#Case9: Create a set from a list of tuples where each tuple is a pair of (key, value).
+
+#Case10: Find the common elements between three sets.
+
+#Case11: Determine the unique elements in a list of sets.
+list_of_sets = [{1, 2, 3}, {3, 4, 5}, {5, 6, 7}, {7, 8, 9}]
+
+unique_ele = list_of_sets[0]
+
+for i in range(1, len(list_of_sets)):
+    unique_ele = unique_ele.union(list_of_sets[i])
+print (unique_ele)
+
+#Case12: Find the elements present in one set but not in any other set from a list of sets.
+
+#Case13: Implement a function to merge multiple sets and remove duplicates.
+list_of_sets = [{1, 2, 3}, {3, 4, 5}, {5, 6, 7}, {7, 8, 9}]
+
+union_set = list_of_sets[0]
+
+for my_set in list_of_sets:
+    for i in my_set:
+        if i not in union_set:
+            union_set.add(i)  #good:add doesnt  return since set is mutable
+print (union_set)
+
+#Case14: Find the element with the maximum frequency in a set derived from a list.
+my_list = [1, 2, 3, 1, 2, 1, 3, 3, 3, 4, 5, 6, 3, 2, 1]
+from collections import Counter
+
+my_dict = Counter(my_list)
+max_freq_ele = max(my_dict, key=my_dict.get)  #good
+print (max_freq_ele)
+
+#good:what when we dont pass key=element_counts.get with max()
+#When you don't pass key=element_counts.get to the max() functon, it will simply return the maximum 
+of the dictionary keys based on their natural order (which is usually numerical or lexicographical for strings). 
+#It won't consider the values (frequencies) in the dictionary but only the keys themselves.
+
+#good:Issue with my_dict.values() in max() function
+#The max() function's key parameter expects a function that takes a single argument and returns a 
+#value to be used for comparison. Here's why my_dict.values() doesn't work in this context:
+
+my_dict.values() returns a view object: my_dict.values() returns a view object that provides a dynamic view of all values in the dictionary. This view object doesn't directly correspond to the key-value pairs needed for comparison in max().
+
+#Case15: Find the intersection of two sets using set comprehension.
+set1 = {1, 2, 3, 4, 5}
+set2 = {3, 4, 5, 6, 7}
+
+set3 = {x for x in set1 if x in set2} #good , dict comprehension.I think, IF can be before FOR also--Ans:NO, The if condition comes after the for loop in this case.
+print (set3)
+#mine:Set Comprehension: {x for x in iterable if condition}
+#List Comprehension: [x for x in iterable if condition]
+#Dictionary Comprehension: {key_expression: value_expression for item in iterable if condition}
+
+#Case16: Create a set of tuples and find the tuple with the maximum sum of its elements.
+
+#Case17: Implement a function that takes a list of sets and returns a set of elements that appear in at least two sets.
+
+#Case18: Find the elements in a set that are at least N times in a list.
+from collections import Counter
+
+my_list = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]
+my_set = {1, 2, 3, 4}
+N = 3
+my_dict = Counter(my_list)
+final_list = [x for x in my_set if my_dict[x] >= N]
+print (final_list)
+
+#Case19: Convert a set into a sorted list.
+set1 = {1, 2, 3, 4, 5}
+my_list = sorted(set1)
+print (my_list)
+
+#Case20: Create a set of characters from a string and find the number of distinct characters.
+from collections import Counter
+my_str = 'mynameisabhishek'
+my_dict = Counter(my_str)
+my_list = [x for x in my_dict if my_dict[x] == 1]
+print (my_list)
+
+Tuple Programs
+#Case21: Sort a list of tuples based on the second element of each tuple.
+data = [(1, 4), (3, 1), (2, 3), (5, 2)]
+
+my_list = sorted(data, key=lambda x:x[1]) #good
+print (my_list)
+
+#Case22: Find the tuple with the maximum sum of its elements. #good
+data = [(1, 4, 3), (3, 1, 2), (2, 3, 5), (5, 2, 1)]
+max_tuple = max(data, key=lambda x:sum(x))
+print (max_tuple)
+
+#Case23: Remove duplicate tuples from a list of tuples.
+data = [(1, 4, 3), (3, 1, 2), (2, 3, 5), (5, 2, 1), (2, 3, 5)]
+set_tuple = set(data)
+print (set_tuple)
+
+#Case24: Find the index of a specific tuple in a list of tuples.
+data = [(1, 4, 3), (3, 1, 2), (2, 3, 5), (5, 2, 1), (2, 3, 5)]
+target = (3,1,2)
+idx = data.index(target)
+print (idx)
+
+#Case25: Convert a list of tuples into a dictionary. --good
+#mine:If your intention is to create a dictionary from tuples, each tuple should contain exactly two elements: a key and a value
+tuples_list = [('a', 1), ('b', 2), ('c', 3)]
+
+#my_dict = dict(tuples_list)
+#or
+
+my_dict = {key: value for key, value in tuples_list}
+print (my_dict)
+
+#mine: if the tuple has more than 2 elements and you need to convert in dict:
+# Convert a single tuple to a dictionary with indices as keys
+tuple_data = (1, 2, 3, 4, 5)
+my_dict = {i: value for i, value in enumerate(tuple_data)}
+print(my_dict)  # Output: {0: 1, 1: 2, 2: 3, 3: 4, 4: 5}
+
+
+#Case26: Merge two lists of tuples into one list of tuples.
+list1 = [('a', 1), ('b', 2), ('c', 3)]
+list2 = [('d', 4), ('e', 5), ('f', 6)]
+
+list1.extend(list2)
+print (list1)
+
+#Case27: Find all tuples in a list that have the same sum of elements.
+tuples_list = [(1, 2), (2, 1), (3, 3), (4, -1), (1, 2), (0, 6)]
+my_dict = {}
+for x in tuples_list:
+    s = sum(x)
+    if s in my_dict:
+        my_dict[s].append(x)
+    else:
+        my_dict[s] = [x]
+print (my_dict)
+
+#Case28: Sort a list of tuples by the first element, and then by the second element.
+tuples_list = [(1, 2), (2, 1), (3, 3), (4, -1), (1, 2), (0, 6)]
+my_list_second = sorted(tuples_list, key=lambda x: x[1])
+my_list_first = sorted(tuples_list, key=lambda x: x[0])
+print (my_list_first)
+print (my_list_second)
+
+#Case29: Find the tuple with the smallest difference between its elements.
+tuples_list = [(1, 2), (2, 1), (3, 3), (4, -1), (1, 2), (0, 6)]
+min_diff = min(tuples_list, key=lambda x: abs(x[0]-x[1])) #good:abs
+print (min_diff)
+
+#Case30: Implement a function to return a list of tuples where the sum of elements equals a given number.
+tuples_list = [(1, 2), (3, -1), (4, -2), (5, 3), (2, 3)]
+target_sum = 5
+
+my_list = [x for x in tuples_list if sum(x) == target_sum]
+print (my_list)
+good:lambda we use for the key with inbuilt methods (say sorted(), min(), max())
+
+#Case31: Flatten a list of tuples into a single list.
+tuples_list = [(1, 2), (3, -1), (4, -2), (5, 3), (2, 3)]
+my_list = []
+
+for x in tuples_list:
+    my_list.extend(x)
+print (my_list)
+
+#Case32: Count the frequency of each tuple in a list of tuples.
+
+#Case33: Create a list of tuples where each tuple contains a unique pair from a given list.
+
+#Case34: Find the common elements in multiple tuples.
+
+#Case35: Create a tuple from the elements of a set and find the tuple with the maximum length.
+
+#Case36: Generate all possible permutations of a tuple.
+
+#Case37: Implement a function to remove tuples that contain duplicate elements.
+
+#Case38: Convert a list of tuples into a single tuple.
+
+#Case39: Find the average of the elements in each tuple of a list of tuples.
+
+#Case40: Extract all tuples from a list where the sum of elements is greater than a given number.
+
+Dictionary Programs
+#Case41: Merge two dictionaries into one, combining values for duplicate keys.
+
+#Case42: Find the key with the maximum value in a dictionary.
+
+#Case43: Create a dictionary from two lists: one for keys and one for values.
+
+#Case44: Count the frequency of each character in a string and store it in a dictionary.
+
+#Case45: Filter a dictionary to include only items with values greater than a specified threshold.
+
+#Case46: Find the common keys between two dictionaries.
+
+#Case47: Convert a dictionary into a list of tuples (key-value pairs).
+
+#Case48: Create a nested dictionary from a list of tuples.
+
+#Case49: Sort a dictionary by its values in descending order.
+
+#Case50: Implement a function to update the values of a dictionary based on another dictionary.
+
+#Case51: Count the number of occurrences of each word in a text and store it in a dictionary.
+
+#Case52: Find the longest key in a dictionary.
+
+#Case53: Create a dictionary from a list of dictionaries based on a common key.
+
+#Case54: Remove items from a dictionary where the value is below a certain threshold.
+
+#Case55: Find the average value of the values in a dictionary.
+
+#Case56: Implement a function to merge dictionaries with the same key, summing their values.
+
+#Case57: Create a dictionary where each key is associated with a list of values.
+
+#Case58: Extract keys from a dictionary that have specific values.
+
+#Case59: Create a dictionary that maps each character in a string to its index positions.
+
+#Case60: Find the key with the minimum value in a dictionary.
+
+#----------------------------------------------------------------
+3. Linked Lists
+#case81: Reverse a Linked List
+#case82: Detect a Cycle in a Linked List
+#case83: Merge Two Sorted Lists
+#case84: Intersection of Two Linked Lists
+#case85: Remove Nth Node From End of List
+#case86: Reverse Nodes in k-Group
+#case87: Copy List with Random Pointer
+#case88: Sort a Linked List
+#case89: Rotate List
+#case90: Add Two Numbers Represented by Linked Lists
+#case91: Remove Duplicates from a Sorted List
+#case92: Remove Linked List Elements
+#case93: Reorder List
+#case94: Flatten a Multilevel Doubly Linked List
+#case95: Swap Nodes in Pairs
+#case96: Partition List
+#case97: Linked List Cycle II
+#case98: LRU Cache
+#case99: Palindrome Linked List
+#case100: Merge k Sorted Lists
+#case101: Clone a Linked List with Next and Random Pointer
+#case102: Convert Binary Number in a Linked List to Integer
+#case103: Remove Duplicates from an Unsorted Linked List
+#case104: Reverse a Doubly Linked List
+#case105: Intersection Point in Y Shaped Linked Lists
+#case106: Find the Starting Point of the Loop in a Linked List
+#case107: Convert a Sorted List to a Binary Search Tree
+#case108: Flatten a Binary Tree to a Linked List
+#case109: Remove Zero Sum Consecutive Nodes from Linked List
+#case110: Add Two Numbers II
+#case111: Design a Linked List
+#case112: Maximum Twin Sum of a Linked List
+#case113: Find the Middle of the Linked List
+#case114: Delete Node in a Linked List
+#case115: Remove All Nodes of a Linked List that Contain Specific Data
+#case116: Multiply Two Numbers Represented by Linked Lists
+#case117: Rotate Doubly Linked List by N nodes
+#case118: Convert a Binary Tree to a Circular Doubly Linked List
+#case119: Move Last Element to Front of a Linked List
+#case120: Flatten a Linked List
+
+4. Trees
+#case121: Binary Tree Inorder Traversal
+#case122: Binary Tree Preorder Traversal
+#case123: Binary Tree Postorder Traversal
+#case124: Level Order Traversal
+#case125: Binary Tree Zigzag Level Order Traversal
+#case126: Diameter of Binary Tree
+#case127: Validate Binary Search Tree
+#case128: Lowest Common Ancestor of a Binary Tree
+#case129: Symmetric Tree
+#case130: Construct Binary Tree from Preorder and Inorder Traversal
+#case131: Construct Binary Tree from Inorder and Postorder Traversal
+#case132: Maximum Depth of Binary Tree
+#case133: Minimum Depth of Binary Tree
+#case134: Balanced Binary Tree
+#case135: Convert Sorted Array to Binary Search Tree
+#case136: Convert Sorted List to Binary Search Tree
+#case137: Path Sum
+#case138: Binary Tree Maximum Path Sum
+#case139: Flatten Binary Tree to Linked List
+#case140: Binary Search Tree Iterator
+#case141: Kth Smallest Element in a BST
+#case142: Binary Tree Right Side View
+#case143: Invert Binary Tree
+#case144: Serialize and Deserialize Binary Tree
+#case145: Recover Binary Search Tree
+#case146: Binary Tree Longest Consecutive Sequence
+#case147: Binary Tree Paths
+#case148: Sum Root to Leaf Numbers
+#case149: Unique Binary Search Trees
+#case150: Unique Binary Search Trees II
+#case151: Construct Binary Search Tree from Preorder Traversal
+#case152: Count Complete Tree Nodes
+#case153: Closest Binary Search Tree Value
+#case154: Vertical Order Traversal of a Binary Tree
+#case155: Lowest Common Ancestor of a BST
+#case156: Sum of Left Leaves
+#case157: Range Sum of BST
+#case158: Binary Tree Tilt
+#case159: Merge Two Binary Trees
+#case160: Delete Node in a BST
+
+5. Graphs
+#case161: Depth First Search (DFS)
+#case162: Breadth First Search (BFS)
+#case163: Topological Sort
+#case164: Detect Cycle in a Directed Graph
+#case165: Detect Cycle in an Undirected Graph
+#case166: Shortest Path in a Binary Matrix
+#case167: Dijkstra’s Shortest Path Algorithm
+#case168: Bellman-Ford Algorithm
+#case169: Floyd-Warshall Algorithm
+#case170: Clone Graph
+#case171: Word Ladder
+#case172: Minimum Cost to Connect All Points
+#case173: Number of Islands
+#case174: Rotting Oranges
+#case175: All Paths From Source to Target
+#case176: Minimum Height Trees
+#case177: Course Schedule
+#case178: Course Schedule II
+#case179: Redundant Connection
+#case180: Evaluate Division
+#case181: Pacific Atlantic Water Flow
+#case182: Cheapest Flights Within K Stops
+#case183: Network Delay Time
+#case184: Path With Maximum Probability
+#case185: Shortest Path in a Grid with Obstacles Elimination
+#case186: Critical Connections in a Network
+#case187: Reconstruct Itinerary
+#case188: K-Similar Strings
+#case189: Minimum Moves to Reach Target with Rotations
+#case190: Sliding Puzzle
+#case191: Swim in Rising Water
+#case192: Alien Dictionary
+#case193: Bus Routes
+#case194: Minimum Knight Moves
+#case195: Find Eventual Safe States
+#case196: Network Delay Time
+#case197: Parallel Courses
+#case198: Minimum Spanning Tree using Prim’s Algorithm
+#case199: Minimum Spanning Tree using Kruskal’s Algorithm
+#case200: Critical Connections in a Network
+
+6. Dynamic Programming
+#case201: Fibonacci Sequence
+#case202: Climbing Stairs
+#case203: Coin Change Problem
+#case204: Longest Increasing Subsequence
+#case205: Longest Common Subsequence
+#case206: 0/1 Knapsack Problem
+#case207: Partition Equal Subset Sum
+#case208: House Robber Problem
+#case209: House Robber II
+#case210: Decode Ways
+#case211: Best Time to Buy and Sell Stock with Cooldown
+#case212: Minimum Path Sum
+#case213: Edit Distance
+#case214: Maximum Product Subarray
+#case215: Burst Balloons
+#case216: Word Break Problem
+#case217: Palindromic Substrings
+#case218: Longest Palindromic Subsequence
+#case219: Unique Paths
+#case220: Unique Paths II
+#case221: Interleaving String
+#case222: Triangle
+#case223: Minimum Difficulty of a Job Schedule
+#case224: Perfect Squares
+#case225: Wildcard Matching
+#case226: Regular Expression Matching
+#case227: Cherry Pickup
+#case228: Distinct Subsequences
+#case229: Predict the Winner
+#case230: Scramble String
+#case231: Longest Arithmetic Subsequence
+#case232: Maximum Sum Circular Subarray
+#case233: Dungeon Game
+#case234: Maximum Length of Pair Chain
+#case235: Palindrome Partitioning II
+#case236: Minimum Falling Path Sum
+#case237: Minimum Insertion Steps to Make a String Palindrome
+#case238: Maximum Profit in Job Scheduling
+#case239: Longest Palindromic Substring
+#case240: Word Break II
+
+7. Backtracking
+#case241: N-Queens Problem
+#case242: Sudoku Solver
+#case243: Generate Parentheses
+#case244: Word Search
+#case245: Palindrome Partitioning
+#case246: Subsets II
+#case247: Combination Sum
+#case248: Combination Sum II
+#case249: Permutations
+#case250: Permutations II
+#case251: Letter Combinations of a Phone Number
+#case252: Restore IP Addresses
+#case253: Rat in a Maze Problem
+#case254: M-Coloring Problem
+#case255: Hamiltonian Path
+#case256: Crossword Puzzle
+#case257: Knight's Tour Problem
+#case258: Tug of War
+#case259: Minimum Sum Partition
+#case260: Matchsticks to Square
+#case261: Word Break II
+#case262: Kth Permutation Sequence
+#case263: Combination Sum IV
+#case264: Largest Rectangle Area in a Binary Matrix
+#case265: Longest Increasing Path in a Matrix
+#case266: Maximum Length of a Concatenated String with Unique Characters
+#case267: Factor Combinations
+#case268: Flip Game II
+#case269: Remove Invalid Parentheses
+#case270: Number of Islands
+#case271: Valid Sudoku
+#case272: Maximal Rectangle
+#case273: Expression Add Operators
+#case274: Combination Sum III
+#case275: Subsets
+#case276: All Paths from Source to Target
+#case277: Binary Tree Maximum Path Sum
+#case278: Partition to K Equal Sum Subsets
+#case279: Minimum Unique Word Abbreviation
+#case280: Sliding Puzzle
+
+8. Greedy Algorithms
+#case281: Activity Selection Problem
+#case282: Fractional Knapsack Problem
+#case283: Job Sequencing Problem
+#case284: Huffman Coding
+#case285: Minimum Number of Platforms Required for a Railway Station
+#case286: Minimum Spanning Tree using Kruskal’s Algorithm
+#case287: Minimum Spanning Tree using Prim’s Algorithm
+#case288: Dijkstra’s Shortest Path Algorithm
+#case289: Greedy Coloring Problem
+#case290: Egyptian Fraction
+#case291: Coin Change Problem
+#case292: Gas Station Problem
+#case293: Candy Distribution Problem
+#case294: Jump Game II
+#case295: Partition Labels
+#case296: Assign Cookies
+#case297: Non-overlapping Intervals
+#case298: Maximum Subarray Sum after K Concatenations
+#case299: Best Time to Buy and Sell Stock II
+#case300: Remove K Digits
+#case301: Reorganize String
+#case302: Task Scheduler
+#case303: Boats to Save People
+#case304: Minimum Number of Refueling Stops
+#case305: Queue Reconstruction by Height
+#case306: Remove Duplicate Letters
+#case307: Split Array into Consecutive Subsequences
+#case308: Minimum Cost to Connect Sticks
+#case309: Minimum Deletions to Make Character Frequencies Unique
+#case310: Reduce Array Size to The Half
+#case311: Car Pooling
+#case312: Minimize Maximum Pair Sum in Array
+#case313: Reduce Array Size to the Half
+#case314: Minimize Deviation in Array
+#case315: Largest Perimeter Triangle
+#case316: Maximum Product of Three Numbers
+#case317: Minimize Max Distance to Gas Station
+#case318: Split Array Largest SumCase25: Convert a list of tuples int
+#case319: Find the City With the Smallest Number of Neighbors at a Threshold Distance
+#case320: Earliest Possible Day of Full Bloom
+'''

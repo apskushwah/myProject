@@ -1,0 +1,5 @@
+my_str = 'the sky is blue'
+arr = my_str.split()
+arr.reverse()
+mystr = ''.join(arr)
+print (mystr)

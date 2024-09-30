@@ -1,0 +1,3156 @@
+#To practice: Do the same set of programs with different different approach. Like by list, by converting to string, by importing etc.
+#https://www.geeksforgeeks.org/explore?page=2&category=Data%20Structures,Arrays,Strings,Hash,Numbers,python-strings,subset,Disjoint%20Set,python-loops,Data%20Type,python-set,python-dict&difficulty=Medium,Hard&sprint=a663236c31453b969852f9ea22507634&sortBy=latest&sprint_name=SDE%20Sheet
+t = 'DEF'
+for ele in t:
+    print (ele)
+
+"""
+# Overlapping Intervals
+# 1. Check for overlapping intervals -- mine:good
+my_list = [[1, 3], [2, 4], [3, 8], [7, 10]]
+# Expected Output: [[1, 4], [6, 8], [9, 10]]
+
+def merge_intervals(my_list):
+    
+    merged_list = []
+    for interval in my_list:
+        # If merged_list is empty or current interval does not overlap with the last interval in merged_list
+        print (f'Interval:{interval}')
+        if not merged_list or merged_list[-1][1] < interval[0]:
+            merged_list.append(interval)
+        else:
+            merged_list[-1][1] = max(merged_list[-1][1], interval[1])
+    return merged_list
+    
+
+# Call the function and print the result
+result = merge_intervals(my_list)
+print(result)
+
+# Coin Change
+# 2. Find the minimum number of coins needed for change
+coins = [9, 1, 1, 1]
+S = 11
+min_coins = 0
+for i in range(0, len(coins)):
+    count=1
+    sum = coins[i]
+    j=i+1
+    for j in range(j, len(coins)):
+        sum += coins[j]
+        #print (sum)
+        if (sum >= S):
+            count += 1
+            if (min_coins == 0):
+                min_coins = count
+            if (count <= min_coins):
+                min_coins = count
+            break
+        else:
+            count += 1
+print (min_coins)
+
+# Minimize the Heights II
+# 3. Minimize the difference between the heights
+#Input: arr[] = {1, 15, 10}, k = 6
+#Output:  Maximum difference is 5.
+#Explanation: Change 1 to 7, 15 to 9 and 10 to 4. Maximum difference is 5 (between 4 and 9). We can’t get a lower difference.
+my_list = [1, 15, 10]
+k = 6
+#create two functions: func1 will increase ele1, decrease ele2. Return the diff.
+#                      func2 will decrease ele1, increase ele2. Return the diff.
+lst = []
+i = ''
+def increase_first(i):
+    #print (f'{my_list[i]+k} , {my_list[i+1]-k}')
+    diff = (int(my_list[i]+k) - int(my_list[i+1]-k))
+    return abs(diff)
+
+def decrease_first(i):
+    #print (f'{my_list[i]-k} , {my_list[i+1]+k}')
+    diff = (int(my_list[i]-k) - int(my_list[i+1]+k))
+    return abs(diff)
+  
+def no_change(i):
+    diff = (int(my_list[i]) - int(my_list[i+1]))
+    return abs(diff)
+
+print (f'Original list: {my_list}')
+for r in range(0, len(my_list)-1):    
+    diff1 = increase_first(r)
+    diff2 = decrease_first(r)
+    diff3 = no_change(r)
+    
+    diff = min(diff1, diff2, diff3)
+    lst.append(diff)
+    print (f'Pair: {my_list[r]} , {my_list[r+1]} ; Diff:{diff}')
+print (f'min diff is {lst[-1]}')
+
+# K-th element of two Arrays
+# 4. Find the k-th element in two sorted arrays
+list1 = [2, 3, 6, 7, 9] 
+list2 = [1, 4, 8, 10] 
+k=5
+list1.extend(list2)
+my_list = sorted(list1)
+print (my_list[k])
+
+# Swapping pairs make sum equal
+# 5. Swap pairs to make sums equal -- mine:good--revise
+
+def swap_to_equalize_sums(a, b):
+    sum_a = sum(a)
+    sum_b = sum(b)
+     
+    print (f'{sum_a} ; {sum_b}')
+    diff = sum_a - sum_b
+    
+    if diff % 2 != 0:
+        return False
+    
+    target = diff // 2  
+    
+    freq_a = {}
+    freq_b = {}
+    
+    for num in a:
+        freq_a[num] = freq_a.get(num, 0) + 1
+    
+    for num in b:
+        freq_b[num] = freq_b.get(num, 0) + 1
+    
+    for i in range(len(a)):
+        current_a = a[i]
+        to_find_in_b = target + current_a  #mine:main logic , target = diff // 2  
+        
+        
+        if to_find_in_b in freq_b and freq_b[to_find_in_b] > 0:
+            new_sum_a = sum_a - current_a + to_find_in_b
+            new_sum_b = sum_b - to_find_in_b + current_a
+            print (f'{new_sum_a}; {new_sum_b}')
+            print (f'{to_find_in_b}, {target}, {current_a}, {diff}, {new_sum_a}, {new_sum_b}')
+            if new_sum_a == new_sum_b:
+                print(f"Swap elements: {current_a} in a[{i}] and {to_find_in_b} in b")
+                return True
+    
+    return False
+
+# Example usage:
+b = [4, 1, 2, 1, 1, 2]
+a = [3, 6, 3, 3]
+
+swap_to_equalize_sums(a, b)
+
+# Largest Number formed from an Array
+# 6. Form the largest number from an array
+from functools import cmp_to_key #mine:good
+
+def compare(x,y):
+    if x+y > y+x:
+        return -1
+    else:
+        return 1
+def my_compare(my_list):
+    my_list.sort(key=cmp_to_key(compare))
+    result = ''.join(my_list)
+
+    return result
+
+my_list = ["3", "30", "34", "5", "9"]
+result = my_compare(my_list)
+print (result)
+
+# using brute-force: 
+from itertools import permutations
+
+def largest_number_brute_force(nums):
+    # Convert numbers to strings for easy concatenation
+    nums_str = list(map(str, nums))
+    
+    # Generate all permutations of the numbers
+    all_permutations = permutations(nums_str)
+    
+    # Initialize the maximum number as an empty string
+    max_num = ''
+    
+    # Iterate through all permutations
+    for perm in all_permutations:
+        # Concatenate the current permutation into a single string
+        num = ''.join(perm)
+        # Update the maximum number if the current one is greater
+        if num > max_num:
+            max_num = num
+    
+    return max_num
+
+# Example usage
+nums = [3, 30, 34, 5, 9]
+print(f"The largest number formed from the array using brute-force is: {largest_number_brute_force(nums)}")
+
+# Sum of Middle Elements of two Arrays
+# 7. Find the sum of middle elements of two arrays
+list1 = [1, 2, 4, 6, 10,5]
+list2 = [4, 5, 6, 9, 12]
+
+list1.extend(list2)
+if len(list1) % 2 != 0:
+    print ('single element at mid')
+else:
+    mid = int(len(list1)/2 - 1)
+    sum = list1[mid] + list1[mid + 1] 
+    print (sum)
+
+
+# Sort 0s, 1s and 2s
+# 8. Sort an array of 0s, 1s, and 2s
+arr = [0, 1, 1, 0, 1, 2, 1, 2, 0, 0, 0, 1]
+arr.sort()
+print (arr)
+
+# Kth Smallest
+# 9. Find the k-th smallest element in an array
+my_list = [7, 10, 4, 3, 20, 15]
+k=3
+my_list.sort()
+print (my_list[k-1])
+
+# Zero Sum Subarrays -- mine:good-revise; logic:in a array, when (sum till element3) == (sum till element7), that means (sum of element4-6 == 0)
+# 10. Find subarrays with a sum of zero
+
+def find_subarrays_with_zero_sum(my_list):
+    # Initialize a hashmap to store cumulative sums and their indices
+    sum_map = {}
+    cumulative_sum = 0
+    result = []
+    
+    # Initialize the first cumulative sum and its index
+    sum_map[0] = [-1]  # This handles the case where the sum becomes zero starting from the beginning
+    
+    for i in range(len(my_list)):
+        cumulative_sum += my_list[i]
+        print (f'cumulative_sum:{cumulative_sum} ; sum_map:{sum_map}; element:{my_list[i]}')
+        input()
+
+        # Check if the cumulative sum has been seen before
+        if cumulative_sum in sum_map:
+            indices = sum_map[cumulative_sum]
+            for index in indices:
+                print (f'{index + 1} ; {i + 1}')
+                result.append(my_list[index + 1:i + 1])
+                
+                print (f'result:{result} ; indices:{indices}')
+        
+        # Add the current index to the hashmap for the current cumulative sum
+        if cumulative_sum in sum_map:
+            sum_map[cumulative_sum].append(i)
+        else:
+            sum_map[cumulative_sum] = [i]
+            print (f'inside ELSE:{sum_map} ; element:{my_list[i]}')
+    
+    return result
+
+# Example usage:
+my_list = [6, 3, -1, -3, 4, -2, 2, 4, 6, -12, -7]
+subarrays = find_subarrays_with_zero_sum(my_list)
+#print("Subarrays with sum zero:")
+#for subarray in subarrays:
+ #   print(subarray)
+
+# Minimum Jumps --mine:good
+# 11. Find the minimum number of jumps to reach the end of the array
+my_list = [1, 3, 5, 8, 9, 2, 6, 7, 6, 8, 9]
+count = 1
+step = 1
+element = ''
+def get_element(count):
+    my_list[count]
+    print (my_list[count])
+    return my_list[count]
+
+while (count < len(my_list)):
+    step += 1
+    element = get_element(count)
+    count = (element + count)
+
+print (step)
+# Minimum Platforms
+# 12. Find the minimum number of platforms required at the railway station -- mine:didnt get
+
+# K Sized Subarray Maximum
+# 13. Find the maximum sum of subarrays of size k --mine:last subarray[2,3,6] is not printing
+my_list = [1, 2, 3, 1, 4, 5, 2, 3, 6]
+k = 3
+max_of_lst = []
+for i in range(0, len(my_list)):
+    j=i+1
+    lst = [my_list[i]]    
+    for j in range(j, len(my_list)):
+        if (len(lst) < k):
+            lst.append(my_list[j])
+            #print (f'subarray:{lst} ; {my_list[i]}, {my_list[j]}')
+        else:
+            maximum = max(lst)
+            print (f'subarray:{lst} ; {my_list[i]}, {my_list[j-1]}')
+            print (f'maximum:{maximum}')
+            #input()
+            max_of_lst.append(maximum)
+            break
+print (max_of_lst)
+
+# Stock span problem
+# 14. Calculate the stock span
+my_list = [100, 80, 60, 70, 60, 75, 85]
+my_span = []
+for i,x in enumerate(my_list):
+   if (i == 0):
+       span = 1
+       my_span = [1]
+   else:
+       if (my_list[i] <= my_list[i-1] ):
+           my_span.append(1)
+       else:
+            j=1
+            k = (i-j)
+            while(my_list[i] > my_list[k] and k>=0):
+               span += my_span[k]
+               j += 1
+               k = (i-j)
+            my_span.append(span) 
+           
+print (my_span)
+
+# Spirally traversing a matrix --mine:NA
+# 15. Traverse a matrix in spiral order
+
+# Indexes of Subarray Sum
+# 16. Find the indexes of a subarray with a given sum
+my_list = [1,2,3,7,5]
+s = 12
+final_list = []
+lst = []
+for i in range(0, len(my_list)):
+    j = i+1
+    sum = my_list[i]
+    lst.append(my_list[i])
+    for j in range(j, len(my_list)):
+        sum += my_list[j]
+        
+        if (sum == s):
+            final_list.extend(lst)
+            lst = []
+            break
+        elif (sum > s):
+            lst = []
+            break
+        else:
+            lst.append(my_list[j])
+print (final_list)
+
+# Count Inversions
+# 17. Count the number of inversions in an array
+my_list = [2, 4, 1, 3, 5]
+lst = []
+for i in range(0,len(my_list)):
+    j = i+1   
+    if j<=(len(my_list)-1):
+        #print (f'{my_list[i]}, {my_list[j]} , {i}, {j}')
+        if (my_list[i] > my_list[j]) and (i<j):
+            lst_temp = [my_list[i], my_list[j]]
+            lst.append(lst_temp)
+            #print (lst)
+            #input()
+print (lst)
+
+# Kadane's Algorithm -- mine:correct it
+# 18. Find the maximum subarray sum
+my_list = [-2,-3,4,-1,-2,1,5,-3]
+arr = []
+my_dict = {}
+
+for i in range(0, len(my_list)):
+    j = i+1
+    sum = my_list[i]
+    arr.append(my_list[i]) 
+    my_dict[sum] = my_list[i]
+    
+    for j in range(j, len(my_list)):
+        sum += my_list[j]
+        if sum > max(my_dict.keys()): 
+            my_dict.clear()          
+            my_dict[sum] = arr    
+            arr = []    
+        else:
+            arr.append(my_list[j]) 
+
+print (my_dict)
+    
+
+# Stock buy and sell
+# 19. Maximize profit by buying and selling stock
+
+
+# Trapping Rain Water
+# 20. Calculate the amount of trapped rainwater
+my_list = [3,0,0,2,0,4]
+water_content = 0
+for i,x in enumerate(my_list):
+    j = (1+1)
+    for j,y in enumerate(my_list):
+        if x>y:
+            water_content += (x-y)
+            print (f'{water_content} , {x}, {y}')            
+        
+    break
+print (water_content)
+
+# Rearrange Array Alternately
+# 21. Rearrange array elements alternately
+my_list = [1,2,3,4,5,6]
+my_list.sort()
+for r in range(0, len(my_list), 2):
+    my_list[r], my_list[r+1] = my_list[r+1], my_list[r]
+print (my_list)
+
+# Minimum Swaps to Sort
+# 22. Find the minimum number of swaps to sort an array
+my_list = [1,4,3,2]
+
+my_list_sorted = sorted(my_list)  #1,2,3,4
+swap = 0
+for i,x in enumerate(my_list_sorted):
+    index = my_list.index(x)
+    if (index != i):
+        temp = my_list[index]
+        my_list[index] = my_list[i]
+        my_list[i] = temp
+        swap += 1
+print (swap)
+
+    
+# Find the longest palindromic subsequence. -- here
+#list1 = ['a', 'b', 'b', 'c', 'd']
+#list1 = ['a', 'b', 'c', 'c', 'c', 'd', 'd', 'a', 'b', 'c']
+list1 = ['a', 'b', 'c', 'c', 'b', 'a']
+found = 0
+my_list = []
+for i in range(0, len(list1)):
+    my_list.append(list1[i])
+    j=1+1
+    for j in range(j, len(list1)):
+        if my_list[-1] == list1[j]:
+            found = 1
+        elif found==1:
+            my_list.pop()
+            found=0
+        else:
+            my_list.append(list1[j])
+        
+    break
+print (my_list)        
+
+# Find the longest palindromic subsequence. --good, check for corretcness.
+s = 'BANANA'
+count = 0
+i=0
+def get_lps(s):
+    for i in range(i,len(s)):
+        j=i+1
+        for j in range(j,len(s)):
+            if (s[i] == s[j]) and (j==i+1):
+                count += 1
+                lst = [s[i], s[j]]
+                my_list.append(lst)
+            elif(s[i] == s[j]):
+                while(s[i] == s[j]) and (i<=j):
+                    i += k
+                    j -= k                    
+                    if (i>j):
+                        count += 1
+                        break
+    return count
+
+result = get_lps(s)
+print (result)
+
+# Largest subarray with 0 sum
+# 23. Find the largest subarray with a sum of zero 
+my_list = [15, -2, 2, -8, 1, 7, 10, 23]
+#Output: 5
+#Explanation: The longest sub-array with elements summing up-to 0 is {-2, 2, -8, 1, 7}
+final_list = []
+lst = []
+size = 0
+for i in range(0, len(my_list)):
+    sum = my_list[i]
+    lst.clear()
+    lst.append(my_list[i])
+    j=i+1
+    for j in range(j, len(my_list)):        
+        sum += my_list[j]        
+        lst.append(my_list[j])
+        print (f'{my_list[i]}, {my_list[j]}, {sum}, {lst}')
+        input()
+        if (sum == 0):
+            final_list.extend(lst)   
+            #print (f'{final_list} , {size}')                   
+            if len(final_list) > size:
+                print (f'{final_list} ; {size}') #mine:need to empty the final_list
+                size = len(final_list)
+                                    
+print (final_list)
+
+# Maximum subset XOR
+# 24. Find the maximum XOR subset
+
+# Sort an array according to the other
+# 25. Sort one array according to another
+list1 = [2, 1, 2, 5, 7, 1, 9, 3, 6, 8, 8]
+list2 = [2, 1, 8, 3]
+my_list = []
+my_list2 = []
+
+for x in list2:
+    if x not in my_list:
+        if x in list1:
+            my_count = list1.count(x)
+            for i in range(0, my_count):
+                my_list.append(x)           
+        else:
+            my_list2.append(x)
+my_list.extend(my_list2)
+
+for x in list1:
+    if x not in my_list:
+        my_list.append(x)
+print (my_list)
+
+
+# Search in a row-column sorted matrix
+# 26. Search for an element in a row-column sorted matrix --NA
+
+# Find All Four Sum Numbers
+# 27. Find all unique quadruplets that sum up to a target
+import itertools
+my_list = [1, 0, -1, 0, -2, 2]
+subsets = list(itertools.combinations(my_list, 4))
+my_dict = {}
+for subset in subsets:
+    my_sum = sum(subset)
+    if my_sum == 0:
+        my_dict[subset] = ''
+print (my_dict)
+
+
+# Heap Sort
+# 28. Implement heap sort
+
+# First non-repeating character
+# 29. Find the first non-repeating character in a string
+s= 'geeksforgeeks'
+for i,x in enumerate(s):
+    if s.count(x) == 1:
+        print (f'{i}, {x}')
+        break
+
+# Array Pair Sum Divisibility Problem
+# 30. Check if an array can be divided into pairs whose sum is divisible by k
+import itertools
+my_list = [9, 7, 5, 3]
+k = 6 
+my_list1 = []
+subsets = list(itertools.combinations(my_list, 2))
+for subset in subsets:
+    if sum(subset)%k == 0 :
+        my_list1.append(subset)
+print (my_list1)
+
+# Longest consecutive subsequence
+# 31. Find the longest consecutive elements sequence --mine:correct it
+import itertools
+my_list1 = []
+my_list = [1, 9, 3, 10, 4, 20, 2]
+for i in range(0,len(my_list)-2):
+    i=i+2
+    subsets = list(itertools.combinations(my_list, i))
+    my_list1.append(subsets)
+#print (my_list1)
+#input()
+
+def get_difference(tpl):
+    flag = 0
+    print (f'tpl:{tpl}')
+    for r in range(0,len(tpl)-1):
+       # print (f'{tpl[r]}')
+       # input()
+        
+        if abs(tpl[r] - tpl[r + 1]) != 1:
+            print (f'No Consecutive: {tpl}')
+            flag = 1
+            break
+        
+    return tpl if flag==0 else None
+        
+for tpl in my_list1:
+   # print (tpl)
+   # input()  
+    for t in tpl:  
+       # print (f'{t} ; {tpl} ====')
+       # input()
+        consecutive_lst=get_difference(t)
+        print (consecutive_lst)
+
+# Smallest window in a string containing all characters of another string
+# 32. Find the smallest window in a string containing all characters of another string
+import itertools
+string = "this is a test string"
+pattern = "tist"
+my_list = [0]
+for i in range(4,8):
+    subsets = list(itertools.combinations(string, i))
+    subsets = list(map(list, subsets))
+    #print (subsets)
+    for subset in subsets:
+        flag = 0
+        for y in pattern:
+            #print (f'{subset} {y}')
+            #input()
+            if y not in subset:
+                flag = 1
+                #print (f'{subset} ; {flag}') if subset else None
+                break                
+            else:
+                subset.remove(y)
+        #print (f'{subset} ; {flag}') if (flag == 0) and subset else None
+        print (subset) if (flag == 0) else None
+        #input()
+        my_list.append(subset) if (flag == 0) and len(subset) >  len(my_list) else None
+        
+        
+print (my_list)
+
+# LRU Cache --NA --good
+# 33. Implement an LRU cache
+#OrderedDict: This is a commonly used data structure from Python's collections module that maintains insertion order. 
+#It's suitable because it allows efficient moves of elements to the end (most recently used) when accessed or updated.
+
+# Shortest Source to Destination Path --NA
+# 34. Find the shortest path from source to destination in a matrix
+
+# Maximum path sum in matrix --NA
+# 35. Find the maximum path sum in a matrix
+
+# Rotten Oranges --matrix --NA
+# 36. Find the minimum time required to rot all oranges
+
+# Find whether path exists
+# 37. Check if a path exists from source to destination in a matrix
+
+# Kth element in Matrix
+# 38. Find the k-th element in a sorted matrix
+
+# Median in a row-wise sorted Matrix
+# 39. Find the median in a row-wise sorted matrix
+
+# Solve the Sudoku
+# 40. Solve a given Sudoku puzzle
+
+# Rearrange characters
+# 41. Rearrange characters in a string so that no two adjacent characters are the same
+import itertools
+
+my_str = 'aaabc'
+my_list = []
+sub_lists = list(itertools.permutations(my_str))
+for sub_list in sub_lists:
+    flag = 0
+    for i in range(0,len(sub_list)-1):
+        if sub_list[i] == sub_list[i+1]:
+            flag = 1
+            break
+    my_list.append(sub_list) if flag==0 and sub_list not in my_list else None
+print (my_list)
+
+# Search Pattern (Rabin-Karp Algorithm)
+# 42. Implement the Rabin-Karp string matching algorithm
+my_string = 'AABAACAADAABAABA'
+my_list = list(my_string)
+pat = 'AABA'
+flag = 1
+idx = 0
+while flag:
+    indx = my_string.find(pat, idx, len(my_string))
+    print (indx)
+    if indx != -1:
+        idx = indx+1 #move 1 index ahead for next iteration
+        flag = 1
+        input()
+    else:
+        flag = 0
+
+# Recursively remove all adjacent duplicates --mine:good
+# 43. Recursively remove all adjacent duplicates in a string
+my_str = 'azxxzy'
+flag = 1
+def remove_duplicates(my_str):
+    for i in range(0, len(my_str)-1):
+        if my_str[i] == my_str[i+1]:
+            flag = 1
+            my_str = my_str[:i] + my_str[i+2:]
+            input()
+            break
+        else:
+            flag = 0
+    return flag, my_str
+
+while (flag):
+    (flag, my_str) = remove_duplicates(my_str)
+
+# Permutations of a given string --mine:good:didnt get
+# 44. Find all permutations of a given string
+def permute(a, l, r):     
+    if l == r: 
+        print(str(a)) 
+    else: 
+        for i in range(l, r): 
+            a[l], a[i] = a[i], a[l] 
+            print (f'a[l]:{a[l]} ; a[i]:{a[i]}, {l}, {i}, {r}, a:{a} ')
+            input()
+            permute(a, l+1, r) 
+            print ('here-------')
+            input()
+            a[l], a[i] = a[i], a[l]  # backtrack 
+  
+  
+# Driver code 
+string = "ABC"
+n = len(string) 
+a = list(string) 
+  
+# Function call 
+permute(a, 0, n) 
+
+# Longest Palindrome in a String
+# 45. Find the longest palindromic substring
+
+my_str = 'forgeeksskeegfor'
+my_str = list(my_str)
+#Output: “geeksskeeg”
+my_str1 = []
+
+def get_palindrom(i,j):
+    print (f'inside pelin--{i}, {j}')
+    flag = 0
+    if (i >= j):
+        my_str2 = ''.join(my_str1)
+        print (f'i:{i}, j:{j}, {my_str2} ---')
+        input()
+        return 0
+
+    if (my_str[i] == my_str[j]):
+        print (f'{my_str[i]}, {my_str[j]} ')
+        input()
+        my_str1.insert(i, my_str[i]) ; my_str1.insert(j, my_str[j])
+        flag = 1
+    else:
+        print ('inside ELSE ')
+        my_str1.clear()
+        flag = 0
+    return flag
+
+for i in range(0, len(my_str)):
+    j=i+1
+    for j in range(j, len(my_str)-1):
+        if (my_str[i] == my_str[j]):
+            flag = 1
+            print (f'i:{i}, {my_str[i]}; j:{j}, {my_str[j]} ====')
+            input()
+            my_str1.insert(i, my_str[i]) ; my_str1.insert(j, my_str[j])  
+            while flag:
+                i += 1 ; j -= 1
+                flag = get_palindrom(i, j)
+            if flag == 0:
+                break
+
+# Longest Common Substring --here
+# 46. Find the longest common substring --mine:correct it
+#Y = 'GeeksforGeeks'
+#X = 'GeeksQuiz'
+X = 'zxabcdezy' 
+Y = 'yzabcdezx'
+flag = 0
+my_str = ''
+def get_common(i,j,my_str):
+    for i in range(i, len(X)):
+        for j in range(j, len(Y)):
+            print (f'{X[i]} {Y[j]} ----')
+            #input()
+            flag = 0
+            if (X[i] == Y[j]):
+                flag = 1
+                my_str += X[i]
+                break
+            
+        return flag,i,j,my_str
+
+i=j=0
+for i in range(i, len(X)):
+    for j in range(j, len(Y)):
+        print (f'{i}, {j}; {X[i]}, {Y[j]}')
+        input()
+        if (X[i] == Y[j]):
+            my_str = ''
+            flag = 1
+            while flag:
+                flag,i,j,my_str = get_common(i,j,my_str)
+                i+=1 ; j+=1
+                
+            if (flag == 0):
+                print (f'Common so-far:{my_str} ; {i} {j}')
+                input()
+                my_str = ''
+                flag,i,j = get_common(i,j)
+                
+            
+# Implement Atoi
+# 47. Implement the Atoi function
+"""
+def permute(a, l, r): 
+    print(f'permute(a={a}, l={l}, r={r})')
+    if l == r: 
+        print(f'Base case reached: {"".join(a)}')
+        input()
+    else: 
+        print (f'In ELSE----------')
+        input()
+        for i in range(l, r): 
+            print (f'l:{l} i:{i}')
+            print(f'Swapping a[{l}]={a[l]} with a[{i}]={a[i]}')
+            a[l], a[i] = a[i], a[l] 
+            permute(a, l+1, r) 
+            print (f'l:{l} i:{i}----------')
+            input()
+            a[l], a[i] = a[i], a[l]  # backtrack
+            print(f'Backtracked: a={a}')
+
+# Driver code 
+string = "ABC"
+n = len(string) 
+a = list(string) 
+  
+# Function call 
+permute(a, 0, n)
+
+"""
+# Generate IP Addresses
+# 48. Generate all possible valid IP addresses from a given string
+
+# Edit Distance
+# 49. Find the minimum edit distance between two strings
+
+# Circle of strings
+# 50. Determine if strings can be chained to form a circle
+
+# Longest Prefix Suffix
+# 51. Find the longest prefix which is also a suffix
+
+# Form a palindrome
+# 52. Find the minimum insertions needed to form a palindrome
+
+# Word Boggle
+# 53. Find all possible words in a boggle board
+
+# Count total set bits
+# 54. Count the total number of set bits in all numbers from 1 to n
+
+# Next Greater Element
+# 55. Find the next greater element for each element in an array
+
+# Get minimum element from stack
+# 56. Get the minimum element from a stack
+
+# Maximum Rectangular Area in a Histogram
+# 57. Find the maximum rectangular area in a histogram
+
+# Circular tour
+# 58. Find the starting point of a circular tour
+
+# Binary Heap Operations
+# 59. Perform operations on a binary heap
+
+# Find median in a stream
+# 60. Find the median of a stream of integers
+#============================================================================================
+
+#String: 
+#Recursively remove all adjacent duplicates in a string
+
+# 1. Check for palindrome
+s = "abacba"
+s_arr = s.split()
+status='yes'
+for i in range(0, int(len(s)/2)):
+    #mine: use range to get index of string characters. 
+    #split() split the sentence into words. So we can use single word string directly in 'for' loop.
+    if s[i] != s[-i-1]:
+        status = 'no'
+        break
+
+print (f"status:{status}")        
+# 2. Check for anagram - An anagram of a string is another string that contains the 
+#    same characters, only the order of characters can be different
+
+class anagram:
+
+    def check_anagram(self, str1, str2):
+        status = 'yes'
+        if sorted(str1) != sorted(str2):
+            status = 'no'
+            
+        print (f"status:{status}")
+
+if __name__ == '__main__':
+    anagram_obj = anagram()
+    str1 = 'listen'
+    str2 = 'silent'
+    anagram_obj.check_anagram(str1, str2)
+    
+
+# 3. Anagram Palindrome
+# Given a string S, Check if characters of the given string can be rearranged to form a palindrome.
+
+s = "geeksogeeka"
+center = 'no'
+status = 'yes'
+            
+for x in s:
+    if len(s) % 2 == 0:
+        if s.count(x)%2 != 0: 
+            status = 'no'           
+            break
+    else:    
+        if s.count(x)%2 != 0 and center == 'no':
+            center = 'yes'
+        elif s.count(x)%2 != 0:
+            status = 'no'
+            break
+            
+print(f"status: {status}")     
+
+# 4. Title case conversion
+
+class CaseConversion:
+    def case_conversion(self, str):        
+        #converted = str.swapcase();
+        converted = str.title();
+        print (f"COnverted:{converted}")
+
+if __name__ == '__main__':
+    str = 'geeksForgEeks'
+    CaseConversion().case_conversion(str)
+# 5. Sort the string
+s = 'bbccdefbbaa'
+print (f"sorted:{''.join(sorted(s))}")
+
+# 6. Merge two strings
+s1 = "durability"
+s2 = "essence"
+k = 3
+#Output: duressabienclitey
+i=j=0
+s=''
+for i in range(i, len(s1), k):
+    #mine: the step:k will just jump to kth element. To read intermediate charac, use s1[i:1+3] 
+    j=i
+    for j in range(j, len(s2), k):         
+        s += (s1[i:i+3]+s2[j:j+3])
+        #print (s)
+        break
+  
+if (len(s1) > len(s2)):
+     s += s1[i+k:]
+
+print (f"concatenated string:{s}")
+
+# 7. Save Ironman
+str = 'I am :IronnorI Ma, i'
+filtered = [x for x in str if x.isalnum()]
+status = 'yes'
+for i in range(0, int(len(filtered)/2)):
+    if filtered[i] != filtered[-i-1] :
+        status = 'no' 
+
+print (f'status:{status}')
+# 8. Good or Bad string
+# To determine if a string is "Good" based on the given definition, 
+# where the distance between every two adjacent characters must be exactly 1
+s = 'abc'
+status = 'yes'
+for i in range (0, len(s)-1):
+    if ((ord(s[i+1]) - ord(s[i])) != 1):
+        status = 'no'
+print (f'status:{status}')
+
+# 9. URLify a given string - Write a method to replace all the spaces in a string with ‘%20’.
+s="Mr John Smith"
+s1 = s.replace(' ', '%20')
+#mine: methods return the new string
+print (s1)
+
+# 10. Extract Maximum
+# 11. Reverse words in a given string
+# 12. Implement strstr
+# 13. Check for subsequence
+# 14. Check for rotation
+# 15. Check if two strings are k-anagrams
+# 16. Uncommon characters
+# 17. Anagram Search
+# 18. First repeating character
+# 19. First non-repeating character
+# 20. Longest Distinct characters in string
+# 21. Longest Palindromic Substring
+# 22. Find k-th character in string
+# 23. Smallest window in a string containing all characters of another string
+# 24. Add Binary Strings
+# 25. Multiply two Strings
+# 26. Nearest multiple of 10
+
+# Advance String Programs
+# Case1: 
+S = "zero four zero one"
+my_list = []
+my_dict = {'one': 1, 'two': 2, 'three':3, 'four':4, 'five':5}
+for x in S.split(' '):
+    if x in my_dict:
+        my_list.append(x)
+print (' '.join(my_list))
+
+# Case2: Python | Word location in String
+
+test_str = "geeksforgeeks is best for geeks"
+wrd = 'best'
+index = test_str.index('best')
+print (index)
+
+# Case3: Python | Consecutive characters frequency
+str = 'geekksforgggeeks'
+count = 1
+my_list = []
+my_count = []
+for x in str:
+    if my_list:
+        if x == my_list[-1]:
+            count += 1
+            my_count[-1] = count
+            
+        else:
+            count = 1
+            my_list.append(x)
+            my_count.append(count)
+    else:
+        my_list.append(x)
+        my_count.append(count)
+
+print (my_count)     
+
+# Case4: String slicing in Python to rotate a string
+s = "GeeksforGeeks"
+d = 2
+lstr = s[2:]
+my_list = []
+
+my_list.extend(s[0:d])
+print ( lstr + ''.join(my_list) )
+
+# Case5: String slicing in Python to check if a string can become empty by recursive deletion
+string = "GEEGEESKS"
+sub_str = "GEEKS"
+
+while (len(string)) :
+    index = string.find(sub_str)
+    if (index == -1):
+        break
+    else:
+        string = string.replace(sub_str, '')
+
+if (len(string)):
+    print ("NO")
+else:
+    print ("yes")            
+
+# Case6: Python Program to find minimum number of rotations to obtain actual string
+my_str = 'ksgee'
+req_str = 'geeks'
+my_str = list(my_str)
+req_str = list(req_str)
+count = 0
+for x in my_str:
+    if count < len(my_str):
+        count += 1
+        element = my_str.pop()
+        my_str.insert(0,element)
+        if (my_str == req_str):
+            print (count)
+
+# Case7: Python – Words Frequency in String Shorthands
+test_str = 'Gfg is Gfg' 
+my_list = test_str.split()
+count_list = []
+count_item = []
+for x in my_list:
+    if x not in count_item:
+        count = my_list.count(x)        
+        count_list.append(count)
+        count_item.append(x)
+    
+print (count_list)
+print (count_item)
+
+# Case8: Python – Successive Characters Frequency
+#output = {'s': 3, ' ': 1}
+
+test_str = 'geeksforgeeks is best for geeks. A geek should take interest.'
+que_word = "geek"
+output = {}
+
+# Find all occurrences of que_word in test_str
+index = test_str.find(que_word)
+while index != -1:
+    # Ensure there are characters following que_word
+    if index + len(que_word) < len(test_str):
+        char = test_str[index + len(que_word)]
+        if char in output:
+            output[char] += 1
+        else:
+            output[char] = 1
+    
+    # Find the next occurrence of que_word
+    index = test_str.find(que_word, index + 1)
+
+print("Output:", output)
+
+# Case9: Python – Sort String list by K character frequency
+
+test_list = ["geekforgeekss", "is", "bessst", "for", "geeks"] 
+K = 's'
+my_list = []
+my_list1 = []
+for x in test_list:
+    if K in x:
+        my_count = x.count(K)
+        my_list.append(str(my_count)+x)
+        #print (str(my_count)+x)
+my_list.sort(reverse = True)
+for x in my_list:
+    x = x[1:]
+    my_list1.append(x)
+print (my_list1)
+
+#Mine: instead of def functionname(element): we use lambda element:
+#test_list.sort(key = lambda ele: ele.count(K))
+
+# Case10: Python – Convert Snake case to Pascal case
+my_str = 'geeks_for_geeks' 
+Output : 'GeeksforGeeks'
+my_str = my_str.replace('_', ' ')
+my_str = my_str.title()
+my_str = my_str.replace(' ', '')
+print (my_str)
+
+# Case11: Python – Avoid Last occurrence of delimitter
+test_list = [4, 7, 8, 3, 2, 1, 9]
+delim = "*"
+my_list = []
+for x in test_list:
+    my_list.append(str(x)+'*')
+
+str = ''.join(my_list)
+print (str[0:len(str)-1])
+
+# Case12: Python program to find the character position of Kth word from a list of strings
+
+# Case: Recursively remove all adjacent duplicates -- pure storage     
+list1 = ['a', 'b', 'b', 'c', 'd']
+#list1 = ['a', 'b', 'c', 'c', 'c', 'd', 'd', 'a', 'b', 'c']
+#list1 = ['a', 'b', 'c', 'c', 'b', 'a']
+my_list = []
+flag = 0
+def remove_adjacent_duplicates(lst):
+    global my_list
+    my_list = []
+    global flag
+    for x in lst:
+        if my_list:
+            if my_list[-1] == x:
+                flag = 1
+            elif flag == 1:
+                my_list.pop()
+                my_list.append(x)
+                if (my_list[-2] != my_list[-1]):
+                    flag = 0    
+                else:
+                    del  my_list[-2:-1]                    
+                    flag = 0           
+            else:
+                my_list.append(x)
+        else:
+            my_list.append(x)
+    if flag:
+        my_list.pop()
+        #my_list.pop()
+
+    print (f'{flag} {my_list}')
+    #print(my_list)
+
+remove_adjacent_duplicates(list1)
+
+# Case13: Python – Right and Left Shift characters in String
+s = "GeeksforGeeks"
+d = 2
+my_lstr = s[2:] + s[0:2]
+my_rstr = s[-2:] + s[0:len(s)-2]
+print (f'{my_lstr} {my_rstr}')
+
+# Case14: Python | Exceptional Split in String
+test_str = "gfg, is, (best, for), geeks"
+count = 0
+temp = ''
+my_list = []
+for x in test_str.split(','):
+    if '(' in x:
+        count = 1
+        temp += x+','
+    elif ')' in x:
+        count = 0
+        temp += x
+    if count == 0:
+        if temp:
+            my_list.append(temp)
+            temp = ''
+        else:
+            my_list.append(x)
+print (my_list)
+
+        
+# Case15: Python – Split String on vowels
+
+test_str = 'GFGaBstuforigeeks'
+vowels = ['a','e','i','o','u']
+my_list = []
+ele = ''
+for x in test_str:
+    if x in vowels:
+        my_list.append(ele)
+        next       
+    else:
+        ele += x
+        next
+    print ('abhishek')
+    
+
+print (my_list)
+    
+    
+# Case16: Python – Mirror Image of String 
+test_str = 'void'
+my_list = []
+my_dict = {'v':'v', 'o':'o', 'i':'i', 'd':'b'}
+for x in test_str:
+    if x in my_dict:
+        my_list.append(my_dict[x])
+print (''.join(my_list))
+
+# Case17: Python – Replace multiple words with K
+test_str = 'Geeksforgeeks is best for geeks and CS'
+word_list = ["best", 'CS', 'for'] 
+repl_wrd = 'gfg'
+
+test_str = test_str.replace('best', 'gfg')
+test_str = test_str.replace('CS', 'gfg')
+test_str = test_str.replace('for', 'gfg')
+print (test_str)
+
+# Case18: Python – Replace Different characters in String at Once
+test_str = 'geeksforgeeks is best' 
+my_dict = {'e':'1', 'b':'6'}
+test_str = test_str.replace('e', my_dict['e'])
+test_str = test_str.replace('b', my_dict['b'])
+print (test_str)
+
+# Case19: Python | Multiple indices Replace in String
+test_str = 'geeksforgeeks is best'
+test_list = [2, 4, 7, 10]
+repl_char = '*'
+my_list = list(test_str)
+for r,x in enumerate(test_str):    
+    for i in test_list:
+        if (r == i):            
+            my_list[r] = '*'
+print (''.join(my_list))
+
+# Case20: Python – Ways to remove multiple empty spaces from string List
+test_list = ['gfg', ' ', ' ', 'is', '         ', 'best']
+my_list = []
+for x in test_list:
+    if x.isspace():
+        pass
+    else:
+        my_list.append(x)
+    
+print (my_list)
+
+# Case21: Python | Remove punctuation from string
+"""
+# Case22: Python – Similar characters Strings comparison
+# Case23: Python – Remove K length Duplicates from String
+# Case24: Python – Remove suffix from string list
+# Case25: Python Counter| Find all duplicate characters in string
+# Case26: Python – Replace duplicate Occurrence in String
+# Case27: Ways to convert string to dictionary
+# Case28: Python – Check if two strings are Rotationally Equivalent
+# Case29: Python | Test if string is subset of another
+# Case30: Python Program to Generate Random binary string
+# Case31: Python Program to convert binary to string
+# Case32: Python – Reverse Sort a String
+
+"""
+# Advance List Programs
+# Case1: Python Program to count unique values inside a list
+my_list = [10, 20, 10, 30, 40, 40]
+my_dic = {}
+for x in my_list:
+    if x in my_dic:
+        my_dic[x] += 1
+    else:
+        my_dic[x] = 1
+print (f'dic is:{my_dic}')   
+
+for x in (my_dic.keys()):
+    if my_dic[x] == 1:
+        print (f'unique element:{x}')
+    
+
+# Case2: Python – List product excluding duplicates
+#using LC
+my_list = [1, 3, 5, 6, 3, 5, 6, 1]
+filtered_list = []
+[filtered_list.append(x) for x in my_list if x not in filtered_list]
+#mine: LC: [inplace operation 'for' 'IF']
+print (f'filtered_list:{filtered_list}')
+ 
+# Case3: Python – Extract elements with Frequency greater than K
+#using dictionary
+
+my_list = [4, 6, 4, 3, 3, 4, 3, 4, 3, 8]
+k = 3
+my_dict = {}
+filtered_list = []
+for x in my_list:
+    if x in my_dict:
+        if my_dict[x] >= 3:
+            filtered_list.append(x)
+        else:
+            my_dict[x] += 1
+    else:
+        my_dict[x] = 1
+print (f'filtered_list:{filtered_list}')
+
+# Case4: Python – Test if List contains elements in Range
+#using LC
+my_list = [4, 5, 6, 7, 3, 9]
+i, j = 4, 7
+filtered_list = []
+[filtered_list.append(x) for x in my_list if i<x<j]
+print (f'filtered_list:{filtered_list}')
+
+# Case5: Python program to check if the list contains three consecutive common numbers in Python
+
+my_list = [1, 1, 1, 64, 23, 64, 22, 23, 24]
+filtered_list = []
+for x in my_list:
+    if filtered_list:
+        if x == filtered_list[-1] + 1 :
+            if len(filtered_list) < 3:
+                filtered_list.append(x)            
+        else:
+            filtered_list = [x]
+    else:
+         filtered_list.append(x)    
+print (f'filtered_list:{filtered_list}')
+
+# Case6: Python program to find the Strongest Neighbour
+filtered_list=[]
+def greatest_neighbour(my_list):
+    for i in range(0, len(my_list)-1):
+        sorted_list = sorted([my_list[i], my_list[i+1]])
+        filtered_list.append(sorted_list[-1])
+    print (filtered_list)
+if __name__ == "__main__":    
+    my_list = [1, 2, 2, 3, 4, 5]
+    greatest_neighbour(my_list)
+
+# Case7: Python Program to print all Possible Combinations from the three Digits
+#mine:good
+my_list = [1,2,3]
+filtered_list = []
+for i in range(3):
+    for j in range(3):
+        for k in range(3):
+            if (i != j) and (j != k) and (i != k):
+                filtered_list.append((my_list[i], my_list[j], my_list[k]))
+
+print (filtered_list)
+
+
+# Case8: Python program to find all the Combinations in the list with the given condition --do
+
+# Case9: Python program to get all unique combinations of two Lists
+
+# Case10: Python program to remove all the occurrences of an element from a list
+my_list = [1, 3, 4, 6, 5, 1]
+
+for x in my_list:
+    if x == 1 :
+        my_list.remove(x)
+        mine: empty space is autofilled
+print (my_list)
+# Case11: Python – Remove Consecutive K element records --do
+The original list is : [(4, 5, 6, 3), (5, 6, 6, 9), (1, 3, 5, 6), (6, 6, 7, 8)]
+The records after removal : [(4, 5, 6, 3), (1, 3, 5, 6)]
+
+# Case12: Python – Replace index elements with elements in Other List
+
+test_list1 = ['Gfg', 'is', 'best']
+filtered_list = []
+test_list2 = [0, 1, 2, 1, 0, 0, 0, 2, 1, 1, 2, 0]
+for x in test_list2:    
+    filtered_list.append(test_list1[x])
+print (filtered_list)
+# Case13: Python Program to Retain records with N occurrences of K --here
+# Case14: Python Program to Sort the list according to the column using lambda
+
+
+# Advance Dictionary Programs
+# Case1: Python – Create Nested Dictionary using given List
+
+test_list1 = ["gfg", 'is', 'best']
+test_list2 = ['ratings', 'price', 'score']
+test_list3 = [5, 6, 7]
+zipped_list = zip(test_list1, test_list2, test_list3)
+#using DC:- dict = {a: {b:c} for a,b,c in zip(test_list1, test_list2, test_list3) }
+dict = {}
+for x in zipped_list:
+    dict[list(x)[0]] = {list(x)[1]: list(x)[2]}
+
+print (dict)
+    
+# Case2: Python – Swapping Hierarchy in Nested Dictionaries
+#---------------------balow-----------------------
+mine:To check if a variable is a dictionary in Python, you can use the isinstance() function.
+     You can use the isinstance() function to check if a variable is a list, set, or string in the same way you check if it is a dictionary.
+
+# Example variable
+my_variable = {"name": "Alice", "age": 25}
+
+# Checking if the variable is a dictionary
+if isinstance(my_variable, dict):
+    print("The variable is a dictionary")
+else:
+    print("The variable is not a dictionary")
+#-----------------------above-----------------------
+test_dict = {'Gfg': {'best' : [1, 3, 4]}} 
+#Output : {‘best’: {‘Gfg’: [1, 3, 4]}} 
+
+level = 0
+key1 = key2 = '' 
+value1 = {} 
+value2 = []
+my_dict = test_dict
+while isinstance(my_dict, dict):
+    for key, value in my_dict.items():
+        level += 1 
+        if level == 1 :
+            key1, value1 = key, value
+        if level == 2 :
+           key2, value2 = key, value
+        my_dict = value
+
+final_dict = { key2 : {key1 : value2} }
+print (final_dict)
+
+# Case3: Python – Inversion in nested dictionary -- correct it
+
+test_dict = {"a" : {"b" : {"c" : {}}},
+             "d" : {"e" : {}},
+             "f" : {"g" : {"h" : {}}}}
+#output:The inverted dictionary : {'c': {'b': {'a': {}}}, 'e': {'d': {}}, 'h': {'g': {'f': {}}}}
+
+level = 0
+key1 = key2 = key3 = '' 
+value1 = value2 = value3 = {} 
+
+# Iterate  test_dict using FOR
+
+# Check first Value is dict using IF. If Yes, capture its key as key_outer
+
+# Check Value is not dict using ELSE. Inside ELSE, capture its key as key_inner.
+
+# Create final dict as final_dict[key_inner: {key : {key_outer: value_inner}]
+
+
+my_dict = test_dict
+while isinstance(my_dict, dict):
+    for key, value in my_dict.items():
+        level += 1 
+        if level == 1 :
+            key1, value1 = key, value
+        if level == 2 :
+           key2, value2 = key, value
+        my_dict = value
+
+final_dict = { key2 : {key1 : value2} }
+print (final_dict)
+
+
+# Case4: Python – Reverse Dictionary Keys Order
+test_dict = {1 : "Gfg", 5 : "is", 4 : "the", 2 : "best"}
+
+
+my_keys = sorted(test_dict.keys(), reverse=True)
+print (my_keys)
+
+# Case5: Python – Extract Key’s Value, if Key Present in List and Dictionary
+
+my_list = ['GFG', 'IS', 'GOOD', 'FOR', 'GEEKS']
+my_dict = {'GFG':5, 'BEST':6}
+K = 'GFG'
+
+if K in my_list:
+    if K in my_dict:
+        print ('yes')
+
+# Case6: Python – Remove keys with Values Greater than K ( Including mixed values )
+test_dict = {'Gfg': 3, 'is': 7, 'best': 10, 'for': 6, 'geeks': 'cs'}
+K = 7
+keystodelete = []
+
+# Collect keys to delete
+for key in test_dict.keys():
+    if isinstance(test_dict[key], int) and test_dict[key] >= K:   #mine-good, check whether key is int. int() wont work for all  the strings
+        keystodelete.append(key)
+
+# Delete the collected keys
+for keytodelete in keystodelete:
+    del test_dict[keytodelete]
+
+print(test_dict)
+
+# Case7: Python – Remove keys with substring values
+test_dict = {1:'GFG is love', 2:'GFG is good'}
+sub_list = ['love', 'good']
+keystodelete = []
+for key,value in test_dict.items():
+    for x in sub_list:
+        if value.find(x) != -1:   #good: find() return -1 if not found
+            keystodelete.append(key)
+    
+for keytodelete in keystodelete:
+    del test_dict[keytodelete]
+print (test_dict)
+
+# Case8: Python – Dictionary with maximum count of pairs
+
+test_list = [{'gfg': 2, 'best' : 4},  
+             {'gfg': 2, 'is' : 3, 'best' : 4},  
+             {'gfg': 2}]
+
+dict = max(test_list, key = len) #good, to find longest element of list.
+print (f'max len dic {dict}')
+
+# Case9: Python - Append Dictionary Keys and Values ( In order ) in dictionary
+test_dict = {'gfg':1, 'is':2, 'best':3}
+keys = []
+values = []
+for key, value in test_dict.items():
+    keys.append(key)
+    values.append(value)
+
+keys.extend(values)
+print (keys)
+
+# Case10: Python – Extract Unique values dictionary values
+test_dict = {'gfg' : [5, 6, 7, 8],
+            'is' : [10, 11, 7, 5],
+            'best' : [6, 12, 10, 8],
+            'for' : [1, 2, 5]}
+
+values = []
+for x in test_dict.values():
+    values.extend(x)
+uniq_list = set(values)
+print (uniq_list)
+
+# Case11: Python – Keys associated with Values in Dictionary
+The original dictionary is : {'is': [1, 4], 'gfg': [1, 2, 3], 'best': [4, 2]}
+The values associated dictionary : {1: ['is', 'gfg'], 2: ['gfg', 'best'], 3: ['gfg'], 4: ['is', 'best']}
+
+
+# Case12: Python – Filter dictionary values in heterogeneous dictionary
+# Case13: Print anagrams together in Python using List and Dictionary
+# Case14: Check if binary representations of two numbers are anagram
+# Case15: Python Counter to find the size of largest subset of anagram word
+# Case16: Count of groups having largest size while grouping according to sum of its digits
+# Case17: Python – Sort Dictionary key and values List
+# Case18: Python – Sort Dictionary by Values Summation
+# Case19: Python – Sort dictionaries list by Key’s Value list index
+# Case20: Python – Sort Nested keys by Value
+# Case21: Python – Scoring Matrix using Dictionary
+# Case22: Python – Factors Frequency Dictionary
+# Case23: Count distinct substrings of a string using Rabin Karp algorithm
+# Case24: Python program to build an undirected graph and finding shortest path using Dictionaries
+# Case25: LRU Cache in Python using OrderedDict
+
+
+# Advance Tuple Programs
+# Case1: Python – Extract tuples having K digit elements
+
+test_list = [(54, 2), (34, 55), (222, 23), (12, 45), (78, )]
+K = 2 
+my_list = []
+for x in test_list:
+    for y in x:
+
+        if len(str(y)) != K:
+            break
+    else :
+        my_list.append(x)
+
+print (my_list)
+# Case2: Python – Extract Symmetric Tuples
+
+test_list = [(6, 7), (2, 3), (7, 6), (9, 8), (10, 2), (8, 9)]
+#for i in range(len(test_list)):  #mine: range will just give the number, so when iteration reached to
+for i in range(0, len(test_list)):
+    j = i+1
+    str1 = ''.join(map(str, test_list[i]))
+    for j in range(j, len(test_list)):
+        str2 = ''.join(map(str, test_list[j]))
+        if str1 == str2[::-1]:
+            print (f'yes:{str1}, {str2}')
+
+# Case3: Python program to Sort Tuples by their Maximum element
+
+test_list = [(4, 5, 5, 7), (1, 3, 7, 4), (19, 4, 5, 3), (1, 2)]
+max_value = 0
+my_list = []
+for x in test_list:
+    my_list.append((max(x),x))
+my_list.sort(reverse=True)
+print (my_list)
+#take 2nd element
+
+# Case4: Python – Remove nested records from tuple
+test_tup = (1, 5, 7, (4, 6), 10)
+my_str = []
+for x in test_tup:
+    if not isinstance(x, tuple): #good
+        my_str.append(x)
+print (tuple(my_str))
+
+
+# Case5: Python – Elements Frequency in Mixed Nested Tuple : good:- yield from ; yield
+note:Usage:
+--yield is used to emit individual values from within a generator function.
+--yield from is used to delegate the iteration to another generator or iterable.
+Flattening:
+yield from simplifies the process of yielding values from nested structures (like nested generators or iterables).
+
+test_tuple = (5, (6, (7, 8, 6))) 
+my_list = []
+
+def flatten(test_tuple):
+    for x in test_tuple:
+        if isinstance(x, tuple):
+           yield from flatten(x)
+        else:
+            yield x
+
+for ele in flatten(test_tuple):
+    my_list.append(ele)
+
+print (my_list)
+
+
+# Case6: Python Program to get unique elements in nested tuple
+test_list = [(3, 4, 5), (4, 5, 7), (1, 4)]
+my_list = []
+def flatten(test_list):
+    for x in test_list:
+        if isinstance(x, tuple):
+            yield from flatten(x)
+        else:
+            yield x
+for y in flatten(test_list):
+    my_list.append(y)
+print (set(my_list))
+
+# Case7: Python program to Concatenate tuples to nested tuples
+test_tup1 = (3, 4)
+test_tup2 = (5, 6)
+
+my_list = [test_tup1, test_tup2]
+print (tuple(my_list))
+
+
+# Case8: Python – Sort by Frequency of second element in Tuple List --mine:correct it
+
+test_list = [(6, 5), (1, 7), (2, 5), (8, 7), (9, 8), (3, 7)] 
+my_list = []
+for i in range(0, len(test_list)):
+    count = 0
+    j = i+1
+    for j in range (j, len(test_list)):
+        if ((test_list[i])[1] == (test_list[j])[1]):          
+            count += 1
+            print (f'{test_list[i][1]} {test_list[j][1]} {count}')
+    my_list.append((count, test_list[i]))
+print (my_list)
+
+# Case9: Python – Sort lists in tuple
+test_tup = ([7, 5, 4], [8, 2, 4], [0, 7, 5])
+#res = tuple(map(sorted, test_tup)) #mine:good use of map. can avoid 'for'. map need two arguments, 1st the operation, 2nd the data
+#list(map(sorted, test_tup)): Here, map(sorted, test_tup) applies the sorted function to each sublist in test_tup. 
+#list() converts the iterator returned by map into a list of sorted sublists (res).
+
+for x in test_tup:
+    x.sort()
+print (test_tup)
+
+# Case10: Python program to Order Tuples using external List
+test_list = [('Gfg', 3), ('best', 9), ('CS', 10), ('Geeks', 2)]
+ord_list = ['Geeks', 'best', 'CS', 'Gfg']
+my_list = []
+
+for x in ord_list:
+    for y in test_list:
+        if x in y:
+            my_list.append(y)
+print (my_list)
+
+# Case11: Python - Filter Tuples by Kth element from List --here
+
+test_list = [("GFg", 5, 9), ("is", 4, 3), ("best", 10, 29)]
+check_list = [4, 2, 3, 10]
+K = 2 
+#Output : [(‘is’, 4, 3)] 
+
+
+# Case12: Python – Closest Pair to Kth index element in Tuple -- here 6july
+# Case13: Python – Tuple List intersection (Order irrespective)
+# Case14: Python – Intersection in Tuple Records Data
+# Case15: Python – Unique Tuple Frequency (Order Irrespective)
+# Case16: Python – Skew Nested Tuple Summation
+# Case17: Python – Convert Binary tuple to Integer
+# Case18: Python – Tuple XOR operation
+# Case19: Python – AND operation between Tuples
+# Case20: Python – Elementwise AND in tuples
+
+# Conversion of Tuple Programs
+# Case1: Python program to convert tuple into list by adding the given string after every element
+# Case2: Python – Convert Tuple Matrix to Tuple List
+# Case3: Python – Convert Tuple to Tuple Pair
+# Case4: Python – Convert List of Lists to Tuple of Tuples
+# Case5: Python – Convert Matrix to Custom Tuple Matrix
+# Case6: Python – Convert Nested Tuple to Custom Key Dictionary
+# Case7: Python program to convert tuple to float value
+
+# Conversion of Set Programs 
+# Case1: Python program to convert Set into Tuple and Tuple into Set
+my_set = {'a', 'b', 'c', 'd', 'e'}
+my_tuple = tuple(my_set) #S-->T
+my_str = ''.join(my_set) #S-->St
+my_list = list(my_set) #S-->L
+
+print (f'tuple:{my_tuple} \n string:{my_str} \n list:{my_list}')
+
+# Case2: Python program to convert set into a list
+# Case3: Python program to convert Set to String
+# Case4: Python program to convert String to Set
+my_str = 'abhishek'
+my_set = set(my_str)
+print (my_set) # St-->S
+
+# Tuple to dict
+my_tuple = ('a','b','h','i','s','h', 'e', 'k')
+my_dict = dict([(my_tuple, '')])
+print (my_dict)
+
+my_tuple1 = tuple(my_dict.items())
+print (my_tuple1)
+
+# Case5: Python – Convert a set into dictionary
+
+# Advance Set Programs
+# Case6: Python program to find union of n arrays
+arr1 = {7, 1, 5, 2, 3, 6}
+arr2 = {3, 8, 6, 20, 7}
+set = arr1.union(arr2)
+print (set)
+
+# Case7: Python – Intersection of two lists
+# Case8: Python program to get all subsets of given size of a set --didnt get: good
+import itertools
+
+nums = [3, 30, 34, 5, 9]
+subsets = list(itertools.combinations(nums, 3))
+print (subsets)
+
+
+def subsets_of_size(set_elements, size):
+    # Convert set to list for indexing
+    set_list = list(set_elements)
+    n = len(set_list)
+    
+    # Helper function to recursively generate combinations
+    def generate_combinations(start, k):
+        if k == 0:
+            return [[]]
+        else:
+            combinations = []
+            for i in range(start, n - k + 1):
+                for combo in generate_combinations(i + 1, k - 1):
+                    combinations.append([set_list[i]] + combo)
+            return combinations
+    
+    # Generate combinations of specified size
+    combinations = generate_combinations(0, size)
+    
+    # Convert each combination list to a set
+    subsets = [set(combo) for combo in combinations]
+    
+    return subsets
+
+# Example usage:
+set_elements = {1, 2, 3, 4}
+subset_size = 2
+
+result = subsets_of_size(set_elements, subset_size)
+print(result)
+
+# Case9: Python – Minimum number of subsets with distinct elements using Counter
+import itertools
+
+list = [1, 2, 3, 3]
+for r in range(1, len(list)):
+    sublists = itertools.combinations(list, r)
+    print (set(sublists))
+
+# Case10: Python dictionary, set and counter to check if frequencies can become same
+my_str = 'xxxyyz' 
+my_set = set(my_str)
+my_list = []
+for x in my_set:
+    count = my_str.count(x)
+    my_list.append(count)
+    print (my_list)
+    my_list = set(my_list)
+    my_list = list(my_list)
+
+if (len(my_list) > 2) :
+    print ('Not Possible')
+elif 1 in my_list:
+    print ('Possible')
+elif len(my_list) == 2 and abs(my_list[0] - my_list[1]) == 1 :
+    print ('Possible')
+else:
+    print ('Not Possible')
+"""
+#=============Do above Advance of List, String, Tupple, Dictionary, set==================================================
+"""
+#Arrays
+# 1. Search, insert, delete
+# 2. Array alternate printing
+# 3. Maximum and minimum in an array
+# 4. Second largest in array
+# 5. Sum of array elements
+# 6. Reverse an Array
+# 7. Rotate Array
+# 8. Count of smaller elements
+# 9. Remove duplicate elements from sorted Array
+# 10. Count possible triangles
+# 11. Leaders in an array
+# 12. Minimum distance between two numbers
+# 13. Sorted subsequence of size 3
+# 14. Maximum Sub Array
+# 15. Majority Element
+# 16. Wave Array
+# 17. Maximum Index
+# 18. Max sum path in two arrays
+# 19. Product array puzzle
+# 20. Find duplicates in a small ranged array
+# 21. Find Missing And Repeating
+# 22. Stock buy and sell
+# 23. Trapping Rain Water
+# 24. Pair with given sum in a sorted array
+# 25. Chocolate Distribution Problem
+# 26. Longest Consecutive subsequence
+# 27. Three way partitioning
+
+
+# Sorting
+# 1. Check if array is sorted
+# 2. Minimum Swaps to Sort
+# 3. Sorting elements by frequency
+
+# Hashing
+# 4. Count distinct elements
+# 5. Array Subset of another array
+# 6. Nuts and Bolts Problem
+# 7. Count frequencies of elements
+# 8. Check if two arrays are equal or not
+# 9. First element to occur k times
+# 10. In First But Second
+# 11. Non-Repeating Element
+# 12. Group Anagrams Together
+# 13. Winner of an election
+# 14. Check for a pair with given sum
+# 15. Count distinct pairs with difference k
+# 16. Count pairs with given sum
+# 17. Find all four sum numbers
+# 18. A Simple Fraction
+# 19. Largest Fibonacci Subsequence
+
+# Prefix Sum and Sliding Window
+# 20. Equilibrium Point
+# 21. Check if there is a subarray with 0 sum
+# 22. Longest Sub-Array with Sum K
+# 23. Longest subarray with sum divisible by K
+# 24. Largest subarray with equal 1s and 0s
+# 25. Longest common span with same number of 1s and 0s among two arrays
+# 26. Find maximum sum in any subarray of size k
+# 27. Count distinct elements in every window of size k
+# 28. Check for subarray with given sum
+
+
+#Basic:-
+#https://www.geeksforgeeks.org/python-string-exercise/?ref=lbp
+
+num1 = 15
+num2 = 12
+ 
+# Adding two nos
+sum = num1 + num2
+ 
+# printing values
+print("Sum of", num1, "and", num2 , "is", sum)
+
+#Sum of two numbers
+num1 = 10
+num2 = 12
+
+sum = num1 + num2
+print ("sum of",num1,"and",num2, "is", sum)
+
+#Sum of two numbers via user inputs
+
+num1 = input("First Number:")
+num2 = input("Second Number:")
+
+#sum = int(num1) + int(num2)
+#The issue with the code is that input() returns a string, so when you try to add num1 and num2, it performs string concatenation instead of numerical addition. 
+#To fix this, you need to convert the inputs to integers (or floats) before performing the addition.
+
+sum = float(num1) + float(num2)
+print ("sum of {0} and {1} is {2}".format(num1, num2, sum))
+
+#Sum of two numbers via function
+
+def add (num1, num2):
+    sum = int(num1) + int(num2)
+    return sum
+
+num1 = input("first number:")
+num2 = input("Second number:")
+
+sum = add(num1, num2)
+print ("sum of {0} and {1} is {2}".format(num1, num2, sum))
+
+#Sum of two numbers via operator
+import operator
+
+num1 = input("Enter first number:")
+num2 = input("Enter Second number:")
+
+sum = operator.add(float(num1), float(num2))
+print ("sum of {0} and {1} is {2}".format(num1, num2, sum))
+
+#Sum of two numbers via lambda function
+
+num1 = input("Enter the first number:")
+num2 = input("Enter the second number:")
+
+add = lambda x,y:int(x)+int(y)
+
+sum = add(num1, num2)
+
+print ("sum of {0} and {1} is {2}".format(num1, num2, sum))
+
+#Case2: Minimum of two numbers in Python 
+
+num1 = input ("Enter first number:")
+num2 = input ("Enter second number:")
+
+def findMin(num1, num2):
+    if (int(num1) < int(num2)):
+        return num1
+    else:
+        return num2
+
+min = findMin(num1, num2)
+print ("Minimum of two is {0}".format(min))
+
+#Case2: Minimum of two numbers via min()
+num1 = input ("Enter first number:")
+num2 = input ("Enter second number:")
+
+minimum = min(num1, num2)
+print ("Minimum of two is {0}".format(minimum))
+
+#Case2: Minimum of two numbers via sort
+
+num1 = input ("Enter first number:")
+num2 = input ("Enter second number:")
+
+min = (sorted([num1,num2]))[0]
+print ("Minimum of two is {0}".format(min))
+
+#Case3: Python program to add two binary numbers.
+a = "1101"
+b = "100"
+
+sum = bin(int(a,2) + int(b,2))
+
+print ("Sum is:{0}".format(sum[2:]))
+
+#Case4:Program to Find the Factorial of a Number
+
+num = input("Enter the number:")
+
+def factorial(num):
+    if ((num == 1) or (num == 0)):
+        return 1
+    else:
+        fac = num * factorial(num - 1)
+    return fac
+
+fac = factorial(int(num))
+print ("Factorial of number is {0}".format(fac))
+
+#Case4:Program to Find the Factorial of a Number using FOR
+num = input ("Enter the number:")
+
+def factorial(num):   
+    if ((num == 0) or (num == 1)):
+        return 1
+    else:        
+        fac = 1
+        for x in range(2, (num+1)):
+            fac *= x
+        
+    return fac
+fac = factorial(int(num))
+print ("Factorial of number is {0}".format(fac))
+
+#Case5:Python Program for Simple Interest
+
+print ("Enter the principle, rate, time")
+p = float(input("principle:"))
+r = float(input("rate:"))
+t = float(input("time:"))
+
+i = (p*r*t)/100
+print ("Interest is:", i)
+
+#mine:
+num = pow((2),3)
+print ("final num is:",num)
+
+#Case: Reverse words in a given String in Python
+string = "geeks quiz practice code"
+
+str = string.split(' ')
+reversedStr = []
+while len(str):
+    reversedStr.append(str.pop())
+
+print (f"reversedStr is: {str(reversedStr)}")
+
+#STRING#=========================
+#Case: Python program to check whether the string is Symmetrical or Palindrome
+str = 'khokho'
+strlen = len(str)
+mid = int(strlen/2)
+firstHalf = str[0:mid]
+secondHalf = str[mid:]
+print (f"string are {firstHalf}; {secondHalf}")
+reversedSecondHalf = secondHalf[::-1]
+
+def palindrom(firstHalf, reversedSecondHalf):
+    nopalindrom = 0
+    for i in range(len(firstHalf)):
+        if (firstHalf[i] != reversedSecondHalf[i]):
+            print ("Not Palindrom")
+            nopalindrom = 1
+            break
+    msg = "It is not Palindrom" if nopalindrom else "It is Palindrom"
+    print (f"{msg}")
+
+def symmetric(firstHalf, secondHalf):
+    nosymmetric = 0
+    for i in range(len(firstHalf)):
+        if (firstHalf[i] != secondHalf[i]):
+            print ("Not Symmetric")
+            nosymmetric = 1
+            break
+    msg = "It is not symmetric" if nosymmetric else "It is symmetric"
+    print (f"{msg}")
+
+palindrom(firstHalf, reversedSecondHalf)
+symmetric(firstHalf, secondHalf)
+#min_value = a if a < b else b
+
+#Case: Ways to remove i’th character from string in Python
+string = 'Geeks123For123Geeks'
+remove = '123'
+
+if remove in string:
+    string = string.replace(remove,'',1)
+    print (f"Updated String:{string}")
+
+#Case: Find length of a string in python (4 ways)
+string = 'geeks'
+def findLen(string):    
+    counter = 0
+    while(string[counter:]):       
+        counter += 1
+    return counter
+
+length = findLen(string)
+print (f"length is {length}")
+
+#Case: Python – Avoid Spaces in string length
+string = 'geeksforgeeks 33 best'
+actualLength = sum(map(len, string.split(' ')))
+print (f"actualLength:{actualLength}")
+
+#Case:Python program to print even length words in a string
+string = "This is a python language"
+lst = string.split(' ')
+
+evenList = list(filter(lambda x: (len(x)%2 == 0), lst))
+print (f"Word:{evenList}")
+
+#Case:Python - Uppercase Half String
+string = 'geeksforgeek' 
+
+mid = int(len(string)/2)
+firstHalf = string[0:mid].upper()
+secondHalf = string[mid:]
+print (f"{firstHalf+secondHalf}")
+
+#Case:Python program to capitalize the first and last character of each word in a string
+x = 'hello world'
+
+str = ' '.join(list(map(lambda x: x[0].upper() + x[1:-1] + x[-1].upper(), x.split())))
+#mine: rather than FOR loop, use map()
+
+print (f"new string:{str}")
+
+#Case:Python program to check if a string has at least one letter and one number
+#using builtin:
+string = 'welcome2ourcountry34'
+if (string.isalnum()):
+    print ("yes")
+else:
+    print ("No")
+
+#using INTERSECTION
+flag_n = flag_a = 0
+
+def findNumber(string):
+    for i in string:   
+        if i in "0123456789":
+            #print ("String has digit")
+            flag_n = 1
+            continue
+
+        if i in "abcdefghijklmnopqrstuvwxyz":
+            #print ("String has alphabet")
+            flag_a = 1
+            continue
+
+    if (flag_n & flag_a):
+        print ("yes, it is alphanum")
+
+findNumber(string)
+
+#Case: Python - Program to accept the strings which contains all vowels
+string = "geeksforgeeks"
+
+def findString(x):
+    if x not in 'aeiou':
+        return 'NO'
+    else:
+        return 'YES'
+
+lst = list(map(lambda x: findString(x) , list(string)))
+print (f"{lst}")
+#mine: I think, when we use map with lambda, we can pass any variable name to lambda since that variable correspond to map's list
+
+#Case: Python - Count the Number of matching characters in a pair of string
+x = 'abcdef'
+y = 'defghia'
+
+commonChar = lambda x,y: set(x) & set(y)
+result = commonChar(x,y)
+print (f"{result}")
+#mine: to call the lambda function, we need to give function name in LHS <functionName = lambda definition>. 
+#To call the lambda function, call by functionName with the inputs . Or else, call it by map and list
+
+#Case:Python program to count number of vowels using sets in given string
+string = 'GeeksforGeeks'
+lst = list(string)
+lst_vowel = []
+vowelCount = map(lambda x: print (f"yes:{x} is vowel") if (x in 'aeiou') else None, lst) #not correct
+count = vowelCount(string)
+print (f"count:{count}") 
+#mine: in lambda, we can change outside variable list append of incrementing
+
+
+#mine:using list comprehension: count = len([char for char in str if char in vowels]) 
+
+#Case: Python Program to remove all duplicates from a given string
+string = 'geeksforgeeks'
+
+list = []
+
+def removeDuplicates(string):
+    for x in string:
+        if x not in list:
+            list.append(x)
+    return list
+
+unique = ''.join(removeDuplicates(string))
+
+print (f"unique:{unique}")
+
+#Mine: Using OrderedDict: An OrderedDict is a dictionary that remembers the order of the keys that were inserted first. 
+#If a new entry overwrites an existing entry, the original insertion position is left unchanged.
+
+from collections import OrderedDict 
+
+ordinary_dictionary = {} 
+ordinary_dictionary['a'] = 1
+ordinary_dictionary['b'] = 2
+ordinary_dictionary['c'] = 3
+ordinary_dictionary['d'] = 4
+ordinary_dictionary['e'] = 5
+
+# Output = {'a': 1, 'c': 3, 'b': 2, 'e': 5, 'd': 4} 
+print (ordinary_dictionary)     
+
+ordered_dictionary = OrderedDict() 
+ordered_dictionary['a'] = 1
+ordered_dictionary['b'] = 2
+ordered_dictionary['c'] = 3
+ordered_dictionary['d'] = 4
+ordered_dictionary['e'] = 5
+
+# Output = {'a':1,'b':2,'c':3,'d':4,'e':5} 
+print (ordered_dictionary)
+
+#Case: Python – Least Frequent Character in String
+string = "GeeksforGeeks"
+
+maxCount = []
+dict = {}
+def getLeastFrequent(string):
+    global maxCount
+    global dict 
+    for x in string:
+        charCount = string.count(x)
+        #print (f"count of {x} is {charCount}")
+        if not maxCount:
+            maxCount = [charCount]
+        elif (maxCount[0] > charCount):
+            maxCount[0] = charCount
+            dict[x] = charCount
+
+    return maxCount
+maxCount = getLeastFrequent(string)
+items = dict.items()
+print (f"items:{items}")
+
+#Case: Python | Maximum frequency character in String --here to below:
+
+Python – Odd Frequency Characters
+Python – Specific Characters Frequency in String List
+Python | Frequency of numbers in String
+Python | Program to check if a string contains any special character
+Generating random strings until a given string is generated
+Find words which are greater than given length k
+Python program for removing i-th character from a string
+Python program to split and join a string
+Python | Check if a given string is binary string or not
+Python | Find all close matches of input string from a list
+Python program to find uncommon words from two Strings
+Python | Swap commas and dots in a String
+Python | Permutation of a given string using inbuilt function
+Python | Check for URL in a String
+Execute a String of Code in Python
+
+##DICTIONARY PROGRAMS:===============================
+
+#Case1:Python | Sort Python Dictionaries by Key or Value
+
+from collections import OrderedDict
+
+myDict = {'ravi':10, 'rajnish':9, 'sanjeev':15, 'yash':2, 'suraj':32}
+myDict = OrderedDict(sorted(myDict.items()))
+
+print("Sorted dict:", myDict)
+
+mine: The line if __name__ == "__main__": main() is a common idiom in Python programming used to ensure that certain code is run only when the script is executed directly, and not when it is imported as a module in another script. Here's a detailed explanation:
+
+__name__ and __main__
+5__name__ Variable:
+
+In Python, every module has a built-in variable called __name__.
+When a module is run directly, __name__ is set to "__main__".
+When a module is imported, __name__ is set to the module's name.
+Conditional Execution:
+
+The conditional statement if __name__ == "__main__": checks whether the script is being run directly or being imported.
+If the script is being run directly, __name__ will be "__main__", and the code block inside the if statement will execute.
+If the script is being imported, __name__ will not be "__main__", and the code block inside the if statement will not execute.
+
+Ex:
+def main():
+    print("This is the main function.")
+
+if __name__ == "__main__":
+    main()
+
+#Case2: Handling missing keys in Python dictionaries
+#using .get()
+
+d = { 'a' : 1 , 'b' : 2 }
+
+key = input("Enter the key: ")
+value = d.get(key, 'Key Not Found')
+print (f"value of key: {value}")
+
+#using .setdefault()
+d = { 'a' : 1 , 'b' : 2 }
+key = input("Enter the key: ")
+value = input("Enter its expected value: ")
+keyValue = d.setdefault(key, value)
+
+print (f"value of key: {keyValue}")
+
+#Case3:Python dictionary with keys having multiple inputs
+#mine: this will be useful when we user input the different keys at run time.
+
+dict = {}
+x,y,z = 3,4,5
+dict[x,y,z] = x+y+z
+x,y,z = 6,7,8
+dict[x,y,z] = x+y-z
+
+print (f"dict:{dict}")
+
+#keys (have tuple) are poiting to another dictionary2. Access key1 of disctionary2 and update its value 
+
+dict1 = {(1, 'abhi'): {1: 'ABHI'}, (2, 'pratap'): {2: 'PRATAP'}, (2, 'singh'): {2:'SINGH'}}
+
+dict1[(2, 'pratap')] = {2: 'KUSHWAH'}
+
+print (dict1[(2, 'pratap')][2])
+
+#Case3: Python program to find the sum of all items in a dictionary
+dict = {'a': 100, 'b':200, 'c':300}
+
+#mine: A generator expression is an expression that generates a sequence 
+#of values, and is similar to a list comprehension, but does not create a new list.
+
+print ("Sum: ",sum(dict[key] for key in dict))
+
+#Case4: Python program to find the size of a Dictionary
+dic2 = {"Geek1": "Raju", "Geek2": "Nikhil", "Geek3": "Deepanshu"}
+
+size = dic2.__sizeof__()
+print ("size is: " + str(size) + "bytes")
+
+#Case5: Ways to sort list of dictionaries by values in Python – Using itemgetter
+from operator import itemgetter
+
+list = [{"name": "Nandini", "age": 20},
+       {"name": "Manjeet", "age": 20},
+       {"name": "Nikhil", "age": 19}]
+
+sortedList = sorted(list, key=itemgetter('age'))
+print (sortedList)
+
+#Case6: Ways to sort list of dictionaries by values in Python – Using lambda function
+#mine:When sorted() iterates over the list, it passes each element of the list as an argument to the lambda function. 
+#The lambda function then extracts the value associated with the key 'age' from each dictionary element (i['age']), and these values are used to determine the order in which the elements will be sorted.
+list = [{"name": "Nandini", "age": 20},
+       {"name": "Manjeet", "age": 20},
+       {"name": "Nikhil", "age": 19}]
+sortedList = sorted(list, key=lambda i: i['age'])
+
+print (sortedList)
+
+
+#Case7: Python | Merging two Dictionaries 
+#using **kwargs
+dict1 = {'a':10, 'b':8}
+dict2 = {'c':4 , 'd':6}
+
+dict3 = {}
+def merge(dict1, dict2):
+    dict3 = {**dict1, **dict2}
+    return dict3
+
+mergedDict = merge(dict1, dict2)
+print (mergedDict)
+
+#using '|'
+dict1 = {'a':10, 'b':8}
+dict2 = {'c':4 , 'd':6}
+
+def merge(dict1, dict2):
+    dict3 = dict1|dict2
+    return dict3
+
+mergedDict = merge(dict1, dict2)
+print (mergedDict)
+
+#using 'ChainMap'
+from collections import ChainMap
+
+dict1 = {'a':10, 'b':8}
+dict2 = {'c':4 , 'd':6}
+mergedDict = ChainMap(dict1, dict2)
+print (mergedDict)
+
+#using 'update/copy'
+dict1 = {'a':10, 'b':8}
+dict2 = {'c':4 , 'd':6}
+
+mergedDict = dict2.copy()
+mergedDict.update(dict1)
+
+print (mergedDict)
+
+#Case8: Program to create grade calculator in Python
+1. score >= 90 : "A"
+2. score >= 80 : "B"
+3. score >= 70 : "C"
+4. score >= 60 : "D"
+
+#Case9: Python – Insertion at the beginning in OrderedDict
+original_dict = {'a':1, 'b':2}
+item = ('c', 3)
+
+from collections import OrderedDict
+OrderedDict = {}
+ordered_dict = OrderedDict
+
+ordered_dict['c'] = 3
+for key in original_dict.keys():
+    ordered_dict[key] = original_dict[key]
+
+print (ordered_dict)
+
+#using move_to_end
+from collections import OrderedDict
+
+original_dict = {'a':1, 'b':2}
+item = ('c', 3)
+ordered_dict = OrderedDict(original_dict)
+ordered_dict.update({'c':3})
+ordered_dict.move_to_end('c', last=False)
+
+print (ordered_dict)
+
+#Case:10: Python | Check order of character in string using OrderedDict()
+from collections import OrderedDict
+
+string = "engineers rock"
+pattern = "er"
+
+ordered_dict = OrderedDict.fromkeys(string)
+
+count=0
+status = 'No'
+for x in ordered_dict.keys():
+    if pattern[count] == x:
+        count += 1
+
+    if (count == len(pattern)):
+        status = 'Yes'
+        break
+        #print (f"{status}")
+        
+print (f"{status}")
+
+#Case:11: Python | Find common elements in three sorted arrays by dictionary intersection
+mine:Counter is a class from the collections module in Python. It is a subclass of the dictionary 
+that is used to count the occurrences of elements in a collection, such as a list or a tuple. 
+Counter objects are similar to dictionaries but have specific methods for counting elements.
+
+mine:The first step inside the function is to convert these lists into Counter objects.
+
+How Counter Works
+When you pass a list to Counter, it creates a dictionary-like object where the keys are the 
+elements of the list, and the values are the counts of those elements.
+
+from collections import Counter
+
+ar1 = [1, 5, 10, 20, 40, 80]
+ar2 = [6, 7, 20, 80, 100]
+ar3 = [3, 4, 15, 20, 30, 70, 80, 120]
+
+ar1 = Counter(ar1)
+ar2 = Counter(ar2)
+ar3 = Counter(ar3)
+
+intersect_dict = dict(ar1 & ar2 & ar3)
+print (intersect_dict)
+
+#Case:12: Dictionary and counter in Python to find winner of election
+from collections import Counter
+
+votes = ["john", "johnny", "jackie", 
+           "johnny", "john", "jackie", 
+           "jamie", "jamie", "john",
+           "johnny", "jamie", "johnny", 
+           "john"]
+
+votes_dict = Counter(votes)
+sorted_dict = {}
+#print (votes_dict)
+for key1,value1 in votes_dict.items():
+    sorted_dict[key1] = value1
+    for key2,value2 in sorted_dict.items():
+        if (value2 > value1):
+            sorted_dict = {key2:value2}
+        elif (value2 == value1):
+            if (key2 > key1):
+                sorted_dict = {key1:value1}
+        elif (value2 == ''): 
+            sorted_dict = {key1:value1}
+
+print (sorted_dict)
+
+#Case:13: Python – Key with maximum unique values
+test_dict = {"Gfg" : [5, 7, 9, 4, 0], "is" : [6, 7, 4, 3, 3], "Best" : [9, 9, 6, 5, 5]} 
+length = [0]
+dic = {}
+for key,value in test_dict.items():
+    print (set(value))
+    if len(set(value)) > length[0] :
+        length = [len(set(value))]
+        dic = {key: value}
+
+print (dic)
+
+#using Counter
+test_dict = {"Gfg" : [5, 7, 9, 4, 0], "is" : [6, 7, 4, 3, 3], "Best" : [9, 9, 6, 5, 5]} 
+from collections import Counter
+
+init_length = 0
+dic = {}
+for key,value in test_dict.items():
+    dict = Counter(value)
+    if len(list(dict.keys())) > init_length :        
+        dic = {key: value}
+        init_length = len(list(dict.keys()))
+   
+print (dic)
+
+#using list-comprehension
+test_dict = {"Gfg" : [5, 7, 9, 4, 0], "is" : [6, 7, 4, 3, 3], "Best" : [9, 9, 6, 5, 5]} 
+
+#Case: 14: Find all duplicate characters in string
+from collections import Counter
+
+string = "geeksforgeeeks"
+duplicate = []
+dic = Counter(string)
+duplicate = [key for key,value in dic.items() if (value > 1)]
+print (duplicate)
+
+#using lambda
+string = "geeksforgeeeks"
+dic = dict.fromkeys(string)
+
+print_key = lambda i: print(i)
+list(map(print_key, dic.keys()))
+
+#mine:The fromkeys() method is a class method available in Python dictionaries (the dict class). 
+It is used to create a new dictionary with specified keys, each having the same initial value.
+keys = ['a', 'b', 'c']
+value = 0  # Initial value for each key
+new_dict = dict.fromkeys(keys, value)
+print(new_dict)
+
+
+#using set
+string = "geeksforgeeeks"
+unique = set(string)
+print (unique)
+
+#using reduce
+from functools import reduce
+
+#Case:15: Python – Group Similar items to Dictionary Values List
+# initializing list
+import itertools
+test_list = [4, 6, 6, 4, 2, 2, 4, 4, 8, 5, 8]
+ 
+# Step 2
+test_list.sort()
+ 
+# Step 3
+groups = itertools.groupby(test_list)
+for key, group in groups:
+    print (f"key:{key} , group:{list(group)}")
+
+#using Counters
+
+#Case:16: K’th Non-repeating Character in Python using List Comprehension and OrderedDict
+from collections import OrderedDict, Counter
+str = 'geeksforgeeks'
+k = 3
+
+ordered_dict = OrderedDict.fromkeys(str)
+unique_dic = OrderedDict(Counter(ordered_dict))
+unique_dict = {}
+unique_dict = {char: count for char, count in unique_dic.items() if count > k}
+
+print(unique_dict)
+
+#mine:----
+def retry(retries=5, interval=30, check_string='EVT_TASK RUNNING'):
+    def retry_decorator(f):
+        @wraps(f)
+        async def func_with_retries(*args, **kwargs):
+            attempt = 1
+            res = None
+            while attempt <= retries:                
+                logging.info("Attempt %s for function %s", attempt, f.__name__)
+                data = await connect_to_dl_with_raw_run_cmd_get_output(
+                    acc_dl_servers_details[0]["ip"], cmd
+                )
+                # Check for the specified string in the command output data
+                if check_string in data:
+                    logging.info("'%s' found in output, retrying...", check_string)
+                    if attempt < retries:
+                        attempt += 1
+                        time.sleep(interval)
+                        continue
+                    else:
+                        break
+                res = data
+                break
+                
+            return res
+
+        return func_with_retries
+
+    return retry_decorator
+
+# Example of applying the retry decorator to an async function
+@retry(retries=5, interval=30, check_string='EVT_TASK RUNNING')
+async def my_function():
+    data = await connect_to_dl_with_raw_run_cmd_get_output(acc_dl_servers_details[0]["ip"], cmd)
+    return data    
+
+#Case:17: Python – Replace String by Kth Dictionary value
+test_list = ["Gfg", "is", "Best"]
+subs_dict = {"Gfg" : [5, 6, 7], "is" : [7, 4, 2]}
+K = 0 
+#Output : [5, 7, “Best”] 
+
+#using list comprehension:
+res = [subs_dict[ele][K] if ele in subs_dict else ele for ele in test_list]
+mine:list comprehension syntax: [expression for item in iterable if condition]
+                                           
+# printing result 
+print("The list after substitution {0} ".format(res))
+
+#using map()
+test_list = ["Gfg", "is", "Best"]
+subs_dict = {"Gfg" : [5, 6, 7], "is" : [7, 4, 2]}
+K = 0 
+
+def replaceitem(s):
+    if s in subs_dict.keys():
+        return subs_dict[s][K]
+lst = list(map(replaceitem, test_list))
+
+#mine:lst = [map(replaceitem, test_list)]--> incorrect --> In Python, map() returns an iterator object, not a list. Therefore, you cannot directly access the elements of map() 
+#using indexing like map(replaceitem, test_list)[0].
+#To convert the iterator returned by map() into a list, you need to use the list() function explicitly. 
+#This function iterates over the entire iterator and collects all the elements into a list.
+
+#mine:In Python, when you use the 'in; operator with a dictionary, it checks for membership in the keys of the dictionary by default. 
+#So, in the expression 's in subs_dict', is compared against the keys of subs_dict
+
+
+
+Here's the corrected code snippet:
+
+print (lst)
+#mine:res = list(map(replace_string(s), test_list)) 
+#The syntax is incorrect because map() expects a function as its first argument, 
+#but replace_string(s) is not a function call. It's trying to call the function replace_string with the argument s, 
+#and then pass the result of that function call as the function to map(), which is not valid.
+#correct syntax:res = list(map(replace_string, test_list))
+
+#Case:18: Python | Ways to remove a key from dictionary
+dict = {'Anuradha': 21, 'Haritha': 21, 'Arushi': 22, 'Mani': 21}
+
+#using del
+
+#using pop()
+
+#using dict comprehen
+
+#mine:Delete all Keys from a Dictionary using the del
+# empty the dictionary d
+del test_dict
+try:
+    print(test_dict)
+except:
+    print('Deleted!')
+
+#mine:# empty the dictionary d
+test_dict.clear()
+
+#Case:19: Python – Replace words from Dictionary
+test_str = 'geekforgeeks best for geeks'
+repl_dict = {"geeks" : "all CS aspirants"} 
+#Output : 'geekforgeeks best for all CS aspirants '
+
+test_list = test_str.split()
+for x in test_list:
+    if x in repl_dict:
+         str = test_str.replace(x, repl_dict[x])
+
+print (str)
+
+#using LC
+test_str = 'geekforgeeks best for geeks'
+repl_dict = {"geeks" : "all CS aspirants"}
+
+lst = [repl_dict[x] if x in repl_dict else x for x in test_list]
+print (' '.join(lst))
+
+#using get()
+# initializing string
+test_str = 'geekforgeeks best for geeks'
+ 
+# printing original string
+print("The original string is : " + str(test_str))
+ 
+# lookup Dictionary
+lookp_dict = {"best" : "good and better", "geeks" : "all CS aspirants"}
+ 
+# performing split()
+test_list = test_str.split()
+final_list = []
+for x in test_list:
+     
+    # searching from lookp_dict
+    final_list.append(lookp_dict.get(x, x))
+res = ' '.join(final_list)
+print (res)
+
+mine:value = dictionary.get(key, default_value)
+dictionary: The dictionary you are working with.
+key: The key you are looking for in the dictionary.
+default_value: The value to return if the key is not found in the dictionary. 
+If this parameter is not specified, None is returned by default.
+ 
+#Case: 20: Python – Remove Dictionary Key Words
+test_str = 'gfg is best for geeks'
+test_dict = {'geeks': 1, 'best': 6}
+test_list = test_str.split()
+final_list = test_list
+for i,x in enumerate(test_dict):
+    if x in test_list:
+       final_list.remove(x)
+
+print (' '.join(final_list))
+#mine:pop(index) vs remove(value)
+
+#using LC
+test_str = 'gfg is best for geeks'
+test_dict = {'geeks': 1, 'best': 6}
+test_list = test_str.split()
+final_list = [x for x in test_list if x not in test_dict]
+
+print(final_list)
+mine: In LC, first item is always the return value of IF. so when you wnat to use else,  then use ternary else keep IF after FOR.
+
+#Case:21: Python | Remove all duplicates words from a given sentence
+from collections import Counter
+s = "Python is great and Java is also great"
+lst = s.split()
+dic = Counter(lst)
+print (dic)
+
+f_lst = []
+for x in dic:
+    if dic[x] == 1:
+        f_lst.append(x)
+
+print (' '.join(f_lst))
+
+ 22: Python – Remove duplicate values across Dictionary Values
+ 23: Python Dictionary to find mirror characters in a string
+ 24: Counting the frequencies in a list using dictionary in Python
+ 25: Python – Dictionary Values Mean
+ 26: Python counter and dictionary intersection example (Make a string using deletion and rearrangement)
+ 27: Python dictionary, set and counter to check if frequencies can become same
+ 28: Scraping And Finding Ordered Words In A Dictionary using Python
+ 29: Possible Words using given characters in Python
+ 30: Python – Maximum record value key in dictionary
+ 31: Python – Extract values of Particular Key in Nested Values
+ 32: Python – Convert Key-Value list Dictionary to List of Lists
+ 33: Python – Convert List to List of dictionaries
+ 34: Python – Convert Lists of List to Dictionary
+ 35: Python – Convert List of Dictionaries to List of Lists
+ 36: Python – Convert key-values list to flat dictionary
+ 37: Python | Convert a list of Tuples into Dictionary
+ 38: Python – Convert Nested dictionary to Mapped Tuple
+ 39: Python Program to convert string to dictionary
+ 40: Python – Convert dictionary to K sized dictionaries
+ 41: Python – Convert Matrix to dictionary
+
+
+## SET PROGRAMS:=================================
+
+mine:In Python, a set can only contain hashable objects, which essentially means immutable objects.Ex:strings,tuples are immutable objects.
+
+#Case:1: Find the size of a Set in Python
+Set1 = {"A", 1, "B", 2, "C", 3}
+Set2 = {"Geek1", "Raju", "Geek2", "Nikhil", "Geek3", "Deepanshu"}
+Set3 = {(1, "Lion"), ( 2, "Tiger"), (3, "Fox")}
+
+import sys
+
+print (sys.getsizeof(Set1))
+print (len(Set1))
+
+#Case:2: Iterate over a set in Python
+string = "geEks"
+test_set = set(string.lower())
+print (test_set)
+
+#Case:3: Python – Maximum and Minimum in a Set
+set = {8, 16, 24, 1, 25, 3, 10, 65, 55}
+print (f"max:{max(set)}")
+
+mine:Sequence data types in Python are data types that represent ordered collections of items. These items are stored in a specific order, 
+and each item can be accessed by its position (index) within the sequence. Sequence data types are iterable, meaning you can iterate over their elements using loops or comprehension expressions.
+Ex:my_list = [1, 2, 3, 4, 5]
+my_tuple = (1, 2, 3, 4, 5)
+my_string = "hello"
+my_range = range(1, 6)  # Represents numbers 1 to 5
+
+#Case:4: Python – Remove items from Set
+test_set= {12, 10, 13, 15, 8, 9}
+test_list = sorted(test_set) # Sort the elements and convert to a list
+for x in test_list:
+    test_list.pop() 
+    print (test_list)
+#mine: didnt understand why only 3 iterations in output
+
+#using while()
+test_set= {12, 10, 13, 15, 8, 9}
+test_list = sorted(test_set) # Sort the elements and convert to a list
+while (test_list):
+    test_list.pop() 
+    print (test_list)
+
+mine:
+In Python, set objects do not have a sort() method because sets are unordered collections. 
+If you want to sort the elements of a set, you need to convert it to a list first, sort the list, and then convert it back to a set.    
+
+#Case5: Python – Check if two lists have at-least one element common
+a = [1, 2, 3, 4, 5]
+b = [5, 6, 7, 8, 9]
+
+c = [set(a).intersection(set(b))]
+print (c)
+
+#Case6: Python program to find common elements in three lists using sets
+ar1 = [1, 5, 10, 20, 40, 80]
+ar2 = [6, 7, 20, 80, 100]
+ar3 = [3, 4, 15, 20, 30, 70, 80, 120]
+
+set1 = set(ar1)
+set2 = set(ar2)
+set3 = set(ar3)
+
+int12 = set(set1.intersection(set2))
+int23 = set(set2.intersection(set3))
+int123 = int12.intersection(int23)
+print (int123)
+
+#using FOR
+ar1 = [1, 5, 10, 20, 40, 80]
+ar2 = [6, 7, 20, 80, 100]
+ar3 = [3, 4, 15, 20, 30, 70, 80, 120]
+
+lst = []
+for x in ar1:
+    if (x in ar2) and (x in ar3):
+        lst.append(x)
+print (lst)
+
+#Case7: Python – Find missing and additional values in two lists
+list1 = [1, 2, 3, 4, 5, 6] 
+list2 = [4, 5, 6, 7, 8] 
+
+diffset = set(list1).difference(set(list2))
+print (diffset)
+diffset = set(list2).difference(set(list1))
+print (diffset)
+
+#using zip to compare lists
+list1 = [1, 2, 3, 4, 5, 6] 
+list2 = [4, 5, 6, 7, 8] 
+
+lst = [x for x,y in zip(list1, list2) if (x == y)]
+if any(lst):
+    print ("yes")
+else:
+    print ("No")
+#Case:8: Python program to find the difference between two lists
+-similar to above
+
+#Case9: Python Set difference to find lost element from a duplicated array
+-similar to above
+
+#Case:10: Python program to count number of vowels using sets in given string
+string = "GeekforGeeks!"
+vowels = "aeiouAEIOU"
+
+sum = 0
+for vowel in vowels:
+    sum += string.count(vowel)
+print (f"number of vowels:{sum}")
+
+#A pangram is a sentence that contains every letter of the alphabet at least once. 
+#These sentences are often used as a tool for testing typewriters and computer keyboards, as well as for showcasing fonts and typography.
+
+from string import ascii_lowercase
+
+def checkPanagram(s):
+    empty_set = set()
+    empty_list = []
+    if set(ascii_lowercase).difference(set(s.lower())) == empty_set:
+        print ("yes")
+    else:
+        print ("no")
+
+if __name__ == "__main__":
+    s = 'The quick brown fox jumps over the lazy dog'
+    checkPanagram(s)
+
+ 11: Concatenated string with uncommon characters in Python
+ 12: Python – Program to accept the strings which contains all vowels
+ 13: Python – Check if a given string is binary string or not
+ 14: Python set to check if string is panagram
+ 15: Python Set – Pairs of complete strings in two sets
+ 16: Python program to check whether a given string is Heterogram or not
+ 17: Conversion of Set Programs 
+ 18: Python program to convert Set into Tuple and Tuple into Set
+ 19: Python program to convert set into a list
+ 20: Python program to convert Set to String
+ 21: Python program to convert String to Set
+ 22: Python – Convert a set into dictionary
+
+## Python OOPS Exercises ====================================
+
+#Case:1	Get index in the list of objects by attribute in Python
+
+
+#Case:2	Python program to build flashcard using class in Python
+class flashcards:
+    def __init__(self, word, meaning):
+        self.flashcard = {word:meaning}
+
+    def test():
+        pass
+
+my_flashcard = flashcards('python', 'its a prog lang')
+
+print (my_flashcard.flashcard['python'])
+
+
+3	How to count number of instances of a class in Python?
+4	Shuffle a deck of card with OOPS in Python
+5	What is a clean and Pythonic way to have multiple constructors in Python?
+6	How to Change a Dictionary Into a Class?
+7	How to create an empty class in Python?
+8	Student management system in Python
+9	How to create a list of object in Python class
+
+##Python OS Module Exercises ====================================
+
+## Python File Handling Exercises =============================
+
+#Case:2	Python Program to Count Words in Text File
+#mine:In the context of file handling, using a raw string for the file path ensures that backslashes are treated as literal characters, preventing unintended escape sequences. 
+#This can help avoid issues such as inadvertently escaping characters in file paths.
+with open(r'file.txt', 'r') as f
+
+lst = f.readlines()
+size = 0
+for line in lst:
+    words = line.split()
+    for word in words:
+        size += len(word)
+
+print (f"size of file:{size}")
+
+#Case:3	Python Program to Delete Specific Line from File
+line_to_match = 'my name is abhishek'
+with open (r'file.txt', 'r') as f:
+    lines = f.readlines()
+    for line in lines:
+        if line_to_match in line:
+            print ("yes")
+        else:
+            print ("No")
+
+
+
+#Case:4	Python Program to Replace Specific Line in File
+line_to_be_replaced = 'my name is abhishek'
+new_line = 'my name is Abhishek'
+
+with open (r'file.txt', 'r') as f:
+    lines = f.readlines()
+    for index, line in enumerate(lines):
+        if line_to_be_replaced in line:
+            with open(r'file.txt','w') as fh_w:
+                lines[index] = new_line
+                fh_w.writelines(lines)
+               
+    
+#mine: In Python, you don't need to manually close file objects when using with statements, 
+#as they are automatically closed when the block exits.
+
+#Case5	Python Program to Print Lines Containing Given String in File
+
+string = 'my name is Abhishek'
+with open(r'file.txt', 'r') as fh_r:
+    lines = fh_r.readlines()
+
+    for line in lines:
+        if string in line:
+            print (f"found the string in {line.strip()}")
+
+
+#Case6	Python - Loop through files of certain extensions
+#using walk -- iterative search (unlike listdir, scandir)
+import os
+foldername = 'D:\\test'
+
+ext = ('.txt','.jpg')
+
+for path, file, dir in os.walk(foldername):
+    if file.endswith(ext):
+        print (f"file:{file}")
+
+#Case7	Compare two Files line by line in Python
+from difflib import Differ
+
+with open(r'file1.txt', r) as fh1, open(r'file2.txt', r) as fh2:
+    file1_lines = fh1.readlines()
+    file2_lines = fh2.readlines()
+
+differ = Differ()
+
+for line in differ.compare(file1_lines,file2_lines):
+    print (f"diff: {line}")
+
+
+#Case8	How to keep old content when Writing to Files in Python?
+filename = r'D:\\test\\file.txt'
+str = 'my name is abhishek'
+with open (filename, 'a') as fh_a:
+    fh_a.write(str)
+
+#Case9	How to get size of folder using Python?
+
+import os
+foldername = r'D:\test'
+
+for path, dirs, files in os.walk(foldername):
+    for file in files:
+        fp = os.path.join(path, file)
+        size += os.path.getsize(fp)
+
+"""
+#case10	How to read multiple text files from folder in Python?
+
+"""
+11	Read a CSV into list of lists in Python
+12	Python - Write dictionary of list to CSV
+13	Convert nested JSON to CSV in Python
+14	How to add timestamp to CSV file in Python
+
+## TUPLE PROGRAMS:===============================
+Python program to Find the size of a Tuple
+Python – Maximum and Minimum K elements in Tuple
+Create a list of tuples from given list having number and its cube in each tuple
+Python – Adding Tuple to List and vice – versa
+Python – Sum of tuple elements
+Python – Modulo of tuple elements
+Python – Row-wise element Addition in Tuple Matrix
+Python – Update each element in tuple list
+Python – Multiply Adjacent elements
+Python – Join Tuples if similar initial element
+Python – All pair combinations of 2 tuples
+Python – Remove Tuples of Length K
+Python – Remove Tuples from the List having every element as None
+Sort a list of tuples by second Item
+Python – Sort Tuples by Total digits
+Python – Elements frequency in Tuple
+Python – Filter Range Length Tuples
+Python – Assign Frequency to Tuples
+Python – Records with Value at K index
+Python – Test if tuple is distinct
+
+Python program to find tuples which have all elements divisible by K from a list of tuples
+Python program to find Tuples with positive elements in List of tuples
+Python – Count tuples occurrence in list of tuples
+Python – Removing duplicates from tuple
+Python – Remove duplicate lists in tuples (Preserving Order)
+Python – Extract digits from Tuple list
+Python – Cross Pairing in Tuple List
+Python – Consecutive Kth column Difference in Tuple List
+Python – Kth Column Product in Tuple List
+Python – Flatten tuple of List to tuple
+Python – Flatten Tuples List to String
+Python program to sort a list of tuples alphabetically
+Python – Combinations of sum with tuples in tuple list
+Python – Custom sorting in list of tuples
+"""

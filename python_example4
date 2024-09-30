@@ -1,0 +1,924 @@
+
+==============================================================================================================================
+Two-Pointer Technique
+#case1: Find pair with target sum in a sorted array.
+Description: Given a sorted array, find two numbers that add up to a target.
+def find_pair_with_sum(arr, k):
+    left = 0
+    right = len(arr) - 1
+    pair = []
+
+    while left < right:  # Change condition to `left < right`
+        current_sum = arr[left] + arr[right]
+        if current_sum == k:
+            pair.append([arr[left], arr[right]])
+            left += 1
+            right -= 1  # Move both pointers when a pair is found
+        elif current_sum > k:
+            right -= 1
+        else:
+            left += 1
+
+    return pair
+
+# Test the function
+arr = [1, 2, 3, 4, 6, 8, 9]
+k = 10
+pair = find_pair_with_sum(arr, k)
+print(pair)
+
+
+#case2: Remove Duplicates from a Sorted Array.
+Description: Given a sorted array, remove duplicates in-place.
+way1:
+from collections import Counter
+
+def remove_duplicates(arr):
+    my_dict = Counter(arr)
+    final_list = []
+    duplicates = []
+    for i in range(len(arr)):
+        if my_dict[arr[i]] == 1:
+            final_list.append(arr[i])
+        else:
+            duplicates.append(arr[i])
+    print ('duplicates', duplicates)
+    return final_list
+
+arr = [1, 1, 2, 2, 3, 4, 4, 5]
+final_list = remove_duplicates(arr)
+print ('final_list',final_list)
+
+way2:GFG: good: using 'set' for iteration .Unlike check element in list [O(n)], here the check will take O(1)
+def remove_duplicates(arr):
+    if not arr:
+        return []
+
+    final_list = []
+    duplicates = set()  # Use a set for efficient O(1) membership check
+
+    for i in range(len(arr)):
+        # Add to final_list if it's the first occurrence
+        if i == 0 or arr[i] != arr[i - 1]:
+            final_list.append(arr[i])
+        # Add to duplicates if it's a repeat and hasn't been added to duplicates before
+        elif arr[i] not in duplicates:
+            duplicates.add(arr[i])
+
+    print('duplicates:', list(duplicates))  # Convert set to list for display
+    return final_list
+
+arr = [1, 1, 2, 2, 3, 4, 4, 5]
+final_list = remove_duplicates(arr)
+print('final_list:', final_list)
+
+
+#case3: Valid Palindrome.
+Description: Check if a string is a valid palindrome by ignoring non-alphanumeric characters.
+
+s = "A man, a plan, a canal: Panama"
+
+my_list = [x for x in s if x.isalnum()]  
+#good:my_list = [x if x.isalnum() else y for x in s]  #in LC, if want to use 'ELSE', then keep IF/ELSE before FOR 
+#good:my_list = [x for x in s if x.isalnum()]  #in LC, if want to use only 'IF', then keep IF after FOR . Mine: can keep before FOR also
+
+my_str = ''.join(my_list)
+print (my_str)
+if my_str == my_str[::-1]:  #good
+    print ('yes')
+else:
+    print ('No')
+
+#case4: Container With Most Water.
+# In the "Container With Most Water" problem, the solution aims to find two heights that, when paired, 
+# form a container that can hold the maximum amount of water. 
+Description: Given an array of heights, find the max water contained between two lines.
+def max_area(heights):
+    start = 0
+    end = len(heights) - 1
+    max_quant = -float('inf')
+
+    while (start < end):
+        height = min(heights[start], heights[end])
+        width = end - start
+        quant = height * width    
+        max_quant = max(quant, max_quant)
+
+        if heights[start] < heights[end]:
+            start += 1
+        else:
+            end -= 1
+    return max_quant
+    
+heights = [1, 8, 6, 2, 5, 4, 8, 3, 7]
+print(max_area(heights))
+
+
+#case5: Merge Sorted Arrays. -- good , good: traverse two arrays parallely
+Description: Merge two sorted arrays into a single sorted array.
+def merge_sorted_arrays(arr1, arr2):
+    merged_array = []
+    i, j = 0, 0
+    
+    # Traverse both arrays and merge them into the merged_array
+    while i < len(arr1) and j < len(arr2):
+        if arr1[i] <= arr2[j]:
+            merged_array.append(arr1[i])
+            i += 1
+        else:
+            merged_array.append(arr2[j])
+            j += 1
+    
+    # If there are remaining elements in arr1, add them to merged_array
+    while i < len(arr1):
+        merged_array.append(arr1[i])
+        i += 1
+    
+    # If there are remaining elements in arr2, add them to merged_array
+    while j < len(arr2):
+        merged_array.append(arr2[j])
+        j += 1
+    
+    return merged_array
+
+# Example usage
+arr1 = [1, 3, 5, 7]
+arr2 = [2, 4, 6, 8]
+merged_array = merge_sorted_arrays(arr1, arr2)
+print(merged_array)  # Output: [1, 2, 3, 4, 5, 6, 7, 8]
+
+
+#case6: Find Triplets with Zero Sum.
+Description: Find triplets in an array whose sum is zero.
+def find_triplets_with_zero_sum(arr, k):
+    arr.sort()
+    final_list = []
+    for i in range(0, len(arr)):
+        first = i
+        second = i+1
+        third = len(arr)-1
+ 
+        while (second < third):
+            sum = arr[first] + arr[second] + arr[third]
+            if (sum == 0):
+                final_list.append([arr[first], arr[second], arr[third]])
+                second += 1  #good, to avoid duplicate triplet
+                third -= 1  #good, to avoid duplicate triplet
+                continue
+            if sum < k:
+                second += 1
+            else:
+                third -= 1
+    return final_list
+
+arr = [-1, 0, 1, 2, -1, -4]
+k= 0
+final_list = find_triplets_with_zero_sum(arr,k)
+print (final_list)
+#way2: generalised 'k'. Given an array of integers and a target sum k, 
+#      write a function that finds all contiguous subarrays (combinations) whose elements sum up to the target value k.
+def find_comb_of_sum(arr, k):
+    cumulative_sum = 0
+    combination = []
+    my_dict = {}
+    for end in range(len(arr)):
+        print (arr[end])
+        cumulative_sum += arr[end]
+        if (cumulative_sum == k):
+            # It is crucial in identifying subarrays whose sum is equal to k
+            combination.append(arr[:end+1]) 
+        if (cumulative_sum - k) in my_dict:
+            combination.append(arr[my_dict[cumulative_sum-k] +1: end+1])      #good   
+        if cumulative_sum not in my_dict:
+            my_dict[cumulative_sum] = end
+    return combination
+
+
+arr = [1, 2, 3, 7, 5]
+k = 12
+combination = find_comb_of_sum(arr, k)
+print (combination)
+
+#case7: Subarray with Given Sum. --This will be for any size of subarray. 
+Description: Find a subarray with a given sum:K in a non-negative integer array.
+def find_comb_of_sum(arr, k):
+    cumulative_sum = 0
+    combination = []
+    my_dict = {}
+    for end in range(len(arr)):
+        print (arr[end])
+        cumulative_sum += arr[end]
+        if (cumulative_sum == k):
+            combination.append(arr[:end+1]) 
+        if (cumulative_sum - k) in my_dict:
+            combination.append(arr[my_dict[cumulative_sum-k] +1: end+1])      #good   
+            #When cumulative_sum - k exists in my_dict, it means that the sum of elements from the index 
+            #immediately after my_dict[cumulative_sum - k] up to the current index end is k.
+        if cumulative_sum not in my_dict:
+            my_dict[cumulative_sum] = end
+    return combination
+
+
+arr = [1, 2, 3, 7, 5]
+k = 12
+combination = find_comb_of_sum(arr, k)
+print (combination)
+#good: For subarray of size 2:, sort it then use only WHILE (left < right)
+
+#case8: Max Consecutive Ones.
+Description: Given a binary array, find the max number of consecutive 1's.
+def find_max_consecutive_ones(arr):
+    count = max_len = l = 0
+    
+    while (l < len(arr)):
+        print ('ele',arr[l])
+        if (arr[l] == 1):
+            count += 1
+        else: 
+            max_len = max(count, max_len)
+            print ('len', max_len)
+            count = 0
+        l += 1   
+    max_len = max(count, max_len)
+
+    return max_len
+    
+arr = [1, 1, 0, 1, 1, 1]
+result = find_max_consecutive_ones(arr)
+print(result)  # Output: 3
+
+#case9: Sort Colors (Dutch National Flag Problem).
+Description: Sort an array of 0s, 1s, and 2s in a single pass.
+def sort_colors(arr):
+    start = 0
+    mid = 0
+    last = len(arr)-1
+
+    while (mid <= last): #good : check till the last element. Since mid is processing or carrying elements to either start or end. [Mid-Dutch]
+        if (arr[mid] == 1):
+            mid += 1
+        elif (arr[mid] == 0): #good: compare with 0,1,2 itself
+            arr[mid], arr[start] = arr[start], arr[mid]
+            start += 1
+            mid += 1
+        elif (arr[mid] == 2):
+            arr[mid], arr[last] = arr[last], arr[mid]
+            last -= 1
+    return arr    
+
+arr = [2, 0, 2, 1, 1, 0]
+result = sort_colors(arr)
+print(result)
+
+
+#case10: Intersection of Two Arrays.
+Description: Find the intersection of two SORTED arrays.
+#mine:wneever you see merging/intersection of SORTED array, start by parallel traversing via WHILE
+#way1:
+arr1 = [1, 2, 4, 5, 6]
+arr2 = [2, 5, 7, 8]
+
+arr1_set = set(arr1) 
+arr2_set = set(arr2)
+
+arr = arr1_set.intersection(arr2_set)
+print (arr)
+
+#way2: GFG - good
+arr1 = [1, 2, 4, 5, 6]
+arr2 = [2, 5, 7, 8]
+
+common_list = []
+i = j = 0
+
+while i < len(arr1) and j < len(arr2):
+    if arr1[i] < arr2[j]:
+        i += 1
+    elif arr1[i] > arr2[j]:
+        j += 1
+    else:  # arr1[i] == arr2[j]
+        if not common_list or common_list[-1] != arr1[i]: # good:for scenarios, arr1 = [1,1,2,3,4], arr2=[2,3,4,5]
+            common_list.append(arr1[i])
+        i += 1
+        j += 1
+
+print(common_list)  # Output: [2, 5]
+
+
+#case11: Find the Duplicate Number.
+Description: Given an array containing n + 1 integers where each integer is between 1 and n, find the duplicate number.
+def find_duplicate(arr):
+    duplicates = []
+    visited = set() #good: use of set
+    for x in arr:
+        if x in visited:
+            duplicates.append(x)
+        else:
+            visited.add(x)
+    return duplicates 
+
+arr = [1, 3, 4, 2, 2]
+duplicates = find_duplicate(arr)
+print(duplicates)
+
+#case12: Minimum Size Subarray Sum. #remember this type, subarray of sum K. Use this approach
+Description: Given an array of positive integers and a positive integer target, find the minimal length of a contiguous subarray for which the sum is at least target.
+def longest_subarray_with_sum_k(my_list, k):
+    cumulative_sum = 0
+    my_dict = {}  # To store cumulative sum and its first occurrence index
+    max_length = 0
+
+    for end in range(len(my_list)):
+        cumulative_sum += my_list[end]
+
+        # If cumulative_sum equals k, the subarray from 0 to end has sum k
+        if cumulative_sum == k:
+            max_length = end + 1
+
+        # If cumulative_sum - k is found in the dictionary, update max_length
+        if (cumulative_sum - k) in my_dict:
+            #The idea is that if the cumulative sum at two different indices is the same, 
+            # the subarray between these two indices has a sum of zero. #good : good
+            length = end - my_dict[cumulative_sum - k]
+            max_length = max(max_length, length)
+        
+        # Store cumulative_sum in the dictionary if it's not already there
+        if cumulative_sum not in my_dict:
+            my_dict[cumulative_sum] = end
+
+    return max_length
+
+# Test the function
+my_list = [15, -2, 2, -8, 1, 7, 10, 23]
+k = 0  # Looking for the longest subarray with sum = 0
+final_length = longest_subarray_with_sum_k(my_list, k)
+print(f'Length of the longest subarray with sum {k}: {final_length}')
+
+#case13: Rotate Array.
+Description: Rotate an array of n elements to the right by k steps, where k is non-negative.
+#mine:good:You should use the deque class from the collections module, which provides a method called appendleft(); popleft() ; append() ; pop() for this purpose.
+
+way1: takes more space for queue variables
+from collections import deque
+
+def rotate_array(arr, k):
+    queue = deque(arr)
+    count = 0
+    while count < k:        
+        ele = queue.popleft()
+        queue.append(ele)
+        count += 1
+    return queue
+
+
+arr = [1, 2, 3, 4, 5, 6, 7]
+k = 3
+rotated_arr = rotate_array(arr, k)
+print (rotated_arr)
+
+#way2: saving space by inplace reversal 
+def rotate_array(arr, k):
+    n = len(arr)
+    k = k % n  # Handle cases where k is larger than the array length -- good
+    # If the array has 7 elements and you rotate it 7 times, the array will remain unchanged.
+    # Rotating it 8 times is the same as rotating it 1 time because the 8th rotation brings it back to the starting position.
+    return arr[-k:] + arr[:-k]   #good
+
+arr = [1, 2, 3, 4, 5, 6, 7]
+k = 3
+rotated_arr = rotate_array(arr, k)
+print(rotated_arr)
+
+
+#case14: Find All Pairs with a Given Sum. 
+Description: Given an array and a sum, find all PAIRS in the array that add up to the given sum.
+def find_pairs_with_sum_sorted(arr, k):
+    left = 0
+    right = len(arr)-1
+    final_list = []
+    arr.sort()
+
+    while (left < right):
+        cumulative_sum = arr[left] + arr[right]
+
+        if (cumulative_sum == k):
+            final_list.append([arr[left], arr[right]])
+            left += 1
+            right -= 1
+        elif (cumulative_sum < k):
+            left += 1
+        elif (cumulative_sum > k):
+            right -= 1
+
+    return (final_list)
+
+arr = [1, 2, 3, 4, 5, 6, 7, 8]
+k = 9
+print(find_pairs_with_sum_sorted(arr, k)) 
+
+#case15: Longest Palindromic Substring.--remember:longestPalin is by 'expand around center'; even/odd length
+Description: Find the longest palindromic substring in a given string.
+def longest_palindromic_substring(s):
+    final_list = []
+    
+    def expand_around_center(left, right):
+        while (left >=0 and right < len(s) and s[left] == s[right]): #good, two ANDs together to avoid infinite loop
+            left -= 1
+            right += 1
+        return (s[left+1:right])
+
+    for i in range(len(s)):
+        #odd length:
+        palin = expand_around_center(i, i)
+        final_list.append(palin)
+
+        #even length:
+        palin = expand_around_center(i, i+1)
+        final_list.append(palin)
+
+    
+    final_list.sort(key=len)
+    return final_list[-1]
+    
+# Example usage
+s = 'forgeeksskeegfor'
+print(longest_palindromic_substring(s))
+
+#case16: Minimum Window Substring.
+# GFG : remember: 2 pointer -- 2 WHILEs ,one for expand other for contract
+Description: Find the smallest window in a string that contains all characters of another string. -- good
+from collections import Counter, defaultdict
+
+def min_window_substring(s, t):
+    right = left = formed = 0
+    t_dict = Counter(t)
+    s_dict = defaultdict(int)
+    required = len(t_dict)
+    min_length = float('inf')
+    min_window = ''
+
+    while (right < len(s)):
+        char = s[right]
+        s_dict[char] += 1 #add all elements to s_dict
+
+        if s_dict[char] == t_dict[char]:
+            formed += 1
+
+        while (left <= right and formed == required):
+            #Take the valid length before contracting (and after valid contraction).
+            # STOP as soon as formed != required. Next window will get counted from incremented LEFT 
+            length = right + 1 - left
+            if (length < min_length):
+                min_length = length
+                min_window = s[left:right+1]
+
+            #Now contract from left
+            char = s[left]
+            s_dict[char] -= 1
+            if char in t_dict and s_dict[char] < t_dict[char]:
+                formed -= 1
+            left += 1   #Incremented
+        right += 1
+
+    return min_window
+
+s = "ADOBECODEBANC"
+t = "ABC"
+print(min_window_substring(s, t))  # Output: "BANC"
+
+
+#case17: Find the Peak Element.
+Description: Find an element which is greater than or equal to its neighbors.
+def find_peak_element(arr):
+    if arr[0] > arr[1]:
+        print ('Element {} is peak'.format(arr[0])) #good: if f-string doesnt support with your python,use format
+    elif arr[-1] > arr[-2]:
+        print ('Element {} is peak'.format(arr[-1]))
+    else:
+        for i in range(1, len(arr)-1):
+            if arr[i-1] < arr[i] > arr[i+1]:
+                print ('Element {} is peak'.format(arr[i]))
+    
+arr = [1, 3, 20, 4, 1, 0]
+find_peak_element(arr)
+
+#case18: Find the Smallest Range. -- later
+Description: Given k sorted lists, find the smallest range that includes at least one number from each of the k lists.
+
+#case19: Count of Subarrays whose Product is Less Than K. --good
+Description: Given an array of positive integers and a positive integer k, find the number of contiguous subarrays where the product of all the elements in the subarray is less than k.
+def count_subarrays_with_product_less_than_k(arr, k):
+    if k <= 1:
+        return 0  # If k is less than or equal to 1, no subarray can have a product less than k.
+
+    count = 0
+    product = 1
+    left = 0
+    
+    # Sliding window approach
+    for right in range(len(arr)):
+        product *= arr[right]
+        
+        # Shrink the window if the product is >= k
+        while product >= k and left <= right:
+            product /= arr[left] #good, removing result of arr[left] from product before new element from right appended in window 
+            left += 1 #good, moving the window
+        
+        # The number of subarrays ending at 'right' is (right - left + 1)
+        count += (right - left + 1) #good
+    
+    return count
+
+# Example usage
+arr = [10, 5, 2, 6]
+k = 100
+result = count_subarrays_with_product_less_than_k(arr, k)
+print(result)  # Output: 8
+
+
+# Test case
+arr = [99, 10, 5, 2, 6, 100]
+k = 100
+print("Number of subarrays:", count_subarrays_with_product_less_than_k(arr, k))
+
+#case20: Trapping Rain Water. -- good 
+Description: Given an array of non-negative integers representing the heights of bars in a histogram, compute how much water can be trapped between the bars.
+def trap_rain_water(heights):
+    if not heights:
+        return 0
+
+    n = len(heights)
+    left_max = [0] * n  #good
+    right_max = [0] * n  #good
+
+    # Fill left_max
+    left_max[0] = heights[0]   #pick first element
+    for i in range(1, n):
+        left_max[i] = max(left_max[i - 1], heights[i]) #compare first element and second height 
+    
+    # Fill right_max
+    right_max[n - 1] = heights[n - 1]   #pick last element
+    for i in range(n - 2, -1, -1):  #good
+        right_max[i] = max(right_max[i + 1], heights[i]) #compare last element and second last height 
+    
+    # Calculate trapped water
+    trapped_water = 0
+    for i in range(n):
+        trapped_water += min(left_max[i], right_max[i]) - heights[i]
+    
+    return trapped_water
+
+heights = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]
+print("Amount of trapped water:", trap_rain_water(heights))  # Output: 6
+
+
+##Three-Pointer (or Three-Way Partitioning)
+
+#case1: 3Sum Problem.
+Description: Find all unique triplets in the array that sum up to zero.
+
+#case2: Sort an Array Containing 0s, 1s, and 2s (Dutch National Flag).
+Description: Sort the array with 0, 1, and 2 without using extra space.
+
+#case3: Find all Triplets with a Given Sum.
+Description: Given an array, find all triplets that add up to a target sum.
+
+#case4: Rearrange Array Alternately.
+Description: Rearrange a sorted array such that the max element comes first, then min, then second max, then second min, etc.
+
+#case5: Wiggle Sort.
+Description: Rearrange the array such that nums[0] < nums[1] > nums[2] < nums[3]...
+
+#case6: Partitioning Array for K Closest Elements.
+Description: Given an array, partition the array into three sections based on proximity to a target value.
+
+#case7: Max Area in Histogram.
+Description: Find the largest rectangle in a histogram with given heights.
+
+#case8: Partition Equal Subset Sum.
+Description: Find whether the array can be partitioned into two subsets of equal sum.
+
+#case9: K-way Merge Problem.
+Description: Merge k sorted lists into one sorted list.
+
+#case10: Find the Majority Element.
+Description: Given an array, find the element that appears more than n/2 times.
+
+#case11: Find the Duplicate Number.
+Description: Given an array containing n + 1 integers where each integer is between 1 and n, find the duplicate number.
+
+#case12: Minimum Number of Swaps Required.
+Description: Given an array, find the minimum number of swaps required to sort the array.
+
+#case13: Maximum Sum of Non-Adjacent Elements.
+Description: Find the maximum sum of non-adjacent elements from an array.
+
+#case14: Rearrange Positive and Negative Numbers.
+Description: Rearrange the array such that positive and negative numbers alternate.
+
+#case15: Maximum Product Subarray.
+Description: Find the maximum product of a subarray within a one-dimensional array.
+
+#case16: Longest Substring with At Most K Distinct Characters.
+Description: Find the longest substring containing at most K distinct characters.
+
+#case17: Median of Two Sorted Arrays.
+Description: Find the median of two sorted arrays of different sizes.
+
+#case18: Maximum Product of Three Numbers.
+Description: Given an integer array, find the maximum product of three numbers.
+
+#case19: Remove Duplicates from Sorted List.
+Description: Given a sorted linked list, delete all duplicates such that each element appears only once.
+
+#case20: Maximum Sum of Non-Adjacent Elements.
+Description: Find the maximum sum of non-adjacent elements from an array.
+
+Sliding Window Technique
+markdown
+Copy code
+#case1: Longest Substring Without Repeating Characters.
+Description: Find the length of the longest substring without repeating characters.
+
+#case2: Maximum Sum Subarray of Size K.
+Description: Find the maximum sum of a subarray with size K.
+
+#case3: Minimum Window Substring.
+Description: Find the smallest window in a string that contains all characters of another string.
+
+#case4: Sliding Window Maximum.
+Description: Find the maximum element in each window of size K.
+
+#case5: Longest Substring with K Distinct Characters.
+Description: Find the longest substring with exactly K distinct characters.
+
+#case6: Subarray with Given Sum (Positive Integers).
+Description: Find a subarray with a given sum in an array of positive integers.
+
+#case7: Count Occurrences of Anagrams.
+Description: Find how many substrings of a given string are anagrams of another string.
+
+#case8: Longest Subarray of 1's After Deleting One Element.
+Description: Find the length of the longest subarray with only 1's after deleting one element.
+
+#case9: Fruit into Baskets.
+Description: You can pick two types of fruits. Find the maximum number of fruits you can collect in a row.
+
+#case10: Longest Subarray with at Most Two Distinct Elements.
+Description: Find the longest subarray that contains at most two distinct characters.
+
+#case11: Longest Substring with K Distinct Characters.
+Description: Find the longest substring with exactly K distinct characters.
+
+#case12: Maximum Length of a Concatenated String with Unique Characters.
+Description: Given an array of strings, find the maximum length of a string that can be formed by concatenating elements of the array with unique characters.
+
+#case13: Maximum Number of Vowels in a Substring of Size K.
+Description: Find the maximum number of vowels in any substring of size K.
+
+#case14: Longest Subarray with Sum Divisible by K.
+Description: Find the longest subarray with a sum divisible by K.
+
+#case15: Find the Longest Repeating Character Replacement.
+Description: Find the length of the longest substring that can be obtained by replacing at most k characters.
+
+#case16: Sliding Window Median.
+Description: Find the median of each sliding window of size K.
+
+#case17: Maximum Number of Non-Overlapping Subarrays.
+Description: Find the maximum number of non-overlapping subarrays with sum equal to a given target.
+
+#case18: Minimum Size Subarray Sum.
+Description: Find the minimal length of a contiguous subarray for which the sum is at least target.
+
+#case19: Longest Substring with At Most K Distinct Characters.
+Description: Find the longest substring with at most K distinct characters.
+
+#case20: Find All Anagrams in a String.
+Description: Find all the start indices of p's anagrams in s.
+
+Dynamic Programming :-
+#case1: Longest Common Subsequence. -good
+Description: Find the length of the longest subsequence present in both strings.
+# Brute force function to find the length of the Longest Common Subsequence
+def lcs_brute_force(str1, str2):
+    longest_common_subsequence = ""
+
+    # Generate all possible subsequences of every length of str1
+    for r in range(1, len(str1) + 1):  # r is the length of the subsequence
+        for subseq in combinations(str1, r):
+            subseq_str = ''.join(subseq)
+            
+            # Check if the generated subsequence of str1 is a subsequence of str2
+            if is_subsequence(subseq_str, str2):
+                # Update the longest subsequence if the current one is longer
+                if len(subseq_str) > len(longest_common_subsequence):
+                    longest_common_subsequence = subseq_str
+    
+    # Return the length of the longest common subsequence
+    return len(longest_common_subsequence)
+
+# Example usage
+#mine LCs:- ['abhishek' if ele == 'firstname' else 'singh' for ele in my_list]
+#        :- ['abhishek' for ele in my_list if ele == 'firstname']
+str1 = "AGGTAB"
+str2 = "GXTXAYB"
+print("Length of LCS (brute force):", lcs_brute_force(str1, str2))  # Output should be 4, LCS: "GTAB"
+
+
+#case2: Knapsack Problem. --good
+Description: Given n items, each with a weight w[i] and a value v[i], and a knapsack with a capacity W, 
+find the maximum value that can be obtained by selecting a subset of items such that their total weight does not exceed W.
+from itertools import combinations
+
+def knapsack_bruteforce(weights, values, capacity):
+    n = len(weights)
+    max_value = 0
+
+    # Iterate through all possible combinations of items
+    for r in range(n + 1):  # r is the number of items in the combination
+        for combo in combinations(range(n), r):
+            total_weight = sum(weights[i] for i in combo)
+            total_value = sum(values[i] for i in combo)
+            
+            # Check if this combination is within the capacity
+            if total_weight <= capacity:
+                max_value = max(max_value, total_value)
+
+    return max_value
+
+# Example usage
+weights = [2, 3, 4, 5]
+values = [3, 4, 5, 6]
+capacity = 5
+max_value = knapsack_bruteforce(weights, values, capacity)
+print(f"Maximum value: {max_value}")  # Output: 7
+
+
+#case3: Coin Change. - bruteforce 
+Description: Given a set of coins, find the fewest number of coins to make a given amount.
+from itertools import product
+
+def min_coins_bruteforce(coins, amount):
+    # Generate all possible combinations of coins
+    max_coins = amount // min(coins) + 1  # Maximum possible number of coins needed
+    print('coins, max_coins', coins, max_coins)
+    
+    best_solution = float('inf')
+    
+    # Generate combinations for different numbers of coins
+    for num_coins in range(1, max_coins + 1):
+        for combination in product(coins, repeat=num_coins):
+            #mine: Read as Ex:-Using repeat=2 with product(coins, repeat=2) will generate all possible combinations 
+            #                  where each combination consists of 2 coins, and each coin can be repeated:
+            #mine:Yes, you can use the combinations object directly in a loop without converting it to a list, as it is an iterator 
+            #     Convert object:combination to a list if you need random access to the combinations or if the total number of combinations.
+            #mine: Once you convert combinations object to list (say my_list), the original combinations object is exhausted and you can't iterate over it again.    
+            if sum(combination) == amount:
+                best_solution = min(best_solution, len(combination))
+                # Break after finding the first valid combination with `num_coins` coins
+                break
+        if best_solution != float('inf'):
+            break
+    
+    return best_solution if best_solution != float('inf') else 'Not possible'
+
+# Example usage
+coins = [1, 2, 5]
+amount = 11
+result = min_coins_bruteforce(coins, amount)
+print('Minimum number of coins needed:', result)
+
+#case4: Longest Increasing Subsequence. (BF)
+Description: Find the length of the longest increasing subsequence in an array.
+def longest_increasing_subsequence_recursive(arr):
+    max_len = -float('inf')
+    final_list = []
+    for i in range(len(arr)-1):
+        j = i+1
+        my_list = [arr[i]]
+        for j in range(j, len(arr)):
+            if (arr[j] > my_list[-1]):
+                my_list.append(arr[j])
+                
+        if (len(my_list) >= max_len):
+            final_list = my_list[:]
+            max_len = len(final_list)
+    return final_list
+
+# Example:
+arr = [10, 9, 2, 5, 3, 7, 101, 18]
+print(longest_increasing_subsequence_recursive(arr, len(arr), -1, {}))  # Output: 4
+
+
+#case5: Palindrome Partitioning.
+Description: Given a string, partition it such that every substring is a palindrome. Return all possible palindrome partitioning of the string.
+#mine: I think, 
+1) generate all the combinations of each length . Filter the palindromes from them.
+2) Sort the palindrom in decreasing length
+3) the traverse from longest palindrom and keep replacing that part (if exists) with '' in string:s.
+4) This will give the min partiontion. Sort in increasing order and repeat step3 will give the max partitions
+def is_palindrome(s):
+    print ('inside is_palindrome, s', s)
+    input()
+    return s == s[::-1]
+
+def min_cut_recursive(s, start, end):
+    print ('s, start, end',s, start, end)
+    input()
+    if start >= end or is_palindrome(s[start:end+1]):
+        return 0
+    
+    min_cuts = float('inf')
+    for i in range(start, end):
+        if is_palindrome(s[start:i+1]):
+            cuts = 1 + min_cut_recursive(s, i+1, end)
+            min_cuts = min(min_cuts, cuts)
+    
+    return min_cuts
+
+# Example Usage
+s = "aab"
+start = 0
+end = len(s)-1
+print("Minimum cuts required:", min_cut_recursive(s, start, end))
+
+#case6: Edit Distance.
+Description: Find the minimum number of operations required to convert one string into another.
+def edit_distance_brute_force(str1, str2):
+    # Initialize variables to track the cost of insertion, deletion, and substitution
+    cost = 0
+
+    # Iterate over both strings
+    i, j = 0, 0
+    while i < len(str1) and j < len(str2):
+        if str1[i] == str2[j]:
+            # If characters match, move to the next character
+            i += 1
+            j += 1
+        else:
+            # Characters don't match, so we need to decide between inserting, deleting, or substituting
+            #  why 'len(str2) - j':-Assume, If we have processed a portion of str1 and have reached the end of it, but str2 still has characters remaining, 
+            #  then one possible option is to simply insert all the remaining characters from str2 into str1 to make them match.
+            insert_cost = len(str2) - j  # Cost if we insert all remaining chars of str2
+            delete_cost = len(str1) - i  # Cost if we delete
+            substitute_cost = 1  # Cost for substitution. 
+            # The substitution operation means replacing one character in str1 with a corresponding character in str2
+            
+            # We choose the minimum cost operation
+            min_cost = min(insert_cost, delete_cost, substitute_cost)
+            
+            # Update the cost
+            cost += min_cost
+            
+            # Move the index based on the operation performed
+            if min_cost == insert_cost:
+                j += 1  # Simulate insertion
+            elif min_cost == delete_cost:
+                i += 1  # Simulate deletion
+            else:
+                i += 1  # Simulate substitution
+                j += 1
+    
+    # Account for any remaining characters
+    if i < len(str1):
+        cost += len(str1) - i  # Delete remaining characters from str1
+    if j < len(str2):
+        cost += len(str2) - j  # Insert remaining characters into str1
+
+    return cost
+
+# Example usage:
+str1 = "kitten"
+str2 = "sitting"
+print(edit_distance_brute_force(str1, str2))  # Output will be 3
+
+#case7: House Robber Problem.
+Description: Maximize the sum of non-adjacent house values. --dint understand
+# Recursive function to solve the House Robber Problem
+def rob_recursive(nums, i):
+    # Base cases: No houses left to rob
+    if i < 0:
+        return 0
+    
+    # Option 1: Rob the current house and move to house i-2
+    rob_current = nums[i] + rob_recursive(nums, i - 2)
+    
+    # Option 2: Skip the current house and move to house i-1
+    skip_current = rob_recursive(nums, i - 1)
+    
+    # Return the maximum of robbing or skipping the current house
+    return max(rob_current, skip_current)
+
+# Example usage
+nums = [2, 7, 9, 3, 1]
+n = len(nums)
+
+print(rob_recursive(nums, n - 1))  # Output: 12
+
+#case8: Unique Paths in a Grid.
+Description: Find the number of unique paths from the top-left to the bottom-right of a grid.
+
+#case9: Maximum Sub
+
+#case10: Scramble String
