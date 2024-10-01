@@ -1,3 +1,17 @@
+#case21: Container With Most Water --good
+#case22: Subarray Product Less Than K
+#case23: Jump Game --greedy algo -- good --here
+#case24: Maximum Gap -- check BF, way2 ; way1=bucketsort didnt get
+#case25: Longest Mountain in Array
+#case26: Rotate Array -- You are given an array and an integer k. Rotate the array to the right by k steps. -- arr[:k] = reverse(arr, 0, k)
+ ; def reverse(arr, start, end): return arr[start:end][::-1]
+ #case28: Reverse Pairs - condition of reverse is: arr[i] > 2 * arr[j] for i < j  ---good
+#case29: Count Inversions in an Array -- mergesort-later
+#case30: Meeting Rooms II-You are given an array of meeting time intervals, where each interval is represented as a pair of integers [start, end]. 
+# Your task is to determine the minimum number of meeting rooms required to hold all meetings without any overlap.
+#case31: Merge Sorted Array without Extra Space
+#case32: Sliding Window Maximum -- Given an array nums and an integer k, return an array containing the maximum value of each sliding window of size k.
+
 
 ==============================================================================================================================
 Two-Pointer Technique

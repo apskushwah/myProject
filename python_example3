@@ -21,11 +21,24 @@
 #case19: Sort Colors (Dutch National Flag Problem)  -- low = mid = 0 ; high = len(my_list) - 1 ; if (my_list[mid] == 0): ; my_list[mid], my_list[low] = my_list[low], my_list[mid] ; low += 1 ;mid += 1
 #case20: Subarrays with K Different Integers -- understand: sliding window --good, do
 #case21: Container With Most Water --good
+#case22: Subarray Product Less Than K
+#case23: Jump Game --greedy algo -- good --here
+#case24: Maximum Gap -- check BF, way2 ; way1=bucketsort didnt get
+#case25: Longest Mountain in Array
+#case26: Rotate Array -- You are given an array and an integer k. Rotate the array to the right by k steps. -- arr[:k] = reverse(arr, 0, k)
+ ; def reverse(arr, start, end): return arr[start:end][::-1]
+ #case28: Reverse Pairs - condition of reverse is: arr[i] > 2 * arr[j] for i < j  ---good
+#case29: Count Inversions in an Array -- mergesort-later
+#case30: Meeting Rooms II-You are given an array of meeting time intervals, where each interval is represented as a pair of integers [start, end]. 
+# Your task is to determine the minimum number of meeting rooms required to hold all meetings without any overlap.
+#case31: Merge Sorted Array without Extra Space
+#case32: Sliding Window Maximum -- Given an array nums and an integer k, return an array containing the maximum value of each sliding window of size k.
 
-Remaining 20, Do BELOW:-start from these 20 the above 20
+
+Remaining 8, Do BELOW:-
 ...
 
-2. Strings 
+2. Strings - Day2
 #case41: Longest Palindromic Substring --remember:longestPalin is by 'expand around center' ; #odd length: ; #even length:
 #case42: Longest Common Subsequence(LCS) -- # Generate all possible subsequences of every length of str1 then match all those with str2; iter_str2 = iter(str2)
 #case43: Edit Distance (Levenshtein Distance) --IF/ELSE:insertion_cost/deletion_cost/substitution_cost
@@ -149,7 +162,7 @@ print(rotated_arr)
     
     return count
 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++from python_example4+++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++from python_example4 - Day3+++++++++++++++++++++++++++++++++++
 #case1: Find pair with target sum in a sorted array.
 #case2: Remove Duplicates from a Sorted Array.
 #case4: Container With Most Water. --if heights[start] < heights[end]:
@@ -274,13 +287,14 @@ print(f"Result: {result}")
 5. Print result
 
 # Sampleconstrutor:
-class Person:
+class Person:   #good, youdont have to receive args here. Receive directly at constructor with self
     def __init__(self, name, age):
         # Constructor to initialize name and age attributes
         self.name = name
         self.age = age
 
-    def display_info(self):
+    def display_info(self): #good, pass self in each function with class 
+                            #(Like class's constructor, along with any additional args from calling function).
         # Method to display person's information
         print(f"Name: {self.name}, Age: {self.age}")
 
@@ -296,7 +310,7 @@ arr = [12, 5, 787, 1, 23]
 n = 5
 k = 2
 arr_set = set(arr) #to make the elements unique if there are duplicates in list
-sorted_set = sorted(arr_set) #to make the sorted set to make it ordered. #good
+sorted_set = sorted(arr_set) #to make the set as the ordered list. #good
 print (sorted_set[k])
 
 #case2: Maximum sum of Subarray (Kadane’s Algorithm) --good
@@ -339,33 +353,25 @@ print(f'Subarray: {my_dict["comb"]}')
 
 #case3: Find the duplicate number in an array
 #way1
+from collections import Counter 
+
 my_list = [2,3,1,2,3]
-from collections import Counter
-cnt = Counter(my_list)
-flag = 0
-for x in my_list:
-    if cnt[x] > 1:
-        print (f'{x} is repeated')
-        flag = 1
+
+my_dict = Counter(my_list)
+for key in my_dict:
+    if my_dict[key] > 1:
+        print ('Duplicated value', my_dict[key])
         break
 
-
-print ('No Duplicates..') if flag == 0 else None
-
 #way2:
-arr = [2, 3, 1, 2, 3]
+my_list = [2,3,1,2,3]
 visited = set()
-duplicates = set()  # Use a set to avoid duplicate entries in the duplicates list
 
-for char in arr:
-    if char in visited:
-        duplicates.add(char)  # Add to duplicates set
-    else:
-        visited.add(char)  # Mark as visited
-
-# Convert the set back to a list if needed
-duplicates_list = list(duplicates)
-print(duplicates_list)
+for item in my_list:
+    if item in visited:
+        print ('Duplicate item', item)
+        break 
+    visited.add(item)
 
 
 #case4: Merge Intervals --good
@@ -381,7 +387,21 @@ def check_overlap(my_list):
             check_overlap(my_list)  #good, trigger from inside IF
             break   #good, to avoid index OOR due to FOR loop where len(my_list)-1) has come as per initial length
     return my_list
+'''
+Understanding Different Chains of Recursion
+When a recursive function is called, each call creates a new frame in the call stack, which keeps track of variables and execution context for that call. Here’s how the chains work in this case:
 
+First Call:
+
+Input: [[1, 3], [2, 4], [6, 8], [9, 10]]
+Action: Detects overlap and merges [[1, 3], [2, 4]] into [[1, 4], [6, 8], [9, 10]]
+Recursive Call: Calls check_overlap with [[1, 4], [6, 8], [9, 10]]
+Second Call:
+
+Input: [[1, 4], [6, 8], [9, 10]]
+Action: No overlaps found.
+Return: The updated list [[1, 4], [6, 8], [9, 10]] is returned back to the first call
+'''
 my_list = [[1, 3], [2, 4], [6, 8], [9, 10]]
 # Call the function and store the result
 non_overlap_list = check_overlap(my_list)
@@ -449,18 +469,16 @@ print(largest_rectangle_area_brute_force(heights))  # Output: 10
 
 #case8: Product of Array Except Self
 #Output: [180, 600, 360, 300, 900]
-def self_product(my_list): 
-    global prod
+def self_product(arr):
     final_list = []
-    for i in range(1, len(my_list)):
-        prod *= my_list[i]
-    for i in range(len(my_list)):
-        final_list.append(prod//my_list[i])      
+    prod = arr[0]
+    for i in range(1, len(arr)):
+        prod *= arr[i]
+    for i in range(len(arr)):
+        final_list.append(prod//arr[i])
     return final_list
 
-
 my_list = [10, 3, 5, 6, 2]
-prod = my_list[0]  #good, assign it globally since used in both the FORs above.
 final_list = self_product(my_list)
 print (final_list)
 
@@ -486,6 +504,8 @@ def trap_rain_water(heights):
     # Calculate trapped water
     trapped_water = 0
     for i in range(n):
+        # good: Second -1 is used as the stop value to indicate that the loop should terminate before reaching 0, 
+        # and it's commonly used to stop at the first element when iterating backwards (since the stop value in range is exclusive).
         trapped_water += min(left_max[i], right_max[i]) - heights[i]
     
     return trapped_water
@@ -501,7 +521,7 @@ def longest_consecutive(arr):
         start = arr[i]
         next = arr[i+1]
        
-        if not seq:
+        if not seq:  #good, add first element to update the last element(here, next)
             seq = [start]
      
         if (start+1 != next):
@@ -1116,7 +1136,7 @@ print(rotate(arr, k))  # Output: [5, 6, 7, 1, 2, 3, 4]
 #way2:
 def reverse(arr, start, end):
     # Reverse the elements from start to end (exclusive)
-    return arr[start:end][::-1]  # Slicing from start to end and then reversing it
+    return arr[start:end][::-1]  # Slicing from start to end and then reversing it 
     #good, take slice first and then reverse it. Finally return the SLICE itself
 
 def rotate(arr, k):
@@ -1127,7 +1147,7 @@ def rotate(arr, k):
     arr = reverse(arr, 0, n)  # Reverse the entire array
     
     # Step 2: Reverse the first k elements
-    # Receive as a slice -- good
+    # Receive as a slice (inplace reversal)-- good
     arr[:k] = reverse(arr, 0, k)  # Reverse the first k elements
 
     # Step 3: Reverse the remaining elements
@@ -1203,7 +1223,7 @@ def countInversions(arr):
 
 # Example usage:
 arr = [1, 3, 2, 3, 1]
-print(countInversions(arr))  # Output: 3
+print(countInversions(arr))  # Output: 4
 
 #way2 -- merge sort (O(nlogn)) -- later
 def mergeAndCount(arr, temp_arr, left, mid, right):
@@ -1282,8 +1302,12 @@ def minMeetingRooms(intervals):
     # Step 4: Iterate over the remaining meetings
     for i in range(1, len(intervals)):  #good, then start from 2nd meeting
         # If meeting2 (here intervals[i][0]) start time is greater than meeting1, then same roomcan be utilized for both the meetings. 
-        if intervals[i][0] >= heap[0]: #good, use 0 and not -1 becasue with -1, even if the current meeting starts after the last meeting in the heap ends, 
-        # it doesn't guarantee that the earlier meetings (those that end before the last one) have finished and freed up their rooms.
+        if intervals[i][0] >= heap[0]: 
+            # good: use heap[0] and not heap[-1] because we need a room that can be reutilized. 
+            # If we use heap[-1], it might reference the last inserted meeting, which might not 
+            # have finished by the time the current meeting's start time (intervals[i][0]) begins. 
+            # However, by using heap[0], we check the meeting that ends the earliest (the one 
+            # that started first). If that room is free, the current meeting can use it.
             heapq.heappop(heap) #good
         
         # Add the current meeting's end time to the heap
@@ -1315,8 +1339,7 @@ def minMeetingRoomsBruteForce(intervals):
 intervals = [[0, 30], [5, 10], [15, 20]]
 print(minMeetingRoomsBruteForce(intervals))  # Output: 2
 
-Do BELOW:-
-#case31: Merge Sorted Array without Extra Space
+#case31: Merge Sorted Array without Extra Space - O(n + m)
 Description: Merge two sorted arrays into a single sorted array.
 def merge_sorted_arrays(arr1, arr2):
     merged_array = []
@@ -1381,7 +1404,7 @@ def maxSlidingWindow(nums, k):
         while dq and nums[dq[-1]] < nums[i]:
             dq.pop()
 
-        # Add the current element's index to the deque
+        # Add the current element's INDEX to the deque
         dq.append(i)
 
         # If we've processed at least k elements, append the maximum to the results
@@ -1402,6 +1425,7 @@ def find_unsorted_subarray(nums):
     start, end = -1, -1  #good,initialize
 
     # Step 1: Find the first element which is out of order from left to right
+    # good, We take bounday elements thost are immediate left and right of the unordered window
     for i in range(1, n):
         if nums[i] < nums[i - 1]:
             start = i - 1
@@ -1416,7 +1440,6 @@ def find_unsorted_subarray(nums):
         if nums[i] > nums[i + 1]:
             end = i + 1
             break  #good, comeout as soon as got the first out of order element
-    #mine,take the boundary till when things are expected like (i-1), (i+1)
 
     # Step 3: Find the min and max of the unsorted subarray
     min_val = min(nums[start:end+1])
@@ -1432,6 +1455,7 @@ def find_unsorted_subarray(nums):
 
     # Return the length of the unsorted subarray
     return end - start + 1
+    # return arr[start+1:end] #since we want just the unsorted array so 'start+1'
 
 # Example usage:
 nums = [1, 3, 5, 2, 6, 4, 7, 8]
@@ -1439,7 +1463,7 @@ result = find_unsorted_subarray(nums)
 print(result)  # Expected output: 5 (subarray [3, 5, 2, 6, 4] needs to be sorted)
 
 
-#case34: Minimum Operations to Reduce X to Zero
+#case34: Minimum Operations to Reduce X to Zero -- sliding window
 def minOperations(nums, x):
     total_sum = sum(nums)
     target = total_sum - x  #good, first find the target sum that we need 
@@ -1460,6 +1484,19 @@ def minOperations(nums, x):
         if current_sum == target:
             max_length = max(max_length, right - left + 1)
 
+'''
+OR
+        while (cumulative_sum >= target_sum):
+            #Take length of valid subarray
+            length = right - left + 1
+            if (length > max_len):
+                max_len = length
+                subarray = arr[left:i+1]
+        
+            # Now contract the subarray till cumulative_sum == target_sum:
+            cumulative_sum -= arr[left]
+            left += 1
+'''
     if max_length == 0:
         return -1  # No valid subarray found
 
@@ -1500,8 +1537,111 @@ def maxProfitBruteForce(prices, start=0):  #good, keep placeholder
 arr = [1, 2, 3, 0, 2]
 result = maxProfitBruteForce(arr)
 print(result)  # Expected output: 3
+'''
+#good:
+Let’s clarify the execution flow of the maxProfitBruteForce function, focusing specifically on how the inner loop iterates and how the next_start affects the outer loop.
 
+Understanding the Loops
+The function contains two nested loops:
 
+Outer Loop (for i): This loop iterates through the days, considering each day as a potential buying day.
+Inner Loop (for j): This loop iterates through the days after i, considering each as a potential selling day.
+Detailed Execution Flow
+Initial Setup
+Input: prices = [1, 2, 3, 0, 2]
+Initial call: maxProfitBruteForce(prices, 0)
+start = 0
+n = 5 (length of prices)
+Outer Loop - First Iteration (i = 0)
+i = 0 (Buy at price 1)
+The inner loop starts checking potential selling days starting from i + 1.
+Inner Loop Execution
+For j = 1 (Sell at price 2):
+
+Profit = 2 - 1 = 1
+
+Next Start: next_start = j + 2 = 1 + 2 = 3
+
+The function now makes a recursive call:
+maxProfitBruteForce(prices, 3)
+
+For j = 2 (Sell at price 3):
+After finishing the inner loop with j = 1, the loop continues to j = 2.
+Profit = 3 - 1 = 2
+
+Next Start: next_start = j + 2 = 2 + 2 = 4
+
+The function makes another recursive call:
+maxProfitBruteForce(prices, 4)
+For j = 3 (Sell at price 0):
+
+Now, the loop continues to j = 3.
+Profit = 0 - 1 = -1
+
+Next Start: next_start = j + 2 = 3 + 2 = 5
+
+The function makes another recursive call:
+maxProfitBruteForce(prices, 5)
+
+For j = 4 (Sell at price 2):
+Finally, the loop checks j = 4.
+Profit = 2 - 1 = 1
+
+Next Start: next_start = j + 2 = 4 + 2 = 6
+
+The function makes another recursive call:
+maxProfitBruteForce(prices, 6)
+
+Summary of Control Flow
+The outer loop (i) only starts from 0 to n-1, where each i is treated as a potential buy day.
+The inner loop (j) iterates through the days after i, starting from i + 1.
+The recursive calls are made with the calculated next_start, which determines the next day the function will consider for buying again after selling on day j.
+
+Clarification on "j=2"
+To address your specific question:
+After the inner loop processes j = 1 and makes a recursive call to maxProfitBruteForce(arr, 3), it does not stop the outer loop or affect the iteration of j.
+The inner loop is STILL IN PROGRESS, so it continues to evaluate j = 2 after j = 1 completes.
+
+Conclusion:
+The inner loop will always check all possible selling days after each buying day.
+Each recursive call effectively explores different paths INDEPENDENTLY, leading to a complete search of all buy-sell combinations.
+This allows the algorithm to calculate the maximum profit, respecting the cooldown period, across the entire array of prices.
+
+#mine: Each recursive call represents a new branch in the computation tree. Each branch explores different combinations of buy and sell days and calculates profits accordingly.
+The function keeps track of the maximum profit obtained from each of these branches using the max function.
+Example Breakdown
+Let’s break down an example with a simplified version of the prices to illustrate the branches and profits:
+
+Prices Example: [1, 2, 3]
+Initial Call: maxProfitBruteForce(prices, 0) (Start at index 0)
+-->Outer Loop (i = 0, Buy at price 1):
+Inner Loop (j = 1, Sell at price 2):
+Profit = 2 - 1 = 1
+Next Start: next_start = 3
+Call: maxProfitBruteForce(prices, 3)
+Base case reached: Return 0
+Total profit from this branch: 1 + 0 = 1
+
+Inner Loop (j = 2, Sell at price 3):
+Profit = 3 - 1 = 2
+Next Start: next_start = 4
+Call: maxProfitBruteForce(prices, 4)
+Base case reached: Return 0
+Total profit from this branch: 2 + 0 = 2
+
+-->Return to Outer Loop for i = 1 (Buy at price 2):
+Inner Loop (j = 2, Sell at price 3):
+Profit = 3 - 2 = 1
+Next Start: next_start = 4
+Call: maxProfitBruteForce(prices, 4)
+Base case reached: Return 0
+Total profit from this branch: 1 + 0 = 1
+No more valid buy days (when i = 2), as there's no future day to sell after that.
+
+Conclusion
+Every Recursive Branch: Each branch created by combinations of (i, j) in the nested loops computes its profit. The function 
+aggregates the maximum profit calculated from all recursive paths until all possibilities are exhausted.
+'''
 #case37: Maximum Swap - Given a non-negative integer, you can swap two digits at most once to get the maximum possible value of that integer. --good-do
 #way1:mine:
 def maximumSwap(num):
@@ -1560,7 +1700,8 @@ result = maximumSwap(num)
 print(result)  # Output: 7236
 
 #case38: Maximum Length of Repeated Subarray
-#You are given two integer arrays nums1 and nums2. Your task is to find the maximum length of a subarray that appears in both arrays.
+#You are given two integer arrays nums1 and nums2. Your task is to find the maximum length of a 
+#subarray that appears in both arrays.
 def findLengthBruteForce(arr1, arr2):
     n, m = len(arr1), len(arr2)
     max_len = 0
@@ -1578,6 +1719,28 @@ def findLengthBruteForce(arr1, arr2):
 
     return max_len
 
+# Example usage
+nums1 = [1, 2, 3, 2, 1]
+nums2 = [3, 2, 1, 4, 7]
+result = findLengthBruteForce(nums1, nums2)
+print(result)  # Output: 3
+
+#mine: way:
+def findLengthBruteForce(arr1, arr2):
+    n = len(arr1)
+    m = len(arr2)
+    max_len = 0
+    for i in range(n):
+        length = 0        
+        for j in range(m):
+            if (i < n and j < m and arr1[i] == arr2[j]):
+                while (i < n and j < m and arr1[i] == arr2[j]):
+                    i += 1
+                    j += 1
+                    length += 1
+                max_len = max(max_len, length)
+    return max_len
+    
 # Example usage
 nums1 = [1, 2, 3, 2, 1]
 nums2 = [3, 2, 1, 4, 7]
@@ -1622,7 +1785,7 @@ def findMin(nums):
         
         # If the middle element is greater than the rightmost element,
         # it means the smallest element must be on the right side(since the array is sorted and rotated) - good
-        if nums[mid] > nums[right]:
+        if nums[mid] > nums[right]: #means, right half is sorted and so the smallest will be at right half.
             left = mid + 1
         else:
             # Otherwise, the smallest element is on the left side (including mid)
@@ -1698,6 +1861,7 @@ def is_subsequence(sub_seq, str2):
     iter_str2 = iter(str2)  # iter will help in maintaining the order :vgood
     # iter_str2 is an iterator object created from the string str2. 
     # It doesn’t return the characters of the string immediately but provides a way to access each character sequentially.
+    # mine:In Python, iterators(here:iter_str2) do not support indexing directly because they are designed for sequential access, not random access like lists or arrays
     return all(char in iter_str2 for char in sub_seq) #good, use all() . 'all/any' expects the list of booleans, so no IF/ELSE here
 
 # Brute force function to find the length of the Longest Common Subsequence

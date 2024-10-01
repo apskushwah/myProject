@@ -1,5 +1,19 @@
-my_str = 'the sky is blue'
-arr = my_str.split()
-arr.reverse()
-mystr = ''.join(arr)
-print (mystr)
+def longest_consecutive(arr):
+    my_list = []
+    final_list = []
+    n = len(arr)
+    for i in range(n-1):
+        final_list = [arr[i]]
+        if (arr[i] + 1 == arr[i+1]):
+            final_list.append(arr[i])
+        elif (arr[i] + 1 != arr[i+1]):
+            final_list.append(arr[i])
+            my_list.append(final_list)
+            final_list = []
+    my_list.append(final_list)
+
+    return my_list
+
+arr = [1, 2, 3, 8, 5, 6, 7]
+final_seq = longest_consecutive(arr)
+print (final_seq)
