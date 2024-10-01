@@ -564,6 +564,7 @@ def search_rotated_sorted_array(arr, key):
         
         # If the left half is sorted
         if arr[low] <= arr[mid]: #Ex:[4, 5, 6, 7, 0, 1, 2]
+        #good: this condition you take whether array is sorted from 'low to mid' or 'mid to high'. Both edges included.
             if arr[low] <= key < arr[mid]:  # Key lies in the left half  
                 high = mid - 1
             else:  # Key lies in the right half #good:dont use elif,to avaoid infinite run
@@ -596,7 +597,7 @@ def find_triplet(arr, target_sum):
         left = i + 1
         right = n - 1       
         while left < right:  # Step 3: Use two pointers to find the other two elements. Use '<' to avoid duplicate element
-            current_sum = arr[i] + arr[left] + arr[right] #move left/right but keep left fixed for one triplet
+            current_sum = arr[i] + arr[left] + arr[right] #move left/right but keep arr[i] fixed for one triplet
             
             if current_sum == target_sum:  # Step 4: Check if the sum matches the target sum
                 return arr[i], arr[left], arr[right] #use return to avoid infinite loop
@@ -672,7 +673,8 @@ def smallest_subarray_with_sum(arr, K):
             if current_sum == K and (end - start + 1) < min_length: #good, IF under WHILE to get the min_length
                 min_length = end - start + 1 #good
                 min_subarray = arr[start:end + 1]   #for 2nd subarray, counting from 'start' since it already increased(L347) during 1st subarray
-                
+
+            # Now contract from left    
             current_sum -= arr[start]
             start += 1
     
@@ -833,6 +835,8 @@ while mid<=high:
         low += 1
         mid += 1
     elif (my_list[mid] == 1):
+        #good, Using elif instead of separate if statements enhances both performance and clarity, 
+        # ensuring that only one branch is executed per iteration and avoiding redundant checks. To get correct output.
         mid += 1
     else:    #good: always use ELSE as last condition not ELIF to avoid infinite loop    
         my_list[high], my_list[mid] =  my_list[mid], my_list[high]
@@ -841,7 +845,7 @@ while mid<=high:
 print (my_list)
 
 #4:32
-#case20: Subarrays with K Different Integers --here 
+#case20: Subarrays with K Different Integers  
 my_list = [1, 2, 1, 2, 3]
 k = 3
 final_array = []
@@ -864,33 +868,31 @@ for i in range(0, len(my_list)):
                 break
 
 #Way2:GFG: understand: sliding window --good, do
+from collections import defaultdict
+
 def find_subarray_with_k_different_integers(arr, k):
     left = 0
-    right = 0
-    n = len(arr)
-    my_dict = {}  # Dictionary to count occurrences of each integer
+    n = len(arr) 
+    
+    my_dict = defaultdict(int)  # Dictionary to count occurrences of each integer
     result = []
     
-    while right < n:
+    for right in range(n):
         # Add the current element to the dictionary
-        if arr[right] in my_dict:
-            my_dict[arr[right]] += 1
-        else:
-            my_dict[arr[right]] = 1
+        my_dict[arr[right]] += 1
+        
         
         # If we have exactly k different integers, record the subarray
-        while len(my_dict) == k:
-            result.append(arr[left:right + 1])
-            
+        while len(my_dict) >= k:
+            if len(my_dict) == k:
+                result.append(arr[left:right + 1])
+                            
             # Move left pointer to find other subarrays
             my_dict[arr[left]] -= 1
             if my_dict[arr[left]] == 0:
                 del my_dict[arr[left]]
             left += 1
         
-        # Move right pointer
-        right += 1  #in SLIDING window, if you use WHILE in outer loop then dont forget to increment 'right'. If you use FOR, then no need to increment
-
     return result
 
 # Example usage
