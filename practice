@@ -1,34 +1,63 @@
-from collections import defaultdict
+def deletion_cost(str1, str2):
+    cost = i = j = 0
+    while i < len(str1) and j < len(str2):
+        if str1[i] == str2[j]:
+            # If characters match, move both pointers
+            i += 1
+            j += 1
+        else:
+            i += 1
+            cost += 1  # Increment cost for deletion
+    cost += (len(str1) - i)  # Remaining characters in str1 are deleted
+    return cost
 
-def find_subarray_with_k_different_integers(arr, k):
-    left = 0
-    n = len(arr)
-   
-    
-    my_dict = defaultdict(int)  # Dictionary to count occurrences of each integer
-    result = []
-    
-    for right in range(n):
-        # Add the current element to the dictionary
-        my_dict[arr[right]] += 1
-        
-        
-        # If we have exactly k different integers, record the subarray
-        while len(my_dict) >= k:
-            if len(my_dict) == k:
-                result.append(arr[left:right + 1])
-                            
-            # Move left pointer to find other subarrays
-            my_dict[arr[left]] -= 1
-            if my_dict[arr[left]] == 0:
-                del my_dict[arr[left]]
-            left += 1
-        
-    return result
+def substitution_cost(str1, str2):
+    cost = i = j = 0
+    while i < len(str1) and j < len(str2):
+        if str1[i] == str2[j]:
+            # If characters match, move both pointers
+            i += 1
+            j += 1
+        else:
+            i += 1
+            j += 1
+            cost += 1  # Increment cost for substitution
+    cost += (len(str1) - i)  # Remaining characters in str1 are substitutions
+    cost += (len(str2) - j)  # Remaining characters in str2 are substitutions
+    return cost
 
-# Example usage
-arr = [1, 2, 1, 2, 3,4]
-k = 3
-subarrays = find_subarray_with_k_different_integers(arr, k)
-print(subarrays)  # Output should be all subarrays with exactly 3 different integers
-#good, to pick the shortest length of list from list of lists, min(subarrays, key=len)
+def insertion_cost(str1, str2):
+    cost = i = j = 0
+    while i < len(str1) and j < len(str2):
+        if str1[i] == str2[j]:
+            # If characters match, move both pointers
+            i += 1
+            j += 1
+        else:
+            j += 1
+            cost += 1  # Increment cost for insertion
+    cost += (len(str2) - j)  # Remaining characters in str2 are inserted
+    return cost
+
+def edit_distance_brute_force(str1, str2):   
+    if len(str2) > len(str1):
+        str1, str2 = str2, str1
+
+    deletion_cost_result = deletion_cost(str1, str2)
+    insertion_cost_result = insertion_cost(str1, str2)
+    substitution_cost_result = substitution_cost(str1, str2)
+
+    # Debugging output
+    print('Deletion cost:', deletion_cost_result)
+    print('Insertion cost:', insertion_cost_result)
+    print('Substitution cost:', substitution_cost_result)
+
+    # Take the minimum of the costs
+    cost = min(deletion_cost_result, insertion_cost_result, substitution_cost_result)
+
+    return cost
+
+# Example usage:
+str1 = "singhabhisheksingh"
+str2 = "abhishek"
+print(edit_distance_brute_force(str1, str2))  # Output: the minimum edit distance

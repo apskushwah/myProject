@@ -11,8 +11,17 @@
 # Your task is to determine the minimum number of meeting rooms required to hold all meetings without any overlap.
 #case31: Merge Sorted Array without Extra Space
 #case32: Sliding Window Maximum -- Given an array nums and an integer k, return an array containing the maximum value of each sliding window of size k.
-
-
+#case33: Shortest Unsorted Continuous Subarray --good -- take boundary and then expand  boundary
+#case34: Minimum Operations to Reduce X to Zero -- sliding window --> target = total_sum - x ; return len(nums) - max_length
+#case35: First Missing Positive 
+#case36: Best Time to Buy and Sell Stock with Cooldown -- if start >= n: return 0 #basecase ; max_profit = max(max_profit, profit + maxProfitBruteForce(prices, next_start))
+#case37: Maximum Swap - Given a non-negative integer, you can swap two digits at most once to get the maximum possible value of that integer. --good-do
+#case38: Maximum Length of Repeated Subarray
+#You are given two integer arrays nums1 and nums2. Your task is to find the maximum length of a 
+#subarray that appears in both arrays. -->while (i < n and j < m and arr1[i] == arr2[j]): ; i += 1 ; j += 1 ; length += 1
+#case39: Find Peak Element -># First check for the peak at the start and end of the array. 
+#If extremes are not peak, then peak must be in the middle. so start from 1 till n-1 #good 
+#case40: Find Minimum in Rotated Sorted Array -
 ==============================================================================================================================
 Two-Pointer Technique
 #case1: Find pair with target sum in a sorted array.

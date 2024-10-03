@@ -33,10 +33,17 @@
 # Your task is to determine the minimum number of meeting rooms required to hold all meetings without any overlap.
 #case31: Merge Sorted Array without Extra Space
 #case32: Sliding Window Maximum -- Given an array nums and an integer k, return an array containing the maximum value of each sliding window of size k.
-
-
-Remaining 8, Do BELOW:-
-...
+#case33: Shortest Unsorted Continuous Subarray --good -- take boundary and then expand  boundary
+#case34: Minimum Operations to Reduce X to Zero -- sliding window --> target = total_sum - x ; return len(nums) - max_length
+#case35: First Missing Positive 
+#case36: Best Time to Buy and Sell Stock with Cooldown -- if start >= n: return 0 #basecase ; max_profit = max(max_profit, profit + maxProfitBruteForce(prices, next_start))
+#case37: Maximum Swap - Given a non-negative integer, you can swap two digits at most once to get the maximum possible value of that integer. --good-do
+#case38: Maximum Length of Repeated Subarray
+#You are given two integer arrays nums1 and nums2. Your task is to find the maximum length of a 
+#subarray that appears in both arrays. -->while (i < n and j < m and arr1[i] == arr2[j]): ; i += 1 ; j += 1 ; length += 1
+#case39: Find Peak Element -># First check for the peak at the start and end of the array. 
+#If extremes are not peak, then peak must be in the middle. so start from 1 till n-1 #good 
+#case40: Find Minimum in Rotated Sorted Array -> while left < right: ; mid = (left + right) // 2
 
 2. Strings - Day2
 #case41: Longest Palindromic Substring --remember:longestPalin is by 'expand around center' ; #odd length: ; #even length:
@@ -63,7 +70,7 @@ Or if any(key not in t_dict for key in s_dict):  #this will not consider the cou
 #case64: Longest Palindrome that can be built
 #case65: Permutation in String --good
 #case67: Minimum Number of Steps to Make Two Strings Anagram
-#case68: Reorder Data in Log Files
+#case68: Reorder Data in Log Files --later
 #case69: good - Find the First Unique Character in a String
 #case70: Add Bold Tag in String -- Python's Counter and dict (since Python 3.7) already maintain the order of elements, so you can just use Counter directly.(OrderedDict not required)
 #case74: Smallest Substring with At Least K Repeating Characters.--good - queue = deque([(beginWord, 1)]) ; for char in 'abcdefghijklmnopqrstuvwxyz':
@@ -1517,7 +1524,7 @@ print(result)  # Output: 2
 def maxProfitBruteForce(prices, start=0):  #good, keep placeholder
     n = len(prices)
     
-    if start >= n:
+    if start >= n: #basecase
         return 0  # No more days left to trade
 
     max_profit = 0  # Keep track of the maximum profit
@@ -1873,7 +1880,7 @@ def lcs_brute_force(str1, str2):
     # Generate all possible subsequences of every length of str1
     for r in range(1, len(str1) + 1):  # r is the length of the subsequence
         for subseq in combinations(str1, r):
-            subseq_str = ''.join(subseq)
+            subseq_str = ''.join(subseq) #combinations will generate tuples of chars. Need to join chars to get a
             
             # Check if the generated subsequence of str1 is a subsequence of str2
             if is_subsequence(subseq_str, str2):
@@ -1920,6 +1927,71 @@ print("Longest Common Subsequence:", ''.join(final_string))
 
 #case43: Edit Distance (Levenshtein Distance) --good - BF - recursion
 Description: Find the minimum number of operations required to convert one string into another
+#way: mine:
+def deletion_cost(str1, str2):
+    deletion_cost = i = j = 0
+    while i < len(str1) and j < len(str2):
+        if str1[i] == str2[j]:
+            # If characters match, move both pointers
+            i += 1
+            j += 1
+        else:
+            i += 1
+            deletion_cost += 1
+    if i < len(str1):
+        deletion_cost += (len(str1) - i)
+    return deletion_cost
+
+def substitution_cost(str1, str2):
+    substitution_cost = i = j = 0
+    while i < len(str1) and j < len(str2):
+        if str1[i] == str2[j]:
+            # If characters match, move both pointers
+            i += 1
+            j += 1
+        else:
+            i += 1
+            j += 1
+            substitution_cost += 1
+    if i < len(str1):
+        substitution_cost += (len(str1) - i)
+    if j < len(str2):
+        substitution_cost += (len(str2) - j)
+    return substitution_cost
+
+def insertion_cost(str1, str2):
+    insertion_cost = i = j = 0
+    while i < len(str1) and j < len(str2):
+        if str1[i] == str2[j]:
+            # If characters match, move both pointers
+            i += 1
+            j += 1
+        else:
+            j += 1
+            insertion_cost += 1
+    if j < len(str2):
+        insertion_cost += (len(str2) - j)
+    return insertion_cost
+
+def edit_distance_brute_force(str1, str2):   
+    if (len(str2) > len(str1)):
+        str1, str2 = str2, str1
+
+    deletion_cost_result = deletion_cost(str1, str2)
+    insertion_cost_result = insertion_cost(str1, str2)
+    substitution_cost_result = substitution_cost(str1, str2)
+
+    # Traverse through both strings
+    print ('deletion_cost_result, insertion_cost_result, substitution_cost_result',deletion_cost_result, insertion_cost_result, substitution_cost_result)
+    cost = min(deletion_cost_result, insertion_cost_result, substitution_cost_result)
+
+    return cost
+
+# Example usage:
+str1 = "singhabhisheksingh"
+str2 = "abhishek"
+print(edit_distance_brute_force(str1, str2))  # Output: 5
+
 #way1: BF
 def edit_distance_brute_force(str1, str2):
     # Initialize variables to track the cost of insertion, deletion, and substitution
@@ -1994,6 +2066,7 @@ def min_window_substring(s, t):
             # STOP as soon as formed != required. Next window will get counted from incremented LEFT 
             length = right + 1 - left
             if (length < min_length):
+                #This will avoid storing all the substrings that can lead to increased memory usage, especially for larger strings
                 min_length = length
                 min_window = s[left:right+1]
 
@@ -2046,8 +2119,8 @@ s = "GEEKSFORGEEKS"
 print(length_of_longest_substring(s))  # Output will be 7 for substring "EKSFORG" or "KSFORGE"
 
 
-#case47: Longest Repeating Subsequence(LRS) --good-again
-# The key difference from the Longest Common Subsequence (LCS) is that in LRS, we look for repeating subsequences within the same string.
+#case47: Longest Repeating Subsequence(LRS) --good
+# The key difference from the Longest Common Subsequence (LCS [hint:-iter]) is that in LRS, we look for repeating subsequences within the same string.
 # In the Longest Repeating Subsequence (LRS) problem, we want to find a subsequence that repeats non-overlapping.
 from itertools import combinations
 
@@ -2112,8 +2185,10 @@ else:
 Given a string s, partition s such that every substring of the partition is a palindrome.
 Return all possible palindrome partitioning of s.
 
-#mine: BF:- get all the palindrom combinations then arrange in ascending order and traverse. Keep replacing part of s as and when matched.
-
+#mine: BF:- get all the palindrom combinations then arrange in ascending order and traverse. 
+#           Keep replacing part of s as and when matched.
+# later: Above wont work when we take  out the palin from mid of string,
+# then firstpart and second part will join and can make one palin instead they shud be counted as 2. So unders below approach.
 from itertools import combinations
 
 # Function to check if a string is a palindrome
@@ -2316,7 +2391,7 @@ status = False
 for i in range (len(haystack)-len(needle)+1):
     #mine:good: Without the +1, the loop would stop before reaching the last valid starting index where the needle can fit.
     #     This happen because we are taking whole value(here 1..2 i.e 2) of len(needle), but taking len(haystack) from 0,len(haystack)-1 i.e 4. So add +1
-    if needle == haystack[i:i+len(needle)]:
+    if needle == haystack[i:i+len(needle)]:   #good i+len(needle), when the len of needle is not  known
         status = True
         index = i
         status = True
@@ -2419,7 +2494,7 @@ print(valid_palindrome(s))  # Output: True
 
 #case63: Remove Invalid Parentheses --good - breadth first search
 # The output of this problem generally involves generating all valid combinations of the string by 
-# removing the minimum number of invalid parentheses, not just one possible valid string.
+# removing the MINIMUM number of invalid parentheses, not just one possible valid string.
 from collections import deque
 
 def is_valid(s: str) -> bool:
@@ -2470,8 +2545,9 @@ def remove_invalid_parentheses(s: str):
         
         # Generate all possible states by removing one parenthesis at each position
         #mine: here we are creating level with nodes where 1 para is removed. (all combinations)
-        # Then in next itertaion, pich first element of level one and again remove one more paranthese (all combinations). Do the same for all other nodes of level1
-        # As and when you get valid combination, append is  final_list. This will be the answer.
+        # Then in next itertaion, pich first element of level one and again remove one more paranthese (all combinations). 
+        # Do the same for all other nodes of LEVEL1. On LEVEL1, one paranthesis will be removed. On LEVEL2, two paranthesis will be removed and so on.
+        # As and when you get valid combination, append is  result and stop removing further paranthesis for the current_str.
 
         for i in range(len(current_str)):
             if current_str[i] not in ('(', ')'):
@@ -2498,20 +2574,22 @@ s2 = "eidbaooo"
 my_dict = Counter(s1)
 
 for i in range(len(s2)-len(s1)+1):
-    window = s2[i:i+len(s1)]
+    window = s2[i:i+len(s1)] #good
     window_count = Counter(window)
-    if (my_dict == window_count):
+    if (my_dict == window_count):  #good, direct matching
         print ('yes')
         
 
 #case66: good- Find All Anagrams in a String-(find all the anagrams of a string s1 in another string s2) - GFG sliding windows- understand
+# Find all starting indices in s2 where the anagram (permutation) of s1 appears. The output should be a list of starting indices of these anagrams in s2.
+#mine:query. I think same as above program.
 from collections import Counter
 
 def find_anagrams(s1:str , s2:str):
     window = s2[:len(s1)]
     window_count = Counter(window)
     s1_count = Counter(s1)
-    for i in range(0, len(s2) - len(s1) + 1):  #good,to avoid index OOR
+    for i in range(0, len(s2) - len(s1) + 1):  #good,to avoid index OOR. Also +1 since len(s2) doesnt include last char unlike len(s1). 
         print (s1_count.keys(), window_count.keys())
         input()
         if (s1_count == window_count):  #good, direct dictionary  matching
@@ -2583,7 +2661,8 @@ print(first_unique_char(s))  # Output: 'First unique char: v'
 #case70: Add Bold Tag in String
 def add_bold_html(text, word):
     #return text.replace(word, f'<b>{word}</b>')  #OR  
-    return text.replace(word, "<b>{}</b>".format(word))
+    text = text.replace(word, "<b>{}</b>".format(word))
+    return text
 
 s = 'loveleetcode'
 word_to_bold = 'love'
@@ -2662,8 +2741,9 @@ def wordLadderLength(beginWord, endWord, wordList):
     # For example, set("hit") would create {'h', 'i', 't'} (each letter is treated as an individual element).
     
     while queue:
-        current_word, length = queue.popleft()
-        
+        current_word, length = queue.popleft()  #good, tuple item when popped goes into current_word, length separately
+        # In Python, you can use tuple unpacking to assign multiple variables to the corresponding elements of a tuple
+
         if current_word == endWord:
             return length
         
@@ -2684,7 +2764,34 @@ result = wordLadderLength(beginWord, endWord, wordList)
 print(result)  # Output: 5
 
 #case76: Scramble String 
-#way - BF:
+Anagrams:
+Anagrams must have the same characters with the same frequency. An anagram is a specific type of scrambled string.
+Hence, s1 and s2 must be of equal length and contain the same characters for one to be considered an anagram of the other.
+
+Scrambled Strings:
+If we adopt the strict definition, the lengths must match since scrambling implies that all characters are used and rearranged.
+If we adopt the looser definition, you can remove or add characters, but this diverges from the classic concept of scrambling.
+# scrambled strings are anagrams since they may not retain the character set from the original string.
+#way1: Time Complexity: O(n) -->When you create a Counter object from a list or string, it iterates through each element to count the occurrences.
+#      This operation involves a single pass through the data, making it linear in terms of time complexity.
+from collections import Counter
+
+# Example usage
+s1 = "great"
+s2 = "rgeat"
+
+# Create character counts for both strings
+s1_dict = Counter(s1)
+s2_dict = Counter(s2)
+
+# Check if the character counts are equal
+if s1_dict != s2_dict:
+    print('Not Scrambled')  # They have different character counts
+else:
+    print('Scrambled')  # They have the same character counts
+
+
+#way2 - BF: Time Complexity: O(n!) -->The number of permutations of n elements is n! (n factorial).
 from itertools import permutations
 
 def is_scramble(s1, s2):
