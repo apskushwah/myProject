@@ -1,3 +1,37 @@
+#mine: dict constructor expects a sequence of key-value pairs (tuples of LENGTH 2) or a mapping.
+dict() function expects an ITERATBLE of pairs (tuples)
+Ex:If you have list of tuple with 2 ele and want to convert to dict:
+tuples_list = [('a', 1), ('b', 2), ('c', 3)]
+my_dict = dict(tuples_list)
+print (my_dict)
+
+OR, (similar totuple of 3)
+my_dict = {}
+for key, value in tuples_list:
+    my_dict[key] = value
+print(my_dict)
+
+Ex:If you have list of tuple with 3 ele and want to convert to dict:
+tuples_list = [('a', 1, 1), ('b', 2, 2), ('c', 3, 4)]
+my_dict = {}  # Initialize an empty dictionary
+
+for tup in tuples_list:
+    my_dict[tup] = ''  # Use the tuple as a key and assign an empty string as the value
+print(my_dict)
+#-------------------------------------------------------------------------------------------------------
+#good:Set Comprehension: {x for x in iterable if condition}
+#List Comprehension: [x for x in iterable if condition]
+                   : [x if condition else y for x in iterable] Ex:replaced = [x if x >= 0 else 0 for x in numbers]
+    #mine: whatever the loop-variable is there will be become the result when IF contion is true else the value of ELSE will be the result.  
+
+#Dictionary Comprehension: {item: value for item in iterable if condition}
+                         :  result = {x: 'Even' if x % 2 == 0 else 'Odd' for x in iterable}
+            Ex: arr = [1, 2, 3, 4, 5]
+                my_dict = {item:'even' for item in arr if item == 2}
+                my_dict = {item:'even' if item == 2 else 'odd' for item in arr }
+    #mine: whatever the loop-variable is there will be become  the key and whatever we calculate in condition will become the value  
+#------------------------------------------------------------------------------------------------------
+
 #Hints:-
 #case1: Find the Kth largest element in an array -- sorted_set = sorted(arr_set) #to make the sorted set to make it ordered. ; print (sorted_set[k])
 #case2: Maximum sum of Subarray (Kadane’s Algorithm) -- if my_list[i] > current_sum + my_list[i]:  -- good , start recursion then 'break' from inside IF itself
@@ -418,6 +452,7 @@ print(non_overlap_list)
 #case5: Rotate Image (90 degrees) -- matrix:mine:later
 
 #case6: Subarray Sum Equals K
+good: Generalised subarray [not only pair or triplet and WITHOUT SORTING]. Given an array of integers and a target sum k
 def find_comb_of_sum(arr, k):
     cumulative_sum = 0
     combination = []
@@ -2865,43 +2900,91 @@ set3 = set1.symmetric_difference(set2)
 print (set3)
 
 #Case8: Remove duplicates from a list using a set. -- good via 2 pointer
-j = 0
 my_list = [1, 1, 2, 3, 4, 4, 5]
-for i in range(1, len(my_list)):
-    if (my_list[j] != my_list[i]):
-        j += 1
-        my_list[j] = my_list[i]
 
-print (my_list)
+visited = set()
+duplicate = set()
+for char in my_list:
+    if char in visited:
+        duplicate.add(char)
+    else:
+        visited.add(char)
+print (duplicate)
 
-#Case9: Create a set from a list of tuples where each tuple is a pair of (key, value).
+#Case9: Create to a set from a list of tuples where each tuple is a pair of (key, value).
+
+#Case: Create to a dict from a list of tuples where each tuple is a pair of (key, value).
+arr = [(1, 2), (3, 4), (5, 6), (7, 8)]
+my_dict = {}
+for key, value in arr:
+    my_dict[key] = value
+
+print (my_dict)
 
 #Case10: Find the common elements between three sets.
 
 #Case11: Determine the unique elements in a list of sets.
+#way1:
 list_of_sets = [{1, 2, 3}, {3, 4, 5}, {5, 6, 7}, {7, 8, 9}]
 
 unique_ele = list_of_sets[0]
-
 for i in range(1, len(list_of_sets)):
     unique_ele = unique_ele.union(list_of_sets[i])
 print (unique_ele)
 
-#Case12: Find the elements present in one set but not in any other set from a list of sets.
-
-#Case13: Implement a function to merge multiple sets and remove duplicates.
+#way2: gfg good
 list_of_sets = [{1, 2, 3}, {3, 4, 5}, {5, 6, 7}, {7, 8, 9}]
 
-union_set = list_of_sets[0]
+# Combine all sets into one using set union
+unique_elements = set.union(*list_of_sets)
 
-for my_set in list_of_sets:
-    for i in my_set:
-        if i not in union_set:
-            union_set.add(i)  #good:add doesnt  return since set is mutable
-print (union_set)
+print(unique_elements)
+
+
+#Case12: Find the elements present in one set but not in any other set from a list of sets. 
+list_of_sets = [{3, 4, 5}, {1, 2, 3}, {5, 6, 7}, {7, 8, 9}]
+final_list = []
+n = len(list_of_sets)
+for i in range(n):
+    current_set = list_of_sets[i]
+    union_set = set()
+    for j in range(n):
+        if (j != i):  #good
+            union_set = union_set.union(list_of_sets[j])  #unlike add or update, union return the result 
+    
+    unique_ele = current_set.difference(union_set)
+    if unique_ele:
+        final_list.append(unique_ele)
+print (final_list)
+
+#case:
+a = {1, 2}
+b = {3, 4}
+a.update(b)  # a is now {1, 2, 3, 4}  #a.add(b) wont work here. #good
+
+#Case13: Implement a function to merge multiple sets and remove duplicates.
+def merge_sets(list_of_sets):
+    # Merge all sets using set.union or | operator
+    merged_set = set.union(*list_of_sets) #good
+    
+    return merged_set
+
+# Example usage:
+list_of_sets = [{1, 2, 3}, {3, 4, 5}, {5, 6, 7}, {7, 8, 9}]
+merged_result = merge_sets(list_of_sets)
+
+print("Merged Set with no duplicates:", merged_result)
 
 #Case14: Find the element with the maximum frequency in a set derived from a list.
-my_list = [1, 2, 3, 1, 2, 1, 3, 3, 3, 4, 5, 6, 3, 2, 1]
+#way1:my_list = [1, 2, 3, 1, 2, 1, 3, 3, 3, 4, 5, 6, 3, 2, 1]
+from collections import Counter
+
+my_dict = Counter(my_list)
+max_freq = max(my_dict.values()) 
+max_freq_key = [k for k, v in my_dict.items() if v == max_freq]
+print (max_freq_key)
+
+#Way2:my_list = [1, 2, 3, 1, 2, 1, 3, 3, 3, 4, 5, 6, 3, 2, 1]
 from collections import Counter
 
 my_dict = Counter(my_list)
@@ -2923,15 +3006,56 @@ my_dict.values() returns a view object: my_dict.values() returns a view object t
 set1 = {1, 2, 3, 4, 5}
 set2 = {3, 4, 5, 6, 7}
 
-set3 = {x for x in set1 if x in set2} #good , dict comprehension.I think, IF can be before FOR also--Ans:NO, The if condition comes after the for loop in this case.
+set3 = {x for x in set1 if x in set2} #good , dict comprehension.
 print (set3)
 #mine:Set Comprehension: {x for x in iterable if condition}
 #List Comprehension: [x for x in iterable if condition]
-#Dictionary Comprehension: {key_expression: value_expression for item in iterable if condition}
+                   : [x if condition else y for x in iterable] Ex:replaced = [x if x >= 0 else 0 for x in numbers]
 
+#Dictionary Comprehension: {key_expression: value_expression for item in iterable if condition}
+                        :  {x: 'Even' if condition else y for x in iterable}
 #Case16: Create a set of tuples and find the tuple with the maximum sum of its elements.
+my_set = {(1, 2, 3), (1, 2, 1), (3, 3, 3), (4, 5, 6), (3, 2, 1)}
+max_sum = 0
+
+# Iterate through each tuple in the set
+for tup in my_set:
+    current_sum = sum(tup)  # Calculate the sum of the current tuple
+    if max_sum < current_sum:  # Check if it's greater than the current max_sum
+        max_sum = current_sum  # Update max_sum if current_sum is greater
+
+print(max_sum)  # Output the maximum sum
+
+#good, same ele in diff order in two tuples in a set of tuples are considered different.
+my_set = {(1, 2, 3), (1, 2, 1), (3, 3, 3), (4, 5, 6), (3, 2, 1), (1,1,1),(3,2,1)}
+
+# Iterate through each tuple in the set
+print ('my_set',my_set)
+
+o/p:-my_set {(3, 3, 3), (1, 2, 1), (3, 2, 1), (1, 2, 3), (1, 1, 1), (4, 5, 6)}
 
 #Case17: Implement a function that takes a list of sets and returns a set of elements that appear in at least two sets.
+def elements_in_multiple_sets(list_of_sets):
+    # Dictionary to count occurrences of each element
+    element_count = {}
+
+    # Count occurrences of each element in the sets
+    for current_set in list_of_sets:
+        for element in current_set:
+            if element in element_count:
+                element_count[element] += 1
+            else:
+                element_count[element] = 1
+
+    # Create a set of elements that appear in at least two sets
+    result_set = {element for element, count in element_count.items() if count >= 2}
+
+    return result_set
+
+# Example usage
+list_of_sets = [{1, 2, 3}, {3, 4, 5}, {5, 6, 7}, {1, 2, 7}]
+result = elements_in_multiple_sets(list_of_sets)
+print(result)  # Output: {1, 2, 3, 5, 7}
 
 #Case18: Find the elements in a set that are at least N times in a list.
 from collections import Counter
@@ -2955,16 +3079,16 @@ my_dict = Counter(my_str)
 my_list = [x for x in my_dict if my_dict[x] == 1]
 print (my_list)
 
-Tuple Programs
+Tuple Programs:-
 #Case21: Sort a list of tuples based on the second element of each tuple.
 data = [(1, 4), (3, 1), (2, 3), (5, 2)]
 
 my_list = sorted(data, key=lambda x:x[1]) #good
 print (my_list)
 
-#Case22: Find the tuple with the maximum sum of its elements. #good
+#Case22: Find the tuple with the maximum sum of its elements. 
 data = [(1, 4, 3), (3, 1, 2), (2, 3, 5), (5, 2, 1)]
-max_tuple = max(data, key=lambda x:sum(x))
+max_tuple = max(data, key=lambda x:sum(x))  #good, max funx also has 'key'
 print (max_tuple)
 
 #Case23: Remove duplicate tuples from a list of tuples.
@@ -3014,6 +3138,7 @@ for x in tuples_list:
 print (my_dict)
 
 #Case28: Sort a list of tuples by the first element, and then by the second element.
+#good, if we want to reatin both the results. sort() does inplace operation.
 tuples_list = [(1, 2), (2, 1), (3, 3), (4, -1), (1, 2), (0, 6)]
 my_list_second = sorted(tuples_list, key=lambda x: x[1])
 my_list_first = sorted(tuples_list, key=lambda x: x[0])
@@ -3022,7 +3147,7 @@ print (my_list_second)
 
 #Case29: Find the tuple with the smallest difference between its elements.
 tuples_list = [(1, 2), (2, 1), (3, 3), (4, -1), (1, 2), (0, 6)]
-min_diff = min(tuples_list, key=lambda x: abs(x[0]-x[1])) #good:abs
+min_diff = min(tuples_list, key=lambda x: abs(x[0]-x[1])) #good:abs. Also like max, min also has 'key'
 print (min_diff)
 
 #Case30: Implement a function to return a list of tuples where the sum of elements equals a given number.
@@ -3031,7 +3156,7 @@ target_sum = 5
 
 my_list = [x for x in tuples_list if sum(x) == target_sum]
 print (my_list)
-good:lambda we use for the key with inbuilt methods (say sorted(), min(), max())
+good:lambda we use for the key with inbuilt methods (say sort(), sorted(), min(), max())
 
 #Case31: Flatten a list of tuples into a single list.
 tuples_list = [(1, 2), (3, -1), (4, -2), (5, 3), (2, 3)]
@@ -3042,22 +3167,84 @@ for x in tuples_list:
 print (my_list)
 
 #Case32: Count the frequency of each tuple in a list of tuples.
+from collections import Counter
 
 #Case33: Create a list of tuples where each tuple contains a unique pair from a given list.
+#similar to below:
+list_of_sets = [{3, 4, 5}, {1, 2, 3}, {5, 6, 7}, {7, 8, 9}]
+final_list = []
+n = len(list_of_sets)
+for i in range(n):
+    current_set = list_of_sets[i]
+    union_set = set()
+    for j in range(n):
+        if (j != i):  #good
+            union_set = union_set.union(list_of_sets[j])  #unlike add or update, union return the result 
+    
+    unique_ele = current_set.difference(union_set)
+    if unique_ele:
+        final_list.append(unique_ele)
+print (final_list)
 
 #Case34: Find the common elements in multiple tuples.
+#use interseaction
 
 #Case35: Create a tuple from the elements of a set and find the tuple with the maximum length.
 
 #Case36: Generate all possible permutations of a tuple.
 
 #Case37: Implement a function to remove tuples that contain duplicate elements.
+tuples_list = [(1, 2, 1), (2, 1, 1), (3, 3), (4, -1, -2), (1, 2, 3), (0, 6)]
+final_list = []
+for tup in tuples_list:
+    if len(tup) == len(set(tup)):
+        final_list.append(tup)
+print (final_list)
 
 #Case38: Convert a list of tuples into a single tuple.
+#good:To convert a list of tuples into a single tuple, you can use the sum function with an empty tuple as the starting point
+# Sample list of tuples
+list_of_tuples = [(1, 2), (3, 4), (5, 6)]
+
+# Convert list of tuples into a single tuple
+single_tuple = sum(list_of_tuples, ())
+
+print("Single tuple:", single_tuple)  #o/p:Single tuple: (1, 2, 3, 4, 5, 6)
+
 
 #Case39: Find the average of the elements in each tuple of a list of tuples.
+def average_of_tuples(tuples_list):
+    averages = []
+    for tup in tuples_list:
+        if len(tup) > 0:  # Check if the tuple is not empty
+            average = sum(tup) / len(tup)  # Calculate the average
+            averages.append(average)  # Append the average to the result list
+        else:
+            averages.append(0)  # Append 0 for empty tuples
+    return averages
+
+# Sample input
+tuples_list = [(1, 2, 3), (4, 5), (6, 7, 8, 9), (10,)]
+
+# Calculate averages
+result = average_of_tuples(tuples_list)
+print("Averages of each tuple:", result)
 
 #Case40: Extract all tuples from a list where the sum of elements is greater than a given number.
+def extract_tuples_with_sum_greater_than(tuples_list, threshold):
+    result = []  # List to store tuples with a sum greater than the threshold
+    for tup in tuples_list:
+        if sum(tup) > threshold:  # Check if the sum of the tuple exceeds the threshold
+            result.append(tup)  # Add the tuple to the result list
+    return result
+
+# Sample input
+tuples_list = [(1, 2), (3, 4), (5, 6), (1, 1), (10, 10)]
+threshold = 8
+
+# Extract tuples
+extracted_tuples = extract_tuples_with_sum_greater_than(tuples_list, threshold)
+print("Tuples with sum greater than {}: {}".format(threshold, extracted_tuples))
 
 Dictionary Programs
 #Case41: Merge two dictionaries into one, combining values for duplicate keys.

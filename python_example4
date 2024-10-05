@@ -21,7 +21,7 @@
 #subarray that appears in both arrays. -->while (i < n and j < m and arr1[i] == arr2[j]): ; i += 1 ; j += 1 ; length += 1
 #case39: Find Peak Element -># First check for the peak at the start and end of the array. 
 #If extremes are not peak, then peak must be in the middle. so start from 1 till n-1 #good 
-#case40: Find Minimum in Rotated Sorted Array -
+#case40: Find Minimum in Rotated Sorted Array -> while left < right: ; mid = (left + right) // 2
 ==============================================================================================================================
 Two-Pointer Technique
 #case1: Find pair with target sum in a sorted array.
@@ -48,52 +48,52 @@ def find_pair_with_sum(arr, k):
 arr = [1, 2, 3, 4, 6, 8, 9]
 k = 10
 pair = find_pair_with_sum(arr, k)
-print(pair)
+print(pair)  #[[1, 9], [2, 8], [4, 6]]
 
 
 #case2: Remove Duplicates from a Sorted Array.
 Description: Given a sorted array, remove duplicates in-place.
-way1:
-from collections import Counter
-
+way1: INPLACE -- good
 def remove_duplicates(arr):
-    my_dict = Counter(arr)
-    final_list = []
-    duplicates = []
-    for i in range(len(arr)):
-        if my_dict[arr[i]] == 1:
-            final_list.append(arr[i])
-        else:
-            duplicates.append(arr[i])
-    print ('duplicates', duplicates)
-    return final_list
+    write_index = 1
+    n = len(arr)
+    for read_index in range(1, n):
+        if (arr[read_index] != arr[read_index-1]):
+            arr[write_index] = arr[read_index]
+            write_index += 1
+    del arr[write_index:]
+    return arr
 
 arr = [1, 1, 2, 2, 3, 4, 4, 5]
 final_list = remove_duplicates(arr)
 print ('final_list',final_list)
 
-way2:GFG: good: using 'set' for iteration .Unlike check element in list [O(n)], here the check will take O(1)
+arr = [1, 1, 2, 2, 3, 4, 4, 5]
+final_list = remove_duplicates(arr)
+print ('final_list',final_list)
+
+way2:GFG: good: NOT INPLACE:- using 'set' for iteration .Unlike check element in list [O(n)], here the check will take O(1)
 def remove_duplicates(arr):
     if not arr:
         return []
 
-    final_list = []
+    visited = set()
     duplicates = set()  # Use a set for efficient O(1) membership check
 
     for i in range(len(arr)):
-        # Add to final_list if it's the first occurrence
-        if i == 0 or arr[i] != arr[i - 1]:
-            final_list.append(arr[i])
+        # Add to visited if it's the first occurrence
+        if arr[i] not in visited:
+            visited.add(arr[i])
         # Add to duplicates if it's a repeat and hasn't been added to duplicates before
-        elif arr[i] not in duplicates:
+        else:
             duplicates.add(arr[i])
 
     print('duplicates:', list(duplicates))  # Convert set to list for display
-    return final_list
+    return visited
 
 arr = [1, 1, 2, 2, 3, 4, 4, 5]
-final_list = remove_duplicates(arr)
-print('final_list:', final_list)
+visited = remove_duplicates(arr)
+print('visited:', visited)
 
 
 #case3: Valid Palindrome.
@@ -106,11 +106,7 @@ my_list = [x for x in s if x.isalnum()]
 #good:my_list = [x for x in s if x.isalnum()]  #in LC, if want to use only 'IF', then keep IF after FOR . Mine: can keep before FOR also
 
 my_str = ''.join(my_list)
-print (my_str)
-if my_str == my_str[::-1]:  #good
-    print ('yes')
-else:
-    print ('No')
+print (my_str == my_str[::-1])  #False
 
 #case4: Container With Most Water.
 # In the "Container With Most Water" problem, the solution aims to find two heights that, when paired, 
@@ -198,8 +194,9 @@ arr = [-1, 0, 1, 2, -1, -4]
 k= 0
 final_list = find_triplets_with_zero_sum(arr,k)
 print (final_list)
-#way2: generalised 'k'. Given an array of integers and a target sum k, 
-#      write a function that finds all contiguous subarrays (combinations) whose elements sum up to the target value k.
+
+#way2: good: Generalised subarray [not only pair or triplet and WITHOUT SORTING]. Given an array of integers and a target sum k, 
+# write a function that finds all CONTIGUOUS subarrays (combinations) whose elements sum up to the target value k.
 def find_comb_of_sum(arr, k):
     cumulative_sum = 0
     combination = []
@@ -251,53 +248,58 @@ print (combination)
 #case8: Max Consecutive Ones.
 Description: Given a binary array, find the max number of consecutive 1's.
 def find_max_consecutive_ones(arr):
-    count = max_len = l = 0
-    
-    while (l < len(arr)):
-        print ('ele',arr[l])
-        if (arr[l] == 1):
-            count += 1
-        else: 
-            max_len = max(count, max_len)
-            print ('len', max_len)
-            count = 0
-        l += 1   
-    max_len = max(count, max_len)
+    max_count = count = 0
+    for char in arr:
+        if char == 1:
+            count += 1  # Increment count for consecutive 1's
+        else:
+            count = 0  # Reset count on encountering non-1
+        max_count = max(count, max_count)  # Update max_count if needed
+    return max_count  # Return the maximum count of consecutive 1's
 
-    return max_len
-    
+# Example usage
 arr = [1, 1, 0, 1, 1, 1]
 result = find_max_consecutive_ones(arr)
 print(result)  # Output: 3
 
 #case9: Sort Colors (Dutch National Flag Problem).
 Description: Sort an array of 0s, 1s, and 2s in a single pass.
-def sort_colors(arr):
-    start = 0
-    mid = 0
-    last = len(arr)-1
+my_list = [0, 1, 2, 0, 1, 2]
+low = mid = 0
+high = len(my_list) - 1
 
-    while (mid <= last): #good : check till the last element. Since mid is processing or carrying elements to either start or end. [Mid-Dutch]
-        if (arr[mid] == 1):
-            mid += 1
-        elif (arr[mid] == 0): #good: compare with 0,1,2 itself
-            arr[mid], arr[start] = arr[start], arr[mid]
-            start += 1
-            mid += 1
-        elif (arr[mid] == 2):
-            arr[mid], arr[last] = arr[last], arr[mid]
-            last -= 1
-    return arr    
-
-arr = [2, 0, 2, 1, 1, 0]
-result = sort_colors(arr)
-print(result)
+while mid<=high:
+    #mine:good: mid <= high ensures you keep examining elements until you have processed all necessary parts of the array.
+    #           low: Where the next 0 should go.
+    #           mid: Current element being examined.
+    #           high: Where the next 2 should go.
+    print (f'mid:{mid}')
+    if (my_list[mid] == 0):
+        my_list[mid], my_list[low] = my_list[low], my_list[mid]
+        low += 1
+        mid += 1
+    elif (my_list[mid] == 1):
+        #good, Using elif instead of separate if statements enhances both performance and clarity, 
+        # ensuring that only one branch is executed per iteration and avoiding redundant checks. To get correct output.
+        mid += 1
+    else:    #good: always use ELSE as last condition not ELIF to avoid infinite loop    
+        my_list[high], my_list[mid] =  my_list[mid], my_list[high]
+        high -= 1
+    
+print (my_list)
 
 
 #case10: Intersection of Two Arrays.
 Description: Find the intersection of two SORTED arrays.
-#mine:wneever you see merging/intersection of SORTED array, start by parallel traversing via WHILE
-#way1:
+#good:wheever you see merging/intersection of SORTED array, start by PARALLEL traversing via WHILE
+#way0: O(nxm) - This is because for each element in arr2, the 'in' operation searches through the entire arr1, which is an O(m) operation.
+arr1 = [1, 2, 4, 5, 6]
+arr2 = [2, 5, 7, 8]
+
+my_list = [char for char in arr2 if char in arr1]
+print (my_list)
+
+#way1: 
 arr1 = [1, 2, 4, 5, 6]
 arr2 = [2, 5, 7, 8]
 
@@ -308,6 +310,7 @@ arr = arr1_set.intersection(arr2_set)
 print (arr)
 
 #way2: GFG - good
+# O(n+m) where n and m are the lengths of arr1 and arr2. This is because the two-pointer technique traverses both arrays only once.
 arr1 = [1, 2, 4, 5, 6]
 arr2 = [2, 5, 7, 8]
 
@@ -326,7 +329,6 @@ while i < len(arr1) and j < len(arr2):
         j += 1
 
 print(common_list)  # Output: [2, 5]
-
 
 #case11: Find the Duplicate Number.
 Description: Given an array containing n + 1 integers where each integer is between 1 and n, find the duplicate number.
@@ -405,7 +407,12 @@ def rotate_array(arr, k):
     k = k % n  # Handle cases where k is larger than the array length -- good
     # If the array has 7 elements and you rotate it 7 times, the array will remain unchanged.
     # Rotating it 8 times is the same as rotating it 1 time because the 8th rotation brings it back to the starting position.
-    return arr[-k:] + arr[:-k]   #good
+    
+    return arr[-k:] + arr[:-k]   #good arr[:-k], because Python allows slicing with negative indices.
+    # Negative indices refer to positions starting from the END of the list. When using negative indices, 
+    #Python interprets them from the back of the list, and the rule "first index < second index" still holds True
+    # Ex:arr[-4:-1]  # Returns [3, 4, 5] (valid because -4 < -1)
+    # Ex: arr[-1:-4]  # Returns [] (empty because -1 > -4)
 
 arr = [1, 2, 3, 4, 5, 6, 7]
 k = 3
@@ -419,7 +426,7 @@ def find_pairs_with_sum_sorted(arr, k):
     left = 0
     right = len(arr)-1
     final_list = []
-    arr.sort()
+    arr.sort()  #First sort the array then only can move the left/right here based  on cumulative_sum value.
 
     while (left < right):
         cumulative_sum = arr[left] + arr[right]
@@ -548,7 +555,7 @@ def count_subarrays_with_product_less_than_k(arr, k):
             left += 1 #good, moving the window
         
         # The number of subarrays ending at 'right' is (right - left + 1)
-        count += (right - left + 1) #good
+        count += (right - left + 1) #vgood
     
     return count
 
