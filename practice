@@ -1,5 +1,23 @@
-arr = [1, 2, 3, 4, 5]
-#my_dict = {item:'even' for item in arr if item == 2}
-my_dict = {item:'even' if item == 2 else 'odd' for item in arr }
+from itertools import combinations
+def is_palindrome(part):
+    return part == part[::-1]
+def min_palindrome_cuts_combinations(s):
+    min_cuts = float('inf')
+    n = len(s)
+    for i in range(n):
+        
+        for cuts in combinations(range(1,n), i):
+            prev = 0
+            parts = []
+            for cut in cuts:
+                parts.append(s[prev:cut])
+                prev = cut
+            parts.append(s[prev:])
 
-print (my_dict)
+            if all(is_palindrome(part) for part in parts):
+                min_cuts = min(min_cuts, len(cuts))
+    return min_cuts
+
+# Example Usage
+s = 'ababbbabbababa'
+print("Minimum cuts required:", min_palindrome_cuts_combinations(s))

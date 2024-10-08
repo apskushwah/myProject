@@ -1,3 +1,20 @@
+#mine:Key Takeaways:
+Don’t rush to finish. Take time to explain your thought process.
+Verbalize your reasoning as though you’re approaching the problem logically for the first time.
+Ask questions and clarify requirements as if you’re thinking through potential challenges.
+Showcase alternatives or optimizations to demonstrate depth of understanding.
+
+#mine:In Python, the variable defined in a for loop (like i in your case) remains accessible after the loop has finished executing. 
+This is different from languages like C or Java, where the scope of loop variables is limited to the loop itself.
+Therefore, after the loop completes, i will still exist and hold the value from the last iteration of the loop. 
+If the loop doesn't run at all, it won't be assigned any value.
+arr = [1,2,3,4,5]
+n = len(arr)
+for i in range(n):
+    print (arr[i])
+
+print ('i:',i)
+
 #mine: dict constructor expects a sequence of key-value pairs (tuples of LENGTH 2) or a mapping.
 dict() function expects an ITERATBLE of pairs (tuples)
 Ex:If you have list of tuple with 2 ele and want to convert to dict:
@@ -5,7 +22,7 @@ tuples_list = [('a', 1), ('b', 2), ('c', 3)]
 my_dict = dict(tuples_list)
 print (my_dict)
 
-OR, (similar totuple of 3)
+OR, (similar to tuple of 3)
 my_dict = {}
 for key, value in tuples_list:
     my_dict[key] = value
@@ -19,6 +36,199 @@ for tup in tuples_list:
     my_dict[tup] = ''  # Use the tuple as a key and assign an empty string as the value
 print(my_dict)
 #-------------------------------------------------------------------------------------------------------
+simple example in python:- overriding , polymorphism,overloading superclass/subclass and any related which I shud know
+
+Here's a simple example that illustrates key OOP concepts like Overriding, Polymorphism, and Overloading using Python's superclass and subclass structure.
+1. Overriding:
+Overriding occurs when a subclass provides a specific implementation for a method that is already defined in its superclass. The method in the subclass has the same name and parameters as the method in the superclass.
+
+class Animal:
+    def __init__(self):
+        pass
+
+    def speak(self):
+        return "Animal makes a sound"
+
+class Dog(Animal):  #good, importing super class
+    def speak(self):  # Overriding the 'speak' method of Animal
+        return "Dog barks"
+
+# Creating instances of Animal and Dog
+animal = Animal()
+dog = Dog()
+
+print(animal.speak())  # Output: Animal makes a sound
+print(dog.speak())     # Output: Dog barks
+Here, the speak method is overridden in the Dog class to provide a more specific implementation, while the Animal class has a generic speak method.
+
+#good:In Python, when you don't explicitly define a constructor (__init__() method) in a class, Python automatically provides a default constructor. 
+#This default constructor doesn't do anything special but allows you to create an object of the class. 
+#As long as there are no specific initialization steps needed, you can instantiate the class without defining __init__().
+
+2. Polymorphism:
+Polymorphism means that different classes can be treated through a common interface. 
+In Python, polymorphism allows us to use objects of different types through the same interface (method).
+
+class Animal:
+    def speak(self):
+        print('Animal makes sound')
+
+class Dog(Animal):
+    def speak(self):
+        print('Dog barks')
+
+class Cat:
+    def speak(self):
+        print('Cat meows')
+
+def animal_sound(obj):  # Interface function or polymorphic because it works with both Cat and Dog objects, calling their respective speak methods.
+    obj.speak()
+
+# Objects
+dog = Dog()
+cat = Cat()
+
+# Function call
+animal_sound(cat)  # Output: "Cat meows"
+animal_sound(dog)  # Output: "Dog barks"
+
+#This is an example of polymorphism in Python, specifically runtime polymorphism. 
+#Polymorphism allows objects of different classes to be treated through a common interface, 
+#meaning you can call the same method (speak() in this case) on different objects and get different behaviors depending on the object.
+
+#Key Points in Your Example:
+#Inheritance-based Polymorphism (Dog -> Animal): The Dog class inherits from the Animal class and overrides the speak() method. 
+#This is the classical case of polymorphism where a child class provides its own implementation of a method that is defined in the parent class.
+
+#Interface-based Polymorphism (animal_sound() function): In the animal_sound(obj) function, you pass any object that has a speak() method 
+#(like Dog, Cat, or even another class). This demonstrates polymorphism without the need for inheritance, as Python is dynamically typed and 
+#allows method calls on any object that implements the method, regardless of its class hierarchy.
+
+#good: Calling the Parent Class's speak() Method from the Child Class
+If you want to call the speak() method of the Animal class from within a derived class (Dog or Cat), you can use super() or explicitly 
+call Animal.speak() from the child class:
+class Animal:
+    def speak(self):
+        print('Animal makes sound')
+
+class Dog(Animal):
+    def speak(self):
+        # Call the parent class's speak method
+        super().speak()  # Or you can use Animal.speak(self) #vgood
+        print('Dog barks')
+
+class Cat(Animal):
+    def speak(self):
+        # Optionally call the parent's speak method
+        super().speak()
+        print('Cat meows')
+
+def animal_sound(obj):
+    obj.speak()
+
+# Now the Dog and Cat objects will also call the Animal's speak method
+dog = Dog()
+cat = Cat()
+
+animal_sound(dog)  # Output: "Animal makes sound" followed by "Dog barks"
+animal_sound(cat)  # Output: "Animal makes sound" followed by "Cat meows"
+
+#Explanation:
+#Using super().speak() or Animal.speak(self) inside the Dog or Cat classes calls the speak() method of the parent Animal class before the derived class's own speak() logic. 
+#This ensures that the parent class's method is called in addition to the derived class's implementation.
+
+3. Overloading:
+#Python does not support true method overloading (methods with the same name but different signatures), but we can achieve 
+#similar behavior using default arguments or variable-length arguments.
+
+class Calculator:
+    def add(self, a, b, c=0):  # Default value for 'c'
+        return a + b + c
+
+calc = Calculator()
+print(calc.add(2, 3))       # Output: 5 (c is not provided, so it defaults to 0)
+print(calc.add(2, 3, 4))    # Output: 9
+Here, the add method behaves differently based on whether two or three arguments are passed.
+
+4. Superclass and Subclass with super():
+The super() function is used to call the methods of the superclass inside a subclass.
+
+class Vehicle:
+    def __init__(self, brand):
+        self.brand = brand
+    
+    def info(self):
+        return f"Brand: {self.brand}"
+
+class Car(Vehicle):
+    def __init__(self, brand, model):
+        super().__init__(brand)  # Calling superclass's __init__ method
+        self.model = model
+    
+    def info(self):  # Overriding the info method
+        return f"Brand: {self.brand}, Model: {self.model}"
+
+car = Car("Toyota", "Corolla")
+print(car.info())  # Output: Brand: Toyota, Model: Corolla
+The super().__init__(brand) ensures that the Vehicle constructor is called when a Car is created, reusing the common initialization logic.
+
+#mine: how both the values can be fetched from construcor of child class since value 1 is given to parent class constructor and value2 is given to child class constructor
+In Python, when a child class inherits from a parent class, the child class can pass arguments to both its own constructor 
+and the parent class's constructor using the super() function. You can pass values to the parent class constructor and fetch them in 
+the child class constructor as well.
+
+Here’s how it works:
+The parent class (Vehicle) takes the brand as an argument.
+The child class (Car) takes both brand and model, and passes the brand to the parent class using super().__init__(brand).
+
+Example:
+class Vehicle:
+    def __init__(self, brand):
+        self.brand = brand  # This is initialized in the parent class
+
+class Car(Vehicle):
+    def __init__(self, brand, model):
+        super().__init__(brand)  # Passing the 'brand' to the parent class (Vehicle)
+        self.model = model  # Initializing 'model' in the child class (Car)
+
+    def info(self):
+        print(self.brand, self.model)
+
+
+# Creating an instance of Car
+car = Car("Toyota", "Corolla")
+car.info()
+
+Explanation:
+The Vehicle class's constructor initializes the brand.
+The Car class's constructor initializes both brand (via the parent class) and model (in the child class itself).
+The info() method in the Car class prints both the brand (from the parent class) and model (from the child class).
+
+Output:
+Brand: Toyota, Model: Corolla
+In this way, both the parent class constructor and the child class constructor can work together to initialize their respective attributes.
+
+#mine: So both parent and child class constructor get merged as child class constructor
+In Python, when a child class constructor is defined, it doesn't automatically merge with the parent class constructor. 
+Instead, the child class constructor needs to explicitly call the parent class constructor using super(). 
+This allows the child class to inherit and initialize attributes from the parent class while also handling its own attributes.
+
+Key points:
+Child class constructor overrides the parent class constructor: When you define a constructor (__init__()) in a child class, 
+it overrides the parent class constructor unless the parent constructor is explicitly called.
+
+Use super() to invoke the parent class constructor: To ensure that the attributes initialized in the parent class are available in the 
+child class, you must call the parent class constructor using super().
+
+Constructors don’t merge automatically: Instead of merging automatically, you explicitly call the parent constructor when needed.
+
+Summary of Concepts:
+Overriding: When a method in a subclass provides a specific implementation that overrides the one in the superclass.
+Polymorphism: The ability to use different types of objects through the same interface.
+Overloading: Python doesn’t support true overloading but can be simulated using default arguments or variable-length arguments.
+super(): Used to access methods of a superclass from within a subclass.
+These are the essential concepts you need to know regarding object-oriented programming in Python.
+#-------------------------------------------------------------------------------------------------------
 #good:Set Comprehension: {x for x in iterable if condition}
 #List Comprehension: [x for x in iterable if condition]
                    : [x if condition else y for x in iterable] Ex:replaced = [x if x >= 0 else 0 for x in numbers]
@@ -29,7 +239,7 @@ print(my_dict)
             Ex: arr = [1, 2, 3, 4, 5]
                 my_dict = {item:'even' for item in arr if item == 2}
                 my_dict = {item:'even' if item == 2 else 'odd' for item in arr }
-    #mine: whatever the loop-variable is there will be become  the key and whatever we calculate in condition will become the value  
+    #mine: whatever the loop-variable is there will be become the key and whatever we calculate in condition will become the value  
 #------------------------------------------------------------------------------------------------------
 
 #Hints:-
@@ -326,6 +536,24 @@ print(f"Result: {result}")
    4.2. Print execution time
    4.3. Return result
 5. Print result
+Summary of Flow:
+@timing_decorator replaces example_function with wrapper.
+When you call example_function(1000000), you're actually calling wrapper(1000000).
+Inside wrapper, example_function is called with the argument 1000000.
+The timing logic is executed around the call to example_function.
+The result is returned and printed.
+
+#mine:This is what happens behind the scenes when you use @timing_decorator. The decorator 
+replaces the original example_function with the wrapper function, but keeps the name example_function.
+ 
+ example_function = timing_decorator(example_function)
+
+This is exactly what happens when you use the @timing_decorator syntax. When you use this form, you're 
+assigning the result of timing_decorator(example_function) back to example_function. In effect, example_function will now refer to the wrapper function.
+
+So, after this assignment, example_function is no longer the original example_function you defined. 
+It now refers to the wrapper function that was returned by timing_decorator.
+
 
 # Sampleconstrutor:
 class Person:   #good, youdont have to receive args here. Receive directly at constructor with self
@@ -355,6 +583,8 @@ sorted_set = sorted(arr_set) #to make the set as the ordered list. #good
 print (sorted_set[k])
 
 #case2: Maximum sum of Subarray (Kadane’s Algorithm) --good
+#good unlike '#case17: Maximum Product Subarray' , (where we need 2 FORs) here we need only one FOR loop 
+bcoz we dont have to traverse all the element to find out 1st element itself is greter the prod of rest.
 my_list = [1, 2, 3, -2, 5]
 
 # Initialize variables --good
@@ -364,8 +594,6 @@ start = end = s = 0
 
 # Iterate through the list starting from the second element
 for i in range(1, len(my_list)):
-    print(f'Element: {my_list[i]}, Current Sum: {current_sum}, Comparing: {my_list[i]} with {current_sum + my_list[i]}')
-    input()  # For debugging purposes
 
     # If starting a new subarray provides a higher sum, reset current_sum and start index
     if my_list[i] > current_sum + my_list[i]: ## This case, when the first element itself (i.e my_list[0]) is negative  #good
@@ -414,6 +642,25 @@ for item in my_list:
         break 
     visited.add(item)
 
+#case: Remove Duplicates from a Sorted Array.
+Description: Given a sorted array, remove duplicates in-place.
+way1: INPLACE -- good
+def remove_duplicates(arr):
+    write_index = 1
+    n = len(arr)
+    for read_index in range(1, n):
+        if (arr[read_index] != arr[read_index-1]):
+            arr[write_index] = arr[read_index]
+            write_index += 1
+
+    #Remove extra elements that we get once we keep all unique at the begining
+    del arr[write_index:]
+    return arr
+
+arr = [1, 1, 2, 2, 3, 4, 4, 5]
+final_list = remove_duplicates(arr)
+print ('final_list',final_list)
+
 
 #case4: Merge Intervals --good
 def check_overlap(my_list):
@@ -429,19 +676,61 @@ def check_overlap(my_list):
             break   #good, to avoid index OOR due to FOR loop where len(my_list)-1) has come as per initial length
     return my_list
 '''
-Understanding Different Chains of Recursion
-When a recursive function is called, each call creates a new frame in the call stack, which keeps track of variables and execution context for that call. Here’s how the chains work in this case:
+#good:
+Understanding Array State on Unwinding
+Creating Slices:
+In the function 'def maxProfitBruteForce', when you use arr[next_start:], you are creating a new list that is a 
+slice of the original array. The original arr remains unchanged in memory.
+Therefore, when the recursion unwinds, the original arr is still intact and has not been modified. 
+This means that any state changes made in the recursive calls do not affect the original list, 
+and there is no risk of running into an IndexError (even without 'break') because the original list structure remains unchanged.
 
-First Call:
+Modifying the Array with .remove():
+In your check_overlap function, when you call my_list.remove(my_list[r + 1]), you are modifying the 
+original my_list directly. This means the size and content of my_list change during the execution of the function.
+When you make a recursive call after modifying my_list, the state of the list is now different, 
+which can lead to potential issues if the code attempts to continue iterating over a list that has changed its length or structure. 
+If not managed correctly(using 'break'), this could result in an IndexError because the indices being accessed may no longer be valid.
 
-Input: [[1, 3], [2, 4], [6, 8], [9, 10]]
-Action: Detects overlap and merges [[1, 3], [2, 4]] into [[1, 4], [6, 8], [9, 10]]
-Recursive Call: Calls check_overlap with [[1, 4], [6, 8], [9, 10]]
-Second Call:
+#good: Understanding Different Chains of Recursion:
+In this case, the first call does "wait" for the second call to complete before it proceeds further. 
+This is because function calls in Python, including recursive calls, behave in a synchronous manner.
 
-Input: [[1, 4], [6, 8], [9, 10]]
-Action: No overlaps found.
-Return: The updated list [[1, 4], [6, 8], [9, 10]] is returned back to the first call
+Step-by-Step Breakdown:
+First Call of check_overlap(my_list):
+You call the function with my_list = [[1, 3], [2, 4], [6, 8], [9, 10]].
+The for loop starts processing the list.
+It checks the first pair [1, 3] and [2, 4] and finds an overlap.
+It merges them into [1, 4], updates the list to [[1, 4], [6, 8], [9, 10]], and removes [2, 4].
+After this merge, it triggers the second call to check_overlap() with the updated list [[1, 4], [6, 8], [9, 10]].
+
+The First Call "Holds" While the Second Call Runs:
+At this point, the first call is paused while waiting for the result of the second call.
+The second call now starts processing the updated list [[1, 4], [6, 8], [9, 10]].
+Second Call of check_overlap([[1, 4], [6, 8], [9, 10]]):
+
+This second call runs a fresh for loop to check for overlaps.
+It checks [1, 4] and [6, 8] — no overlap.
+It checks [6, 8] and [9, 10] — no overlap.
+Since no overlaps are found, the second call completes its loop and returns the unmodified list [[1, 4], [6, 8], [9, 10]] back to the first call (where it was originally triggered).
+
+First Call Resumes After the Second Call Returns:
+After the second call returns the result [[1, 4], [6, 8], [9, 10]], the first call resumes execution.
+However, because of the break in the if block, the first call does not continue iterating through its for loop anymore. It simply breaks out of the loop.
+The first call now returns the same list [[1, 4], [6, 8], [9, 10]] that was passed back from the second call.
+
+Understanding the Process:
+The first call holds (pauses execution) as soon as it triggers the second check_overlap() call. It waits for the second call to finish and return a result.
+The second call runs independently, checking the list and either merging intervals or returning the list unchanged.
+Once the second call is finished, the first call resumes, takes the result from the second call, and breaks out of its loop to avoid further iteration since the list length may have changed.
+The final result of the entire process is the list that is returned from the second call, passed back through the first call, and ultimately returned as the final answer.
+
+Flow Summary:
+The first check_overlap() triggers the second call and holds.
+The second call finishes and returns the modified list (if any changes occurred).
+The first call resumes, breaks out of its loop, and returns the final result (the same list returned by the second call).
+By understanding that each recursive call holds the previous one in place, it becomes clearer that recursion allows each function call to work on a progressively simplified version of the list. 
+Each call focuses on smaller parts of the list until no more overlaps are found.
 '''
 my_list = [[1, 3], [2, 4], [6, 8], [9, 10]]
 # Call the function and store the result
@@ -488,7 +777,7 @@ def largest_rectangle_area_brute_force(heights):
 
     # Iterate over each bar
     for i in range(n):
-        min_height = heights[i]
+        min_height = heights[i] #good, this will take into account(by varying below) the min heignt for all the indices (j)
         
         # Try to form a rectangle with heights[i] as the smallest height
         for j in range(i, n): #good, start with i itself since area of tower of height i will be i*1
@@ -808,6 +1097,7 @@ for i in range (0, len(my_list)):
 print (f'duplicates:{duplicate_set}')
 
 #case17: Maximum Product Subarray
+#way1: 2 FORs
 my_list = [6, -3, -10, 0, 2]
 max_product = -float('inf')
 final_array = []
@@ -827,6 +1117,49 @@ for i in range(0, len(my_list)):
         final_array = [my_list[i]]
 
 print (final_array)
+
+#way2: 1 FOR:
+def max_product_array(arr):
+    if len(arr) == 0:
+        return []
+
+    n = len(arr)
+    max_prod = arr[0]
+    min_prod = arr[0]
+    result_subarray = [arr[0]]
+    current_start = 0  # Track the start of the current subarray
+    start = 0  # Track the starting index for the best subarray
+
+    for i in range(1, n):
+        if arr[i] == 0:
+            # Reset when we encounter zero
+            max_prod = 1
+            min_prod = 1
+            current_start = i + 1
+            continue
+
+        # When the current element is negative, swap max and min
+        # While iterating through the array, the goal is to keep track of both the maximum product (max_prod) and the minimum product (min_prod) ending at each index.
+        # This dual tracking allows us to manage the impact of negative numbers efficiently.
+        if arr[i] < 0:
+            max_prod, min_prod = min_prod, max_prod
+
+        # Calculate the maximum and minimum product ending at index i
+        max_prod = max(arr[i], max_prod * arr[i])
+        min_prod = min(arr[i], min_prod * arr[i])
+
+        # Update the subarray if the max product has changed
+        if max_prod > arr[current_start]:  # This condition checks against the first element in the current subarray
+            start = current_start
+                
+            result_subarray = arr[start:i + 1]
+
+    return result_subarray
+
+# Example usage
+arr = [6, -3, -10, 0, 2]
+result = max_product_array(arr)
+print(result)  # Expected output: [6, -3, -10]
 
 #case18: Longest Subarray with Sum 0 #mine: use all 3 IFs only. - good
 def longest_subarray_with_sum_k(my_list, k):
@@ -886,7 +1219,7 @@ while mid<=high:
     
 print (my_list)
 
-#4:32
+
 #case20: Subarrays with K Different Integers  
 my_list = [1, 2, 1, 2, 3]
 k = 3
@@ -910,6 +1243,9 @@ for i in range(0, len(my_list)):
                 break
 
 #Way2:GFG: understand: sliding window --good, do
+#Good: Whenever we see 'min length subarray of SUM/ContainDiffInteger, apply 2 pointer. But when we see find 
+# all subarrays of SUM, apply <cumulative_sum - k in my_dict>
+
 from collections import defaultdict
 
 def find_subarray_with_k_different_integers(arr, k):
@@ -944,7 +1280,7 @@ subarrays = find_subarray_with_k_different_integers(arr, k)
 print(subarrays)  # Output should be all subarrays with exactly 3 different integers
 #good, to pick the shortest length of list from list of lists, min(subarrays, key=len)
 
-#5:15
+
 #case21: Container With Most Water --good
 # In the "Container With Most Water" problem, the solution aims to find two heights that, when paired, 
 # form a container that can hold the maximum amount of water. 
@@ -1031,7 +1367,9 @@ def minJumps(arr):
             if i >= maxReach:
                 return -1
             
-            # Reinitialize steps with the amount of steps to reach maxReach
+            # Reinitialize steps with the amount of steps to reach maxReach.
+            # Even though maxReach might have been influenced by the jump from i-1 (or earlier), 
+            # you are now at i, so the calculation must be based on how far you can go from i.
             steps = maxReach - i
     
     return -1
@@ -1129,7 +1467,7 @@ def longestMountain(arr):
             # Expand to the left (strictly increasing part)
             left = i - 1  #good to initialize left/right before WHILE itself. Easy to traverse then.
             while left > 0 and arr[left - 1] < arr[left]: #good,individually traversion left and right to get the max length
-                left -= 1
+                left -= 1   #good:say in 'a-b', rather than increasing b (keep a constant) to go backwards, decrease a and keep b as constant.
 
             # Expand to the right (strictly decreasing part)
             right = i + 1
@@ -1147,6 +1485,20 @@ arr = [2, 1, 4, 7, 3, 2, 5]
 print(longestMountain(arr))  # Output: 5
 
 #case26: Rotate Array -- You are given an array and an integer k. Rotate the array to the right by k steps.
+#way0:
+def rotate(arr, k):
+    k = k%len(arr)
+
+    while k:
+        ele = arr.pop()
+        arr.insert(0,ele)
+        k -= 1
+    print (arr)
+# Example usage:
+arr = [1, 2, 3, 4, 5, 6, 7]
+k = 3
+print(rotate(arr, k))  # Output: [5, 6, 7, 1, 2, 3, 4]
+
 #way1:
 def reverse(arr, start, end):
     while start < end:
@@ -1216,13 +1568,13 @@ def findMissingNumber(arr):
     n = len(arr)
     # Calculate the expected sum of numbers from 0 to n. 
     #mine: Since starting from 0 and only one ele is missing, so we  can use n as len(arr). In actual, n is number of continuous integers (say 0,1,2,3..).
-    total_sum = n * (n + 1) // 2  #good, use * for multiply and // for avoiding float, else it will give 2.0 rather than 2
+    expected_sum = n * (n + 1) // 2  #good, use * for multiply and // for avoiding float, else it will give 2.0 rather than 2
     
     # Calculate the sum of elements in the array
     actual_sum = sum(arr)
     
     # The missing number is the difference between the expected sum and actual sum
-    return total_sum - actual_sum
+    return expected_sum - actual_sum
 
 # Example usage:
 arr = [3, 0, 1]
@@ -1251,6 +1603,32 @@ def reversePairsBruteForce(arr):
 arr = [1, 3, 2, 3, 1]
 print(reversePairsBruteForce(arr))  # Output: 2
 
+#way2 -- merge sort (O(nlogn)) -- revision
+def reversePairs(arr):
+    def merge_and_count(arr, left, right):
+        if left >= right:
+            return 0
+
+        mid = (left + right) // 2
+        count = merge_and_count(arr, left, mid) + merge_and_count(arr, mid + 1, right)
+        
+        # Count reverse pairs
+        j = mid + 1
+        for i in range(left, mid + 1):
+            while j <= right and arr[i] > 2 * arr[j]:
+                j += 1
+            count += (j - (mid + 1))
+
+        # Merge the two sorted halves
+        arr[left:right+1] = sorted(arr[left:right+1])
+        return count
+
+    return merge_and_count(arr, 0, len(arr) - 1)
+
+# Example usage:
+arr = [1, 3, 2, 3, 1]
+print(reversePairs(arr))  # Output: 2
+
 #case29: Count Inversions in an Array
 Ex:Input: arr = [1, 3, 2, 3, 1]
 Output: 3
@@ -1264,63 +1642,9 @@ def countInversions(arr):
                 count +=1
     return count
 
-
 # Example usage:
 arr = [1, 3, 2, 3, 1]
 print(countInversions(arr))  # Output: 4
-
-#way2 -- merge sort (O(nlogn)) -- later
-def mergeAndCount(arr, temp_arr, left, mid, right):
-    i = left    # Starting index for left subarray
-    j = mid + 1 # Starting index for right subarray
-    k = left    # Starting index to be sorted
-    inv_count = 0
-    
-    while i <= mid and j <= right:
-        if arr[i] <= arr[j]:
-            temp_arr[k] = arr[i]
-            i += 1
-        else:
-            # There are mid - i inversions, because all remaining elements
-            # in the left subarray (arr[i]...arr[mid]) are greater than arr[j]
-            temp_arr[k] = arr[j]
-            inv_count += (mid - i + 1)
-            j += 1
-        k += 1
-
-    while i <= mid:
-        temp_arr[k] = arr[i]
-        i += 1
-        k += 1
-
-    while j <= right:
-        temp_arr[k] = arr[j]
-        j += 1
-        k += 1
-
-    for i in range(left, right + 1):
-        arr[i] = temp_arr[i]
-        
-    return inv_count
-
-def mergeSortAndCount(arr, temp_arr, left, right):
-    inv_count = 0
-    if left < right:
-        mid = (left + right) // 2
-
-        inv_count += mergeSortAndCount(arr, temp_arr, left, mid)
-        inv_count += mergeSortAndCount(arr, temp_arr, mid + 1, right)
-        inv_count += mergeAndCount(arr, temp_arr, left, mid, right)
-
-    return inv_count
-
-def countInversions(arr):
-    temp_arr = [0] * len(arr)
-    return mergeSortAndCount(arr, temp_arr, 0, len(arr) - 1)
-
-# Example usage:
-arr = [1, 3, 2, 3, 1]
-print(countInversions(arr))  # Output: 3
 
 
 #case30: Meeting Rooms II-You are given an array of meeting time intervals, where each interval is represented as a pair of integers [start, end]. 
@@ -1350,8 +1674,8 @@ def minMeetingRooms(intervals):
             # good: use heap[0] and not heap[-1] because we need a room that can be reutilized. 
             # If we use heap[-1], it might reference the last inserted meeting, which might not 
             # have finished by the time the current meeting's start time (intervals[i][0]) begins. 
-            # However, by using heap[0], we check the meeting that ends the earliest (the one 
-            # that started first). If that room is free, the current meeting can use it.
+            # However, at the same time heap[0] meeting has finished and freed the room.
+            # So If that room is free, the current meeting can use it instead of waiting for the last meeting heap[-1] to finish.
             heapq.heappop(heap) #good
         
         # Add the current meeting's end time to the heap
@@ -1416,7 +1740,8 @@ arr2 = [2, 4, 6, 8]
 merged_array = merge_sorted_arrays(arr1, arr2)
 print(merged_array)  # Output: [1, 2, 3, 4, 5, 6, 7, 8]
 
-#case32: Sliding Window Maximum -- Given an array nums and an integer k, return an array containing the maximum value of each sliding window of size k.
+#case32: Sliding Window Maximum -- Given an array nums and an integer k, 
+# return an array containing the maximum value of each sliding window of size k.
 #way1- BF - O(n*k)
 nums = [1, 3, -1, -3, 5, 3, 6, 7]
 k = 3
@@ -1425,7 +1750,7 @@ k = 3
 
 final_array = []
 for i in range(len(arr)-k+1):
-    max_element = max(arr[i:i+k])
+    max_element = max(arr[i:i+k])  #good
     final_array.append(max_element)
 print (final_array)
 
@@ -1472,7 +1797,7 @@ def find_unsorted_subarray(nums):
     # good, We take bounday elements thost are immediate left and right of the unordered window
     for i in range(1, n):
         if nums[i] < nums[i - 1]:
-            start = i - 1
+            start = i - 1  #remem, this i-1 and above i-1 will be same
             break  #good, comeout as soon as got the first out of order element
     
     # If the array is already sorted
@@ -1482,7 +1807,7 @@ def find_unsorted_subarray(nums):
     # Step 2: Find the first element which is out of order from right to left
     for i in range(n - 2, -1, -1):
         if nums[i] > nums[i + 1]:
-            end = i + 1
+            end = i + 1  #remem, this i+1 and above i+1 will be same
             break  #good, comeout as soon as got the first out of order element
 
     # Step 3: Find the min and max of the unsorted subarray
@@ -1490,12 +1815,14 @@ def find_unsorted_subarray(nums):
     max_val = max(nums[start:end+1])
 
     # Step 4: Expand the left boundary if there are elements greater than min_val
-    while start > 0 and nums[start - 1] > min_val:
-        start -= 1
+    for i in range(0, start):
+        if nums[i] > min_val:
+            start = i
 
     # Step 5: Expand the right boundary if there are elements smaller than max_val
-    while end < n - 1 and nums[end + 1] < max_val:
-        end += 1
+    for i in range(end, n):
+        if nums[i] < max_val:
+            end = i
 
     # Return the length of the unsorted subarray
     return end - start + 1
@@ -1507,7 +1834,12 @@ result = find_unsorted_subarray(nums)
 print(result)  # Expected output: 5 (subarray [3, 5, 2, 6, 4] needs to be sorted)
 
 
-#case34: Minimum Operations to Reduce X to Zero -- sliding window
+#case34: Minimum Operations required to reduce sum of the array:nums to x -- sliding window
+#The function minOperations(nums, x) is designed to determine the minimum number of operations 
+#required to reduce the sum of the array nums to x. Specifically, it does this by finding the 
+#longest contiguous subarray of nums whose sum equals total_sum - x. By removing this subarray 
+#from the array, the remaining elements will sum to x. This is achieved by removing (or effectively "zeroing out") certain elements.
+
 def minOperations(nums, x):
     total_sum = sum(nums)
     target = total_sum - x  #good, first find the target sum that we need 
@@ -1531,11 +1863,12 @@ def minOperations(nums, x):
 '''
 OR
         while (cumulative_sum >= target_sum):
-            #Take length of valid subarray
-            length = right - left + 1
-            if (length > max_len):
-                max_len = length
-                subarray = arr[left:i+1]
+            if cumulative_sum == target_sum:
+                #Take length of valid subarray
+                length = right - left + 1
+                if (length > max_len):
+                    max_len = length
+                    subarray = arr[left:i+1]
         
             # Now contract the subarray till cumulative_sum == target_sum:
             cumulative_sum -= arr[left]
@@ -1573,7 +1906,10 @@ def maxProfitBruteForce(prices, start=0):  #good, keep placeholder
             next_start = j + 2  # Next buy can happen on day j+2 due to cooldown
             
             # Recurse for the remaining days after selling on day j
+            # This is where the recursion happens. The idea is to explore all possible buy-sell pairs, 
+            #including the additional profits that can be made from future transactions starting from next_start.
             max_profit = max(max_profit, profit + maxProfitBruteForce(prices, next_start)) #good
+
 
     return max_profit
 
@@ -1582,6 +1918,53 @@ arr = [1, 2, 3, 0, 2]
 result = maxProfitBruteForce(arr)
 print(result)  # Expected output: 3
 '''
+#good, why index OOR didnt come with using 'break':-
+def maxProfitBruteForce(arr):
+    n = len(arr)
+    max_profit = 0
+    for i in range(n):
+        for j in range(i+1, n):
+            profit = arr[j] - arr[i]
+
+            next_start = j+2
+            max_profit = max(max_profit, profit+ maxProfitBruteForce(arr[next_start:]))
+            break  
+        break
+    return max_profit
+
+# Example usage
+arr = [1, 2, 3, 0, 2]
+result = maxProfitBruteForce(arr)
+print(result)  # Expected output: 3
+
+Function Calls and Slicing:
+When you slice the array with arr[next_start:], you're not modifying the original array; you are creating a new array from the original.
+For example, if your original array is [1, 2, 3, 0, 2] and you call maxProfitBruteForce(arr[3:]), you get a new array [0, 2]. The original array remains unchanged.
+
+Recursion:
+Each recursive call has its own context, which includes its own variables and the state of the passed array. This means that even if you work with a smaller slice 
+of the original array in a recursive call, once that call finishes, control returns to the previous call with ITS OWN CONTEXT INTACT.
+When you return from a recursive call, you go back to the previous function call’s state, which includes the FULL ORIGINAL ARRAY.
+
+#good: Taking max profit  of every possible buy-seel pair starting from iter1:-buyday1/sellday2, buyday4/sellday5...so on ; iter2:-buyday2/sellday3, buyday5/sellday6...so on
+Iteration 1: Combinations
+(1, 2): Buy on Day 1 (price 1), Sell on Day 2 (price 2)
+Profit: 2 - 1 = 1
+(4, 5): Buy on Day 4 (price 0), Sell on Day 5 (price 2)
+Profit: 2 - 0 = 2
+(7, 8): Buy on Day 7 (price 4), Sell on Day 8 (price 5)
+Profit: 5 - 4 = 1
+Total Profit for Iteration 1: 1 + 2 + 1 = 4
+
+Iteration 2: Combinations
+(2, 3): Buy on Day 2 (price 2), Sell on Day 3 (price 3)
+Profit: 3 - 2 = 1
+(5, 6): Buy on Day 5 (price 2), Sell on Day 6 (price 3)
+Profit: 3 - 2 = 1
+(8): Not applicable as there's no sell after this.
+Total Profit for Iteration 2: 1 + 1 = 2
+and so on....
+
 #good:
 Let’s clarify the execution flow of the maxProfitBruteForce function, focusing specifically on how the inner loop iterates and how the next_start affects the outer loop.
 
@@ -1687,36 +2070,23 @@ Every Recursive Branch: Each branch created by combinations of (i, j) in the nes
 aggregates the maximum profit calculated from all recursive paths until all possibilities are exhausted.
 '''
 #case37: Maximum Swap - Given a non-negative integer, you can swap two digits at most once to get the maximum possible value of that integer. --good-do
-#way1:mine:
+#way1:mine: good
 def maximumSwap(num):
     arr = list(str(num))
-    my_array = []
-    swapped = 0
-    for i, value in enumerate(arr):
-        for j in range(i+1, len(arr)):
-            if (arr[j] > value and j > i):
-                my_array.append(arr[j])
+    my_dict = {}
+    for i,v in enumerate(arr):
+        my_dict[v] = i 
 
-        if (my_array):          
-            largest_ele = max(my_array) 
-            idx = ''.join(arr).rfind(largest_ele)
-            arr[i], arr[idx] = arr[idx], arr[i]
-            swapped = 1
-            break
-        if (swapped):
-            break
-        else: 
-            my_array = []
-        
-    return ''.join(arr)       
-        
+    for i in range(len(arr)):
+        for j in range(9, int(arr[i]), -1):
+            if str(j) in my_dict and my_dict[str(j)] > i:  #good:conversion of j to str(j) is bcoz 'v' of my_dict in str
+                arr[i], arr[my_dict[str(j)]] = arr[my_dict[str(j)]], arr[i]
+                return int(''.join(arr)) 
+
+    return num #if orig number is alreay max, return as is.
+
 # Example usage
-num = 9793
-result = maximumSwap(num)
-print(result)  # Output: 9973       
-        
-# Example usage
-num = 9793
+num = 2736
 result = maximumSwap(num)
 print(result)  # Output: 7236
 
@@ -1746,6 +2116,7 @@ print(result)  # Output: 7236
 #case38: Maximum Length of Repeated Subarray
 #You are given two integer arrays nums1 and nums2. Your task is to find the maximum length of a 
 #subarray that appears in both arrays.
+#way1:
 def findLengthBruteForce(arr1, arr2):
     n, m = len(arr1), len(arr2)
     max_len = 0
@@ -1769,7 +2140,7 @@ nums2 = [3, 2, 1, 4, 7]
 result = findLengthBruteForce(nums1, nums2)
 print(result)  # Output: 3
 
-#mine: way:
+#mine: way2: similar to above
 def findLengthBruteForce(arr1, arr2):
     n = len(arr1)
     m = len(arr2)
@@ -1824,7 +2195,7 @@ print(result)  # Output: 2
 def findMin(nums):
     left, right = 0, len(nums) - 1
     
-    while left < right: #good:use < and not <= to avaoid infinite loop when left == right
+    while left < right: #good:use < and not <= (bcoz when left==right, we are not returing from WHILE) to avaoid infinite loop when left == right
         mid = (left + right) // 2
         
         # If the middle element is greater than the rightmost element,
@@ -2121,7 +2492,7 @@ print(min_window_substring(s, t))  # Output: "BANC"
 
 #case45: Regular Expression Matching --later
 
-#case46: Longest Substring Without Repeating Characters(LSWRC) -- 2Pointer- sliding window - again, good ==here17Sep
+#case46: Longest Substring Without Repeating Characters(LSWRC) -- 2Pointer- sliding window -good
 #Definition: LSWRC is focused on finding the length of the longest substring that does not contain any repeating characters. 
 #A substring is a contiguous sequence of characters within a string.
 
@@ -2171,7 +2542,7 @@ def is_repeating_subsequence(subseq, s):
         j = 0
         for i in range(start, len(s)):
             if s[i] == subseq[j]:
-                j += 1
+                j += 1  # good: not using 's[i] = next(iter_subseq)' because once comparison happens (even not matched), iter will move to next item. Using 'j' we are stopping subseq till the next match
             if j == len(subseq):  #good,to get the index of s where subseq ends 
                 return i
         return -1
@@ -2183,7 +2554,7 @@ def is_repeating_subsequence(subseq, s):
     return second_occurrence_end != -1   #good way to return True or False by comparing
 
 def longest_repeating_subsequence(s):
-    subsequences = generate_subsequences(s)  #-----(1)
+    subsequences = generate_combinations(s)  #-----(1)
     max_len = 0
     for subseq in subsequences:
         if is_repeating_subsequence(subseq, s): #-----------(2)
@@ -2216,7 +2587,7 @@ if len(s):
 else:
     print ('YES')
 
-#case50: Palindrome Partitioning -- good -- see walkthrough --later, didnt understand
+#case50: Palindrome Partitioning -- good -- rev
 Given a string s, partition s such that every substring of the partition is a palindrome.
 Return all possible palindrome partitioning of s.
 
@@ -2226,14 +2597,14 @@ Return all possible palindrome partitioning of s.
 # then firstpart and second part will join and can make one palin instead they shud be counted as 2. So unders below approach.
 from itertools import combinations
 
-# Function to check if a string is a palindrome
+# Function to check if a string is a palindrome 
 def is_palindrome(s):
     return s == s[::-1]
 
 # Function to find the minimum palindrome cuts using combinations
 def min_palindrome_cuts_combinations(s):
     n = len(s)
-    if is_palindrome(s): #good, inbuilt func to check palin
+    if is_palindrome(s): 
         return 0  # No cuts needed if the entire string is a palindrome
 
     # To store the minimum cuts found
@@ -2339,7 +2710,7 @@ while count < n:
         elif num[i] != num[i-1]:  # 1, 11, 21, 1211, 111221
             final_num += str(freq)+num[i-1] #for the previous repititive digits whose freq is increasing in above IF
             freq = 1 #good, reset the freq
-    final_num += str(freq)+num[-1]  #for  the last element  
+    final_num += str(freq)+num[-1]  #for  the last element . This and earlier line is same just without 'i' (to remember)
     my_list.append(final_num)
     count += 1
     
