@@ -4,6 +4,15 @@ Verbalize your reasoning as though you’re approaching the problem logically fo
 Ask questions and clarify requirements as if you’re thinking through potential challenges.
 Showcase alternatives or optimizations to demonstrate depth of understanding.
 
+# Yes, in Python, you can create a "set of sets" using the built-in set data structure. 
+#However, since sets in Python must contain only hashable (immutable) elements, you cannot 
+#directly add a set to another set because sets themselves are mutable and therefore not hashable.
+Workarounds for Creating a Set of Sets:
+Using frozenset: You can use frozenset, which is an immutable version of a set, to create a set of sets. This allows you to have sets as elements of another set.
+set_of_sets = set()
+set_of_sets.add(frozenset({1, 2, 3}))
+print (set_of_sets)
+
 #mine:In Python, the variable defined in a for loop (like i in your case) remains accessible after the loop has finished executing. 
 This is different from languages like C or Java, where the scope of loop variables is limited to the loop itself.
 Therefore, after the loop completes, i will still exist and hold the value from the last iteration of the loop. 
@@ -35,8 +44,40 @@ my_dict = {}  # Initialize an empty dictionary
 for tup in tuples_list:
     my_dict[tup] = ''  # Use the tuple as a key and assign an empty string as the value
 print(my_dict)
+#-----------------------------------------------------------------------------------------------------
+#Case13: Implement a function to merge list of multiple sets and remove duplicates.
+def merge_sets(list_of_sets):
+    # Merge all sets using set.union or | operator
+    merged_set = set.union(*list_of_sets) #good
+    
+    return merged_set
+
+# Example usage:
+list_of_sets = [{1, 2, 3}, {3, 4, 5}, {5, 6, 7}, {7, 8, 9}]
+merged_result = merge_sets(list_of_sets)
+
+
+#Case14: Find the element with the maximum frequency in a set derived from a list.
+#way1: from collections import Counter
+my_list = [1, 2, 3, 1, 2, 1, 3, 3, 3, 4, 5, 6, 3, 2, 1]
+
+my_dict = Counter(my_list)
+max_freq_ele = max(my_dict, key=lambda x: my_dict[x])  
+print (max_freq_ele)
+
+#Way2:my_list = [1, 2, 3, 1, 2, 1, 3, 3, 3, 4, 5, 6, 3, 2, 1]
+from collections import Counter
+
+my_dict = Counter(my_list)
+max_freq_ele = max(my_dict, key=my_dict.get)  #good. try key=lambda x: my_dict[x]
+print (max_freq_ele)
+
+#good:Issue with my_dict.values() in max() function
+#The max() function's key parameter expects a function that takes a single argument and returns a 
+#value to be used for comparison. Here's why my_dict.values() doesn't work in this context:
+my_dict.values() returns a view object that provides a dynamic view of all values in the dictionary. This view object doesn't directly correspond to the key-value pairs needed for comparison in max().
 #-------------------------------------------------------------------------------------------------------
-simple example in python:- overriding , polymorphism,overloading superclass/subclass and any related which I shud know
+simple example in python:- overriding , polymorphism,overloading superclass/subclass 
 
 Here's a simple example that illustrates key OOP concepts like Overriding, Polymorphism, and Overloading using Python's superclass and subclass structure.
 1. Overriding:
@@ -82,7 +123,7 @@ class Cat:
         print('Cat meows')
 
 def animal_sound(obj):  # Interface function or polymorphic because it works with both Cat and Dog objects, calling their respective speak methods.
-    obj.speak()
+    obj.speak()    #self parameter is only necessary for class methods, for methods outside of class, we dont pass 'self' (bcoz we dont call it via class object).
 
 # Objects
 dog = Dog()
@@ -96,7 +137,7 @@ animal_sound(dog)  # Output: "Dog barks"
 #Polymorphism allows objects of different classes to be treated through a common interface, 
 #meaning you can call the same method (speak() in this case) on different objects and get different behaviors depending on the object.
 
-#Key Points in Your Example:
+#Key Points in Your below Example:
 #Inheritance-based Polymorphism (Dog -> Animal): The Dog class inherits from the Animal class and overrides the speak() method. 
 #This is the classical case of polymorphism where a child class provides its own implementation of a method that is defined in the parent class.
 
@@ -162,7 +203,7 @@ class Vehicle:
 
 class Car(Vehicle):
     def __init__(self, brand, model):
-        super().__init__(brand)  # Calling superclass's __init__ method
+        super().__init__(brand)  # Calling superclass's __init__ method.
         self.model = model
     
     def info(self):  # Overriding the info method
@@ -235,7 +276,7 @@ These are the essential concepts you need to know regarding object-oriented prog
     #mine: whatever the loop-variable is there will be become the result when IF contion is true else the value of ELSE will be the result.  
 
 #Dictionary Comprehension: {item: value for item in iterable if condition}
-                         :  result = {x: 'Even' if x % 2 == 0 else 'Odd' for x in iterable}
+                         :  my_dict = {x: 'Even' if x % 2 == 0 else 'Odd' for x in iterable}
             Ex: arr = [1, 2, 3, 4, 5]
                 my_dict = {item:'even' for item in arr if item == 2}
                 my_dict = {item:'even' if item == 2 else 'odd' for item in arr }
@@ -380,6 +421,38 @@ good:lambda we use for the key with inbuilt methods (say sorted(), min(), max())
 #Case31: Flatten a list of tuples into a single list.
 tuples_list = [(1, 2), (3, -1), (4, -2), (5, 3), (2, 3)]
 my_list = []
+
+#Case25: Convert a list of tuples into a dictionary. --good
+#mine:If your intention is to create a dictionary from tuples, each tuple should contain exactly two elements: a key and a value
+tuples_list = [('a', 1), ('b', 2), ('c', 3)]
+
+#my_dict = dict(tuples_list)
+#or
+
+my_dict = {key: value for key, value in tuples_list}
+print (my_dict)
+
+#mine: if the tuple has more than 2 elements and you need to convert in dict:
+# Convert a single tuple to a dictionary with indices as keys
+tuple_data = (1, 2, 3, 4, 5)
+my_dict = {i: value for i, value in enumerate(tuple_data)}
+print(my_dict)  # Output: {0: 1, 1: 2, 2: 3, 3: 4, 4: 5}
+
+#Case28: Sort a list of tuples by the first element, and then by the second element.
+#good, if we want to reatin both the results. sort() does inplace operation.
+tuples_list = [(1, 2), (2, 1), (3, 3), (4, -1), (1, 2), (0, 6)]
+my_list_second = sorted(tuples_list, key=lambda x: x[1])
+my_list_first = sorted(tuples_list, key=lambda x: x[0])
+print (my_list_first)
+print (my_list_second)
+
+#Case38: Convert a list of tuples into a single tuple.
+#good:To convert a list of tuples into a single tuple, you can use the sum function with an empty tuple as the starting point
+# Sample list of tuples
+list_of_tuples = [(1, 2), (3, 4), (5, 6)]
+
+# Convert list of tuples into a single tuple
+single_tuple = sum(list_of_tuples, ())
 
 for x in tuples_list:
     my_list.extend(x)
@@ -644,7 +717,7 @@ for item in my_list:
 
 #case: Remove Duplicates from a Sorted Array.
 Description: Given a sorted array, remove duplicates in-place.
-way1: INPLACE -- good
+way1: INPLACE -- vgood
 def remove_duplicates(arr):
     write_index = 1
     n = len(arr)
@@ -844,7 +917,24 @@ def trap_rain_water(heights):
 heights = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]
 print("Amount of trapped water:", trap_rain_water(heights))  # Output: 6
 
-#case10: Longest Consecutive Sequence 
+#case10: Longest Consecutive Sequence
+#way1:mine:
+def longest_consecutive(arr):
+    n = len(arr)
+    start = 0
+    sublist = []
+    for i in range(1, n):
+        if arr[i] != arr[i-1] + 1 :
+            sublist.append(arr[start:i])
+            start = i 
+    sublist.append(arr[start:i+1])   
+    return sublist 
+
+arr = [1, 2, 3, 8, 5, 6, 7, 5]
+final_seq = longest_consecutive(arr)
+print (final_seq)
+
+#way2:
 def longest_consecutive(arr):
     seq = []
     final_seq =[]
@@ -893,6 +983,11 @@ def search_rotated_sorted_array(arr, key):
         if arr[mid] == key:
             return mid
         
+        #good: In a rotated sorted array, we always check the sorted side first because it helps narrow down the search space efficiently. 
+        # Key Idea: Efficient Binary Search
+        # In a binary search, the power of the algorithm lies in halving the search space each time. 
+        # A rotated sorted array still has one half (either the left or right) that is sorted, so focusing on this sorted half allows us to quickly determine if the target is in that half or the other.
+        
         # If the left half is sorted
         if arr[low] <= arr[mid]: #Ex:[4, 5, 6, 7, 0, 1, 2]
         #good: this condition you take whether array is sorted from 'low to mid' or 'mid to high'. Both edges included.
@@ -925,7 +1020,7 @@ def find_triplet(arr, target_sum):
     
     n = len(arr)
     for i in range(n - 2):  # Step 2: Iterate through the array, fixing one element at a time
-        left = i + 1
+        left = i + 1        # good: The loop runs until n-2 instead of n-1 because we are looking for triplets. When i reaches n-2, the remaining two elements  can still form a triplet.
         right = n - 1       
         while left < right:  # Step 3: Use two pointers to find the other two elements. Use '<' to avoid duplicate element
             current_sum = arr[i] + arr[left] + arr[right] #move left/right but keep arr[i] fixed for one triplet
@@ -1118,7 +1213,7 @@ for i in range(0, len(my_list)):
 
 print (final_array)
 
-#way2: 1 FOR:
+#way2: 1 FOR: good
 def max_product_array(arr):
     if len(arr) == 0:
         return []
@@ -1196,7 +1291,7 @@ print(f'Length of the longest subarray with sum {k}: {final_length}')
 
 #case19: Sort Colors (Dutch National Flag Problem) -- good
 my_list = [0, 1, 2, 0, 1, 2]
-low = mid = 0
+low = mid = 0 #good:remem, mid is not (low+high)//2, since mid is moving by itself.
 high = len(my_list) - 1
 
 while mid<=high:
@@ -1243,7 +1338,7 @@ for i in range(0, len(my_list)):
                 break
 
 #Way2:GFG: understand: sliding window --good, do
-#Good: Whenever we see 'min length subarray of SUM/ContainDiffInteger, apply 2 pointer. But when we see find 
+#Good: Whenever we see 'min length subarray of SUM:k/Contain k DiffInteger, apply 2 pointer. But when we see find 
 # all subarrays of SUM, apply <cumulative_sum - k in my_dict>
 
 from collections import defaultdict
@@ -1284,7 +1379,6 @@ print(subarrays)  # Output should be all subarrays with exactly 3 different inte
 #case21: Container With Most Water --good
 # In the "Container With Most Water" problem, the solution aims to find two heights that, when paired, 
 # form a container that can hold the maximum amount of water. 
-#5:18
 def max_area(heights):
     start = 0
     end = len(heights) - 1
@@ -1329,7 +1423,7 @@ print(max_quant)  #output:6
 
 #case22: Subarray Product Less Than K
 
-#case23: Jump Game --greedy algo -- good --here
+#case23: Jump Game --greedy algo -- good 
 # Given an array arr[] where each element represents the max number of steps that can be made forward from that index. 
 # The task is to find the minimum number of jumps to reach the end of the array starting from index 0.
 def minJumps(arr):
@@ -1348,13 +1442,13 @@ def minJumps(arr):
     steps = arr[0]     # Steps we can still take
     jumps = 1          # Number of jumps taken
     
-    for i in range(1, n):  #good, start from 1
+    for i in range(1, n):  #good, start from 1. Through i only, we increase the steps
         # Check if we've reached the end of the array
         if i == n - 1:
             return jumps
         
         # Update the maxReach for this index
-        maxReach = max(maxReach, i + arr[i])
+        maxReach = max(maxReach, i + arr[i])  #good, dont forget to add 'i +...'
         
         # Use a step to move forward
         steps -= 1  #good, shud come after we take next step and get the new max_reach
@@ -1377,6 +1471,7 @@ def minJumps(arr):
 # Example usage:
 arr = [2, 3, 1, 1, 2, 4, 2, 0, 1, 1]
 print(minJumps(arr))  # Output: 4
+
 
 #case24: Maximum Gap -- check BF, way2
 # Given an unsorted array, the task is to find the maximum difference between the successive elements in the sorted version of the array.
@@ -1471,7 +1566,7 @@ def longestMountain(arr):
 
             # Expand to the right (strictly decreasing part)
             right = i + 1
-            while right < n - 1 and arr[right] > arr[right + 1]:
+            while right < n - 1 and arr[right] > arr[right + 1]: #good:remem, take one element same as arr[right] or arr[left]. Measuring the dist from there only.
                 right += 1
 
             # Calculate the length of the mountain
@@ -1743,8 +1838,6 @@ print(merged_array)  # Output: [1, 2, 3, 4, 5, 6, 7, 8]
 #case32: Sliding Window Maximum -- Given an array nums and an integer k, 
 # return an array containing the maximum value of each sliding window of size k.
 #way1- BF - O(n*k)
-nums = [1, 3, -1, -3, 5, 3, 6, 7]
-k = 3
 arr = [1, 3, -1, -3, 5, 3, 6, 7]
 k = 3
 
@@ -1754,7 +1847,31 @@ for i in range(len(arr)-k+1):
     final_array.append(max_element)
 print (final_array)
 
-#way2: understand later --O(n)
+#way2:O(n*k) 
+def max_value(arr, k):
+    final_list = []
+    sublist = []
+    n = len(arr)
+    
+    for i in range(n):
+        sublist.append(arr[i])
+
+        # Once we have enough elements in the window, calculate the max and contract
+        while len(sublist) >= k:
+            if len(sublist) == k:
+                final_list.append(max(sublist))
+            
+            # Now Contract: Remove the oldest element to slide the window
+            sublist.pop(0)
+
+    return final_list
+
+# Example usage:
+arr = [1, 3, -1, -3, 5, 3, 6, 7]
+k = 3
+print(max_value(arr, k))  # Output: [3, 3, 5, 5, 6, 7]
+
+#way3: understand later --O(n)
 from collections import deque
 
 def maxSlidingWindow(nums, k):
@@ -1836,7 +1953,7 @@ print(result)  # Expected output: 5 (subarray [3, 5, 2, 6, 4] needs to be sorted
 
 #case34: Minimum Operations required to reduce sum of the array:nums to x -- sliding window
 #The function minOperations(nums, x) is designed to determine the minimum number of operations 
-#required to reduce the sum of the array nums to x. Specifically, it does this by finding the 
+#required to reduce the sum of the array:nums to x. Specifically, it does this by finding the 
 #longest contiguous subarray of nums whose sum equals total_sum - x. By removing this subarray 
 #from the array, the remaining elements will sum to x. This is achieved by removing (or effectively "zeroing out") certain elements.
 
@@ -1889,6 +2006,38 @@ print(result)  # Output: 2
 #mine: sort and then use FOR th get the first missing element
 
 #case36: Best Time to Buy and Sell Stock with Cooldown -- good
+#mine:query: which frame will cover buying on 1st day and selling on 3rd day ??
+#way1: Limiting to Two Buy/Sell Pairs:
+def maxProfitBruteForce(prices):
+    n = len(prices)
+    max_profit = 0  # Initialize max profit
+
+    # Iterate over all possible buy days
+    for i in range(n):
+        # Iterate over all possible sell days after buy day i
+        for j in range(i + 1, n):
+            profit = prices[j] - prices[i]  # Calculate the profit for this transaction
+
+            # After selling on day j, next buy can only happen after day j + 1 (due to cooldown)
+            next_profit = 0
+
+            # Find the next buy-sell combination after the cooldown period (j + 2)
+            for next_i in range(j + 2, n):
+                for next_j in range(next_i + 1, n):
+                    next_profit = max(next_profit, prices[next_j] - prices[next_i])
+
+            # Calculate the total profit and update max_profit
+            total_profit = profit + next_profit
+            max_profit = max(max_profit, total_profit)
+
+    return max_profit
+
+# Example usage
+arr = [1, 2, 3, 0, 2]
+result = maxProfitBruteForce(arr)
+print(result)  # Expected output: 3
+
+#way2:
 def maxProfitBruteForce(prices, start=0):  #good, keep placeholder
     n = len(prices)
     
@@ -1910,7 +2059,6 @@ def maxProfitBruteForce(prices, start=0):  #good, keep placeholder
             #including the additional profits that can be made from future transactions starting from next_start.
             max_profit = max(max_profit, profit + maxProfitBruteForce(prices, next_start)) #good
 
-
     return max_profit
 
 # Example usage
@@ -1918,6 +2066,48 @@ arr = [1, 2, 3, 0, 2]
 result = maxProfitBruteForce(arr)
 print(result)  # Expected output: 3
 '''
+#mine: return 0 to 2+0(from maxProfitBruteForce) then finally return 2 to (,1+ maxProfitBruteForce) i.e last recursion will return 0 then earlier recusrions will use second 'return'
+How the Profit is Accumulated and Returned
+To illustrate this with an example, let's use the array [1, 2, 3, 0, 2].
+
+Initial Call: maxProfitBruteForce(prices, start=0)
+Buy on Day 0 (Price = 1):
+Try selling on Day 1 (Price = 2): Profit = 1
+Call maxProfitBruteForce(prices, start=3) to find the future profit.
+Recursive Call: maxProfitBruteForce(prices, start=3)
+
+Buy on Day 3 (Price = 0):
+Try selling on Day 4 (Price = 2): Profit = 2
+Call maxProfitBruteForce(prices, start=6) (but start >= n, so this returns 0).
+
+Unwinding for maxProfitBruteForce(prices, start=3)
+Future profit from Day 4 = 0 (no more transactions possible).
+Total profit for this buy/sell pair = 2 + 0 = 2.
+
+Return 2 to the previous call (start = 0).
+Unwinding for maxProfitBruteForce(prices, start=0)
+The profit from buying on Day 0 and selling on Day 1 is 1.
+The future profit (from recursion starting on Day 3) is 2.
+Total profit for this buy/sell pair = 1 + 2 = 3.
+
+Now, let's say we explore another buy/sell pair from start=0:
+
+Buy on Day 1 (Price = 2):
+Try selling on Day 2 (Price = 3): Profit = 1
+Call maxProfitBruteForce(prices, start=4) to find the future profit.
+Recursive Call: maxProfitBruteForce(prices, start=4)
+Buy on Day 4 (Price = 2):
+No more days to sell after this, so return 0.
+Unwinding for maxProfitBruteForce(prices, start=4)
+Total profit = 0.
+Return 0 to the previous call (start = 1).
+Unwinding for maxProfitBruteForce(prices, start=0)
+The profit from buying on Day 1 and selling on Day 2 is 1.
+The future profit (from recursion starting on Day 4) is 0.
+Total profit for this buy/sell pair = 1 + 0 = 1.
+Final Result
+The maximum profit from all buy/sell pairs (with cooldown) is 3, and that’s the result returned by the function.
+
 #good, why index OOR didnt come with using 'break':-
 def maxProfitBruteForce(arr):
     n = len(arr)
@@ -2072,7 +2262,9 @@ aggregates the maximum profit calculated from all recursive paths until all poss
 #case37: Maximum Swap - Given a non-negative integer, you can swap two digits at most once to get the maximum possible value of that integer. --good-do
 #way1:mine: good
 def maximumSwap(num):
-    arr = list(str(num))
+    arr = list(str(num)) #good
+    #mine:good:In Python, you can't convert an integer directly to a list because integers are not iterable. 
+    #     When you use list(num) on an integer, Python expects an iterable (like a string or a list) to create the list elements from.
     my_dict = {}
     for i,v in enumerate(arr):
         my_dict[v] = i 
@@ -2084,29 +2276,6 @@ def maximumSwap(num):
                 return int(''.join(arr)) 
 
     return num #if orig number is alreay max, return as is.
-
-# Example usage
-num = 2736
-result = maximumSwap(num)
-print(result)  # Output: 7236
-
-#way2:
-def maximumSwap(num):
-    # Convert the number to a list of its digits
-    digits = list(str(num))  #good
-    #mine:good:In Python, you can't convert an integer directly to a list because integers are not iterable. 
-    #     When you use list(num) on an integer, Python expects an iterable (like a string or a list) to create the list elements from.
-    last = {int(x): i for i, x in enumerate(digits)}  # Store last occurrence of each digit
-
-    for i, digit in enumerate(digits):
-        # Check for a larger digit to swap with
-        for d in range(9, int(digit), -1):  # Check digits from 9 down to digit+1
-            if d in last and last[d] > i:  # A larger digit found later
-                # Perform the swap
-                digits[i], digits[last[d]] = digits[last[d]], digits[i]
-                return int(''.join(digits))  # Return the new number after swap
-
-    return num  # Return original number if no swap was made
 
 # Example usage
 num = 2736
@@ -2141,21 +2310,19 @@ result = findLengthBruteForce(nums1, nums2)
 print(result)  # Output: 3
 
 #mine: way2: similar to above
-def findLengthBruteForce(arr1, arr2):
-    n = len(arr1)
-    m = len(arr2)
+def findLengthBruteForce(nums1, nums2):
+    n,m = len(nums1), len(nums2)
     max_len = 0
     for i in range(n):
-        length = 0        
+        length = 0
         for j in range(m):
-            if (i < n and j < m and arr1[i] == arr2[j]):
-                while (i < n and j < m and arr1[i] == arr2[j]):
-                    i += 1
-                    j += 1
-                    length += 1
-                max_len = max(max_len, length)
+            while i < n and j < m and nums1[i] == nums2[j]:
+                length += 1
+                i += 1
+                j += 1
+            max_len = max(length, max_len)
     return max_len
-    
+
 # Example usage
 nums1 = [1, 2, 3, 2, 1]
 nums2 = [3, 2, 1, 4, 7]
@@ -2199,9 +2366,12 @@ def findMin(nums):
         mid = (left + right) // 2
         
         # If the middle element is greater than the rightmost element,
-        # it means the smallest element must be on the right side(since the array is sorted and rotated) - good
-        if nums[mid] > nums[right]: #means, right half is sorted and so the smallest will be at right half.
-            left = mid + 1
+        # it means the smallest element must be on the right side(since the array is sorted and rotated) 
+        # good: Key Difference from Searching for k in rotated sorted array:
+        # When searching for k, you care about which half is sorted to decide if k is in that half. Also, there we use left <= right
+        # When finding the minimum, you use the comparison between nums[mid] and nums[right] to locate the minimum by narrowing the search space.
+        if nums[mid] > nums[right]: #means, the smallest will be in right half
+            left = mid + 1  #here, we dont have k, so only one IF/ELSE not nested IF/ELSE
         else:
             # Otherwise, the smallest element is on the left side (including mid)
             right = mid
@@ -2236,7 +2406,7 @@ nums = [3, 4, 5, 1, 2]
 result = findMin(nums)
 print(result)  # Output: 1
 
-2. Strings -- here:
+2. Strings:
 #case41: Longest Palindromic Substring --remember:longestPalin is by 'expand around center'
 #Way1: The "Expand Around Center" method
 def longest_palindromic_substring(s):
@@ -2304,33 +2474,6 @@ str1 = "AGGTAB"
 str2 = "GXTXAYB"
 print("Length of LCS (brute force):", lcs_brute_force(str1, str2))  # Output should be 4, LCS: "GTAB"
 
-#way2:recursion
-def longest_common_seq(S1, S2):
-    # Base case: if either string is empty, return an empty list (no common subsequence)
-    if len(S1) == 0 or len(S2) == 0:
-        return []
-
-    # If the last characters of both strings match
-    if S1[-1] == S2[-1]:
-        result =  longest_common_seq(S1[:-1], S2[:-1]) + [S1[-1]]  # Append the matching character
-        return result
-
-    # If the last characters do not match, we have two possibilities:
-    # 1. Ignore the last character of S1
-    # 2. Ignore the last character of S2
-    # Take the result with the longer subsequence
-    else:
-        lcs1 = longest_common_seq(S1[:-1], S2)
-        lcs2 = longest_common_seq(S1, S2[:-1])
-        return lcs1 if len(lcs1) > len(lcs2) else lcs2
-
-# Example usage:
-S1 = 'ABCBDAB'
-S2 = 'BDCAB'
-final_string = longest_common_seq(S1, S2)
-print("Longest Common Subsequence:", ''.join(final_string))
-
-
 #case43: Edit Distance (Levenshtein Distance) --good - BF - recursion
 Description: Find the minimum number of operations required to convert one string into another
 #way: mine:
@@ -2396,7 +2539,7 @@ def edit_distance_brute_force(str1, str2):
 # Example usage:
 str1 = "singhabhisheksingh"
 str2 = "abhishek"
-print(edit_distance_brute_force(str1, str2))  # Output: 5
+print(edit_distance_brute_force(str1, str2))  # Output: 7
 
 #way1: BF
 def edit_distance_brute_force(str1, str2):
@@ -2449,6 +2592,8 @@ print(edit_distance_brute_force(str1, str2))  # Output will be 3
 
 
 #case44: Minimum Window Substring --good 
+# Given two strings s (the source string) and t (the target string), 
+# your task is to find the smallest substring of s that contains all the characters of t, including duplicates.
 #Way1: GFG : remember:  2 pointer -- 2 WHILEs ,one for expand other for contract
 from collections import Counter, defaultdict
 
@@ -2541,9 +2686,9 @@ def is_repeating_subsequence(subseq, s):
     def find_subsequence(s, subseq, start): # good:this we defined because this wholeblock needs to be called twice.
         j = 0
         for i in range(start, len(s)):
-            if s[i] == subseq[j]:
+            if s[i] == subseq[j]: # good: Using subseq[j] and increasing j (on match), we are tracking the order (unlike 'if s[i] in subseq'). 
                 j += 1  # good: not using 's[i] = next(iter_subseq)' because once comparison happens (even not matched), iter will move to next item. Using 'j' we are stopping subseq till the next match
-            if j == len(subseq):  #good,to get the index of s where subseq ends 
+            if j == len(subseq):  #good,to get the index of s where subseq ends
                 return i
         return -1
     
@@ -2587,7 +2732,7 @@ if len(s):
 else:
     print ('YES')
 
-#case50: Palindrome Partitioning -- good -- rev
+#case50: Palindrome Partitioning -- good -- revision
 Given a string s, partition s such that every substring of the partition is a palindrome.
 Return all possible palindrome partitioning of s.
 
@@ -2749,7 +2894,7 @@ numRows = 3
 result = convert(s, numRows)
 print(result)  # Output: "PAHNAPLSIIGYIR"
 
-#case55: Valid Parentheses --good
+#case55: Valid Parentheses --good, 'MatchingParenthesis (we use 'matching_paranthesis' here)' and 'BalancedParenthesis (we use 'count' here)' problems are not same.
 def check_valid_paranthesis(s):
     matching_paranthesis = {']':'[' , '}':'{' , ')':'('} #good, will be used to compare its values of its keys(char) with final_str[-1]
     final_list = []
@@ -2759,10 +2904,10 @@ def check_valid_paranthesis(s):
         else:
             innermost_paranthesis = final_list.pop()
             if innermost_paranthesis != matching_paranthesis[char]:
-                print ('NotBalanced')
+                print ('NotMatching')
                 break 
     if final_list:   #good, if 'openings' are more
-        print ('NotBalanced')
+        print ('NotMatching')
 
 s = '()[]{}'
 check_valid_paranthesis(s)
@@ -3034,16 +3179,20 @@ print (sum(actions)) #sum of elements of array
 #case68: Reorder Data in Log Files
 #case69: good - Find the First Unique Character in a String
 
-#Good: You can optimize this code for finding the first unique character in a string by avoiding the use of OrderedDict and Counter together. 
-#Python's Counter and dict (since Python 3.7) already maintain the order of elements, so you can just use Counter directly.
+#Good: Below way1 is not working becoz :-The reason Counter does not maintain the order of characters as they appear in the string is that Counter 
+#is not specifically designed to maintain the insertion order of elements. Instead, it is meant to count the occurrences of elements in an unordered manner.
+# To maintain the order of characters as they appear in the string and find the first unique character, you can 
+#Iterate through the string itself and check each character's count in the Counter. (as in way2)
+#way1 - Not Working. Read above.
+from collections import Counter
 
-from collections import OrderedDict, Counter
-my_dict = OrderedDict()
-s='loveleetcode'
-my_dict = Counter(s)
-for key,value in my_dict.items():
-    if value == 1:
-        print ('First unique char', key)
+# Example usage
+s = 'loveleetcode'
+s_dict = Counter(s)
+
+for char in s_dict:
+    if s_dict[char] == 1:
+        print ('First unique char:', char)
         break
 
 Way2: optimized:
@@ -3067,7 +3216,7 @@ print(first_unique_char(s))  # Output: 'First unique char: v'
 #case70: Add Bold Tag in String
 def add_bold_html(text, word):
     #return text.replace(word, f'<b>{word}</b>')  #OR  
-    text = text.replace(word, "<b>{}</b>".format(word))
+    text = text.replace(word, "<b>{}</b>".format(word))  #good:just write newword as you write with print ("..{}..".format(word)) and return to text(since immutable strings).
     return text
 
 s = 'loveleetcode'
@@ -3113,17 +3262,18 @@ print(result)  # Output: 4, for substring "babc"
 good: Does sliding window will have a FOR loop that will increase the size of window in right, 
 while we need to reduce the window from left (using WHILE loop) inside that FOR loop
 
---Yes, that's correct. The sliding window approach involves two main operations witWITHIN a FOR loop:
+--Yes, that's correct. The sliding window approach involves two main operations WITHIN a FOR loop:
 
 Expanding the Window (Increasing Size on the Right):
 
 The end pointer is used to expand the window by moving it to the right, adding characters to the current window and updating the frequency counts or other relevant data structures.
 Contracting the Window (Reducing Size from the Left):
 
-Once a valid window is found (i.e., a window that satisfies the condition, such as having at least K repeating characters), then first take the length of valid string.
-Then start pointer is used to contract the window from the left to find the smallest possible window that still satisfies the condition.
+Once a valid window is found (i.e., a window that satisfies the condition, such as having at least K repeating characters), 
+then first take the length of valid string. Then start pointer is used to contract the window from the left to find the smallest 
+possible window that still satisfies the condition.
 
-#case75: Word Ladder --do understand :later --good-again
+#case75: Word Ladder --good
 '''
 The Word Ladder problem is a classic problem in algorithms and is typically asked in interviews to assess breadth-first search (BFS) understanding.
 Given two words, beginWord and endWord, and a dictionary containing a list of words, find the shortest transformation sequence from beginWord to endWord, such that:
@@ -3131,6 +3281,7 @@ Given two words, beginWord and endWord, and a dictionary containing a list of wo
 Only one letter can be changed at a time.
 Each transformed word must exist in the word list.
 Return the length of the shortest transformation sequence. If no such sequence exists, return 0.
+#mine:good: think like in the dict, if we start from beginWord, how many words (those are in wordlist) came in between till we find endWord.
 '''
 
 from collections import deque
@@ -3171,7 +3322,7 @@ print(result)  # Output: 5
 
 #case76: Scramble String 
 Anagrams:
-Anagrams must have the same characters with the same frequency. An anagram is a specific type of scrambled string.
+Anagrams must have the SAME characters with the SAME frequency. An anagram is a specific type of scrambled string.
 Hence, s1 and s2 must be of equal length and contain the same characters for one to be considered an anagram of the other.
 
 Scrambled Strings:
@@ -3191,7 +3342,8 @@ s1_dict = Counter(s1)
 s2_dict = Counter(s2)
 
 # Check if the character counts are equal
-if s1_dict != s2_dict:
+if s1_dict != s2_dict:  #good,just to find two string are anagrams or not. 
+                        #To find out how many opeartions required to make them(must be of same lenth) anagram,use FOR then s_dict[char] - s2_dict.get(char, 0)
     print('Not Scrambled')  # They have different character counts
 else:
     print('Scrambled')  # They have the same character counts
@@ -3208,7 +3360,7 @@ def is_scramble(s1, s2):
     # Generate all permutations of s1
     for perm in permutations(s1): #good
         # Join the tuple to form the scrambled string
-        scrambled = ''.join(perm)
+        scrambled = ''.join(perm)  #like combinations, permutations also give list of characters. So need to join them.
         if scrambled == s2:
             return True
 
@@ -3224,14 +3376,14 @@ print(result)  # Output: True
 my_str = 'the sky is blue'
 words = my_str.split() # good:first convert into list by splitting then do reverse then join. else  revserse on string will reverse character level
 words.reverse()  #remember, only STRING and TUPLE  are immutable, so there function returns the new value. Other does inplace, so return None.
-my_str1 = ' '.join(words)
+my_str1 = ' '.join(words)  #conversion from list to string and from string to list always RETURNS.
 print (my_str1)
 
 #case78: Basic Calculator
 #case79: Text Justification
 #case80: Simplify Path
 #----------------------------------------------------------------
-Set Programs --here
+Set Programs 
 #Case1: Find the intersection of two sets.
 s1 = {89, 24, 75, 11, 23}
 s2 = {89, 2, 4}
@@ -3295,7 +3447,7 @@ print (my_dict)
 #Case10: Find the common elements between three sets.
 
 #Case11: Determine the unique elements in a list of sets.
-#way1:
+#way1: Just do union of first with rest others
 list_of_sets = [{1, 2, 3}, {3, 4, 5}, {5, 6, 7}, {7, 8, 9}]
 
 unique_ele = list_of_sets[0]
@@ -3303,7 +3455,7 @@ for i in range(1, len(list_of_sets)):
     unique_ele = unique_ele.union(list_of_sets[i])
 print (unique_ele)
 
-#way2: gfg good
+#way2: gfg vgood
 list_of_sets = [{1, 2, 3}, {3, 4, 5}, {5, 6, 7}, {7, 8, 9}]
 
 # Combine all sets into one using set union
@@ -3321,7 +3473,7 @@ for i in range(n):
     union_set = set()
     for j in range(n):
         if (j != i):  #good
-            union_set = union_set.union(list_of_sets[j])  #unlike add or update, union return the result 
+            union_set = union_set.union(list_of_sets[j])  #unlike add or update, intersection/union return the result 
     
     unique_ele = current_set.difference(union_set)
     if unique_ele:
@@ -3371,7 +3523,7 @@ of the dictionary keys based on their natural order (which is usually numerical 
 #The max() function's key parameter expects a function that takes a single argument and returns a 
 #value to be used for comparison. Here's why my_dict.values() doesn't work in this context:
 
-my_dict.values() returns a view object: my_dict.values() returns a view object that provides a dynamic view of all values in the dictionary. This view object doesn't directly correspond to the key-value pairs needed for comparison in max().
+my_dict.values() returns a view object that provides a dynamic view of all values in the dictionary. This view object doesn't directly correspond to the key-value pairs needed for comparison in max().
 
 #Case15: Find the intersection of two sets using set comprehension.
 set1 = {1, 2, 3, 4, 5}
